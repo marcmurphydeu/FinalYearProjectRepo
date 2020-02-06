@@ -11,7 +11,6 @@ import YearsDropDownMenu from './YearsDropDown';
 
 
 export function UserForm(props){
-
     const [property, setProperty] = useState('Population')
     const [country, setCountry] = useState('Spain')
     const [year, setYear] = useState(2018)
