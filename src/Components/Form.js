@@ -5,6 +5,7 @@ import {Form} from 'react-bootstrap';
 import draw from './Visualization';
 import CountriesDropDown from './CountriesDropDown';
 import YearsDropDownMenu from './YearsDropDown';
+import Badges from './Badges';
 
 
 
@@ -16,9 +17,10 @@ export function UserForm(props){
     const [year, setYear] = useState(2018)
     const [limit , setLimit] = useState(50)
     const [filter , setFilter] = useState('asc') 
+    const [selectedCountries, setSelectedCountries] = useState([country])
 
     useEffect(()=>{
-        draw(country, property, year, limit, filter)
+        draw(selectedCountries, property, year, limit, filter)
     });
 
 
@@ -27,8 +29,10 @@ export function UserForm(props){
         <Form>
         <Form.Group controlId="formCountry">
         <Form.Label>Country</Form.Label>
-        <CountriesDropDown setCountry = {setCountry} country = {country}/>
+        <CountriesDropDown setCountry = {setCountry} country = {country} countries = {selectedCountries} setSelectedCountries = {setSelectedCountries}/>
         </Form.Group>
+
+        <Badges countries = {selectedCountries} setSelectedCountries = {setSelectedCountries}/>
 
         <Form.Group controlId="formProperty">
         <Form.Label>Property</Form.Label>
@@ -41,7 +45,6 @@ export function UserForm(props){
         <Form.Group controlId="formYear">
         <Form.Label>Year</Form.Label>
         <YearsDropDownMenu setYear ={setYear} year = {year}/>
-        {/* <Form.Control onChange={e => setYear(e.target.value)} type="number" placeholder={year} /> */}
         </Form.Group>
 
         <Form.Group controlId="formLimit">

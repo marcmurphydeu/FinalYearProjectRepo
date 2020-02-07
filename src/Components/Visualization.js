@@ -1,3 +1,22 @@
+
+function countryString(countries){
+    let string = `n.country_name = "`+countries[0]+`" or n.country_name = "`+countries[1]+`"`
+    // countries.foreach((c) => string += `n.country_name = `+{c}+``)
+    return string
+}
+
+function computeCypher(country, property, year, limit, filter){
+    let cypher = ``
+    console.log(country)
+    if (country.length > 1){
+        cypher = `MATCH (n:Country)-[r:had]->(p1: `+property+`)-[i:in]->(y1:Year) WHERE y1.year = `+year+` AND (`+countryString(country)+`) RETURN n, p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``
+    }
+    else{
+        cypher = `MATCH (n:Country {country_name: "`+country+`"})-[r:had]->(p1: `+property+`)-[i:in]->(y1:Year) WHERE y1.year = `+year+` RETURN n, p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``
+    }
+    return cypher;
+}
+
 export default function draw(country, property, year, limit, filter){
     var viz;
     var config = {
@@ -36,7 +55,7 @@ export default function draw(country, property, year, limit, filter){
         
             },
 
-        initial_cypher: `MATCH (n:Country {country_name: "`+country+`"})-[r:had]->(p1: `+property+`)-[i:in]->(y1:Year) WHERE y1.year = `+year+` RETURN n, p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``,
+        initial_cypher: computeCypher(country,property,year,limit, filter),
         arrows: true
     };
     var neo = require('neovis.js')

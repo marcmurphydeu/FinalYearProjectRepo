@@ -18,7 +18,6 @@ export default async function getCountries(){
 
     var records = result.records.map(record => record._fields)
 
-    console.log(records)
     } finally {
     await session.close()
     }

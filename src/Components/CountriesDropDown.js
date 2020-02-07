@@ -5,12 +5,12 @@ import {Dropdown} from 'react-bootstrap';
 import getCountries from '../Models/DatabaseModel';
 
 
+
+
 export default function CountriesDropDownMenu (props) {
     const [countries, setCountries] = useState(['Spain'])
-    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(()=>{
-        setIsLoading(true);
         getCountries().then((result)=>{
             setCountries(result)
         })
@@ -25,7 +25,12 @@ export default function CountriesDropDownMenu (props) {
 
             <Dropdown.Menu>
             <ul>
-                {!isLoading ? "" : countries.map((country) => <Dropdown.Item onSelect={()=>props.setCountry(country[0])} key={country[0]}>{country[0]}</Dropdown.Item>)}
+            {/* This adds the selected country to the dropdown title
+                and adds the selected country to the list of country chips  */}
+            {countries.map((country) => <Dropdown.Item onSelect={()=>{
+                    props.setSelectedCountries(props.countries.concat([country[0]]))
+                    props.setCountry(country[0]); 
+                }} key={country[0]}>{country[0]}</Dropdown.Item>)}
             </ul>   
             </Dropdown.Menu>
         </Dropdown>
