@@ -1,15 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import '../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Form} from 'react-bootstrap';
+import {Form, Col} from 'react-bootstrap';
 import draw from './Visualization';
 import CountriesDropDown from './CountriesDropDown';
 import YearsDropDownMenu from './YearsDropDown';
 import Badges from './Badges';
-
-
-
-
+import styled from 'styled-components';
+import OrderByFilter from './OrderBy';
+import PropertiesDropDown from './PropertiesDropDown';
+import PropertiesBadges from './PropertyBadges';
 
 export function UserForm(props){
     const [property, setProperty] = useState('Population')
@@ -18,7 +18,8 @@ export function UserForm(props){
     const [limit , setLimit] = useState(50)
     const [filter , setFilter] = useState('asc') 
     const [selectedCountries, setSelectedCountries] = useState([country])
-
+    const [selectedProperties, setSelectedProperties] = useState([property])
+ 
     useEffect(()=>{
         draw(selectedCountries, property, year, limit, filter)
     });
@@ -27,37 +28,48 @@ export function UserForm(props){
     return (
     <div>
         <Form>
-        <Form.Group controlId="formCountry">
-        <Form.Label>Country</Form.Label>
-        <CountriesDropDown setCountry = {setCountry} country = {country} countries = {selectedCountries} setSelectedCountries = {setSelectedCountries}/>
-        </Form.Group>
+            <Form.Row id = "FormRow"> 
+               <div>
+                    <Form.Group controlId="formCountry">
+                    <Form.Label>Country</Form.Label>
+                    <CountriesDropDown setCountry = {setCountry} country = {country} countries = {selectedCountries} setSelectedCountries = {setSelectedCountries}/>
+                    </Form.Group>
+                    <Badges countries = {selectedCountries} setSelectedCountries = {setSelectedCountries}/>
+                </div>            
 
-        <Badges countries = {selectedCountries} setSelectedCountries = {setSelectedCountries}/>
+                <div>
+                    <Form.Group controlId="formProperty">
+                    <Form.Label>Property</Form.Label>
+                    <PropertiesDropDown setProperty = {setProperty} property = {property} properties = {selectedProperties} setSelectedProperties = {setSelectedProperties}/>
+                    <PropertiesBadges properties = {selectedProperties} setSelectedProperties = {setSelectedProperties}/>
+                    </Form.Group>
+                </div>
+                
+                <div>
+                    <Form.Group controlId="formYear">
+                    <Form.Label>Year</Form.Label>
+                    <YearsDropDownMenu setYear ={setYear} year = {year}/>
+                    </Form.Group>
+                </div>
+                
+                <div>
+                    <Form.Group controlId="formLimit">
+                    <Form.Label>Limit</Form.Label>
+                    <Form.Control onChange={e => setLimit(e.target.value)} type="number" placeholder={limit} />
+                    </Form.Group>
+                </div>
 
-        <Form.Group controlId="formProperty">
-        <Form.Label>Property</Form.Label>
-        <Form.Control onChange={e => setProperty(e.target.value)} type="text" placeholder={property} />
-        <Form.Text className="text-muted">
-            Choose from the drop down
-        </Form.Text>
-        </Form.Group>
-
-        <Form.Group controlId="formYear">
-        <Form.Label>Year</Form.Label>
-        <YearsDropDownMenu setYear ={setYear} year = {year}/>
-        </Form.Group>
-
-        <Form.Group controlId="formLimit">
-        <Form.Label>Limit</Form.Label>
-        <Form.Control onChange={e => setLimit(e.target.value)} type="number" placeholder={limit} />
-        </Form.Group>
-
-        <Form.Group controlId="formBasicCheckbox">
-        <Form.Check type="checkbox" label="ASC" onChange={e => setFilter(e.target.value)} />
-        <Form.Check type="checkbox" label="DESC" onChange={e => setFilter(e.target.value)}/>
-        </Form.Group>
-    </Form>
-    <div id = "viz"></div>
+                <div>
+                    <Form.Group controlId="forOrder">
+                    <Form.Label>Order By</Form.Label>
+                    <OrderByFilter setFilter ={setFilter} filter = {filter}/>
+                    </Form.Group>
+                </div>
+                
+            </Form.Row>
+        
+        </Form>
+        <div id = "viz"></div>
     </div>
     )
 }

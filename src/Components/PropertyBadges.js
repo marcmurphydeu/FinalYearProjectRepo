@@ -17,27 +17,27 @@ const findDuplicates = (arr) => {
     return results;
   }
 
-function deleteCountry(setSelectedCountries, country, countries){
-    let value = country
+function deleteProperty(setSelectedProperties, property, properties){
+    let value = property
 
-    let arr = countries
+    let arr = properties
 
     arr = arr.filter(item => item !== value)
 
-    setSelectedCountries(arr)
+    setSelectedProperties(arr)
 }
 
 export default function Badges (props) {
-    const duplicates = findDuplicates(props.countries)
+    const duplicates = findDuplicates(props.properties)
     if (duplicates.length !== 0){
-        alert("Enter a country you haven't entered before")
-        deleteCountry(props.setSelectedCountries, duplicates[0], props.countries)
+        alert("Enter a property you haven't entered before")
+        deleteProperty(props.setSelectedProperties, duplicates[0], props.properties)
     }
     // console.log(props.countries)
     return (
         <div>
-            {props.countries.map(
-                (country) => <Chip key = {country} label={country} size = "small" onDelete={() => deleteCountry(props.setSelectedCountries, country, props.countries)} color="primary" />
+            {props.properties.map(
+                (property) => <Chip key = {property} label={property} size = "small" onDelete={() => deleteProperty(props.setSelectedProperties, property, props.properties)} color="primary" />
             )}
             
         </div>

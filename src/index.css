@@ -15,3 +15,11 @@ code {
 #theaLogo {
   height: 40px;
 }
+
+#FormRow {
+  display: flex;
+  justify-content: space-around;
+  align-items: baseline; 
+  align-content: center;
+  height: 150px;
+}

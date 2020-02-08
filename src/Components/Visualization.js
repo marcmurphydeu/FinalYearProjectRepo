@@ -1,13 +1,22 @@
 
 function countryString(countries){
-    let string = `n.country_name = "`+countries[0]+`" or n.country_name = "`+countries[1]+`"`
-    // countries.foreach((c) => string += `n.country_name = `+{c}+``)
+    let string = ``
+    countries.forEach((c) => {
+        console.log(c)
+        if (c === countries[countries.length-1]){
+            string += `n.country_name = "`+c+`"` 
+        }
+        else {
+            string += `n.country_name = "`+c+ `" or `
+        }
+    })
+    console.log(string)
     return string
 }
 
 function computeCypher(country, property, year, limit, filter){
     let cypher = ``
-    console.log(country)
+    console.log(filter)
     if (country.length > 1){
         cypher = `MATCH (n:Country)-[r:had]->(p1: `+property+`)-[i:in]->(y1:Year) WHERE y1.year = `+year+` AND (`+countryString(country)+`) RETURN n, p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``
     }

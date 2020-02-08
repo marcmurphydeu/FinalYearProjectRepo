@@ -38,9 +38,9 @@
 }
 
 #viz {
-  width: 75%;
+  width: 70%;
   height:700px;
-  border: 1px solid lightgray;
+  margin: auto;
+  border: 10px solid lightgray;
   font: 22pt arial;
-margin: 10px;
 }
