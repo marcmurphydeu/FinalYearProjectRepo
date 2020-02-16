@@ -34,40 +34,56 @@ export function UserForm(props){
 
     return (
         <Grid item xs={6} id = "Form"> 
-
             <Grid container id = "row1">
                 <Grid id = "countryForm" item xs={5} >
-                    <Form.Label id = "label">Country</Form.Label>
-                    <CountriesDropDown className = "dropdown" setCountry = {setCountry} country = {country} countries = {selectedCountries} setSelectedCountries = {setSelectedCountries}/>
+                    <Grid item id = "labelAndDropdown">
+                        <Form.Label id = "label">Country</Form.Label>
+                        <CountriesDropDown setCountry = {setCountry} country = {country} countries = {selectedCountries} setSelectedCountries = {setSelectedCountries}/>
+                    </Grid>
                     <Badges countries = {selectedCountries} setSelectedCountries = {setSelectedCountries}/>
                 </Grid>            
 
                 <Grid id ="propertyForm" item xs={5}>
-                    <Form.Label id = "label">Property</Form.Label>
-                    <PropertiesDropDown  className = "dropdown" setProperty = {setProperty} property = {property} properties = {selectedProperties} setSelectedProperties = {setSelectedProperties}/>
+                    <Grid item id = "labelAndDropdown">
+                        <Form.Label id = "label">Property</Form.Label>
+                        <PropertiesDropDown setProperty = {setProperty} property = {property} properties = {selectedProperties} setSelectedProperties = {setSelectedProperties}/>
+                    </Grid>
                     <PropertiesBadges properties = {selectedProperties} setSelectedProperties = {setSelectedProperties}/>
                 </Grid>
             </Grid> 
 
-            <Grid container id= "row2">
+            <Grid container id= "row2-box">
                 <Grid id ="yearForm" item xs={11}>
-                    <Form.Label id = "label">Year</Form.Label>
-                    <YearsDropDownMenu className = "dropdown" setYear ={setYear} year = {year}  selectedYears = {selectedYears} setSelectedYears = {setSelectedYears}/>
-                    <YearBadges years = {selectedYears} setSelectedYears = {setSelectedYears} />
-                    <Slider id = "yearSlider" setSelectedYears = {setSelectedYears}/>
-                    <TimeSeriesSlider setSelectedYears = {setSelectedYears}/>
+                    <Grid container xs={11} id="row2row1">
+                        <Grid item xs ={9} id = "labelAndDropdown">
+                            <Form.Label id = "label">Year</Form.Label>
+                            <YearsDropDownMenu setYear ={setYear} year = {year}  selectedYears = {selectedYears} setSelectedYears = {setSelectedYears}/>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Slider id = "yearSlider" setSelectedYears = {setSelectedYears}/>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <TimeSeriesSlider setSelectedYears = {setSelectedYears}/>
+                        </Grid>
+                    </Grid>    
+                    <Grid item xs = {11}>
+                        <YearBadges years = {selectedYears} setSelectedYears = {setSelectedYears} />
+                    </Grid>
                 </Grid>
             </Grid>
 
-            <Grid container>
-                <Grid id ="limitForm" item xs={6}>
-                    <Form.Label id = "label">Limit</Form.Label>
-                    <LimitDropDownMenu className = "dropdown" setLimit ={setLimit} limit = {limit}/>
+            <Grid container id="row3">
+                <Grid item id = "filterForm" xs={11}>
+                    <Grid id ="labelAndDropdown" item xs={5}>
+                            <Form.Label id = "label">Limit</Form.Label>
+                            <LimitDropDownMenu setLimit ={setLimit} limit = {limit}/>
+                    </Grid>
+                    <Grid id ="labelAndDropdown" item xs={5}>
+                        <Form.Label id = "label">Order By</Form.Label>
+                        <OrderByFilter setFilter ={setFilter} filter = {filter}/>
+                    </Grid>
                 </Grid>
-                <Grid id ="orderByForm" item xs={6}>
-                    <Form.Label id = "label">Order By</Form.Label>
-                    <OrderByFilter className = "dropdown" setFilter ={setFilter} filter = {filter}/>
-                </Grid>
+                    
             </Grid>
         </Grid>
     )

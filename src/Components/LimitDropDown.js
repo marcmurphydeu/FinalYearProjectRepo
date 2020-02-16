@@ -14,7 +14,7 @@ export default function LimitDropDownMenu (props) {
     ) 
     
     return (
-        <Dropdown >
+        <Dropdown className = "filterFormDropdown">
             <Dropdown.Toggle variant="success" id="dropdown-basic">
                 {props.limit}
             </Dropdown.Toggle>

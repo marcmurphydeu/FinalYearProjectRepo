@@ -18,7 +18,7 @@ export default function PropertiesDropDownMenu (props) {
 
     return (
         
-        <Dropdown >
+        <Dropdown  className = "formDropdown">
             <Dropdown.Toggle variant="success" id="dropdown-basic">
                 {props.property}
             </Dropdown.Toggle>

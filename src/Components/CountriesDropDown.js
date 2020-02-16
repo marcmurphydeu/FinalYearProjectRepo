@@ -18,7 +18,7 @@ export default function CountriesDropDownMenu (props) {
 
     return (
         
-        <Dropdown >
+        <Dropdown className = "formDropdown" >
             <Dropdown.Toggle variant="success" id="dropdown-basic">
                 {props.country}
             </Dropdown.Toggle>

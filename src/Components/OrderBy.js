@@ -11,7 +11,7 @@ export default function OrderByDropDown (props) {
     ) 
     
     return (
-        <Dropdown >
+        <Dropdown className = "filterFormDropdown">
             <Dropdown.Toggle variant="success" id="dropdown-basic">
                 {props.filter}
             </Dropdown.Toggle>
