@@ -2,7 +2,6 @@
 function countryString(countries){
     let string = ``
     countries.forEach((c) => {
-        console.log(c)
         if (c === countries[countries.length-1]){
             string += `n.country_name = "`+c+`"` 
         }
@@ -10,19 +9,37 @@ function countryString(countries){
             string += `n.country_name = "`+c+ `" or `
         }
     })
-    console.log(string)
+    return string
+}
+
+function propertyString(properties){
+    let string = ``
+    properties.forEach((p) => {
+        if (p === properties[properties.length-1]){
+            string += `labels(p1) = ["`+p+`"]` 
+        }
+        else {
+            string += `labels(p1) = ["`+p+ `"] or `
+        }
+    })
+    return string
+}
+
+function yearString(years){
+    let string = ``
+    years.forEach((y) => {
+        if (y === years[years.length-1]){
+            string += `y1.year = `+y+`` 
+        }
+        else {
+            string += `y1.year = `+y+ ` or `
+        }
+    })
     return string
 }
 
 function computeCypher(country, property, year, limit, filter){
-    let cypher = ``
-    console.log(filter)
-    if (country.length > 1){
-        cypher = `MATCH (n:Country)-[r:had]->(p1: `+property+`)-[i:in]->(y1:Year) WHERE y1.year = `+year+` AND (`+countryString(country)+`) RETURN n, p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``
-    }
-    else{
-        cypher = `MATCH (n:Country {country_name: "`+country+`"})-[r:had]->(p1: `+property+`)-[i:in]->(y1:Year) WHERE y1.year = `+year+` RETURN n, p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``
-    }
+    let cypher = `MATCH (n:Country)-[r:had]->(p1)-[i:in]->(y1:Year) WHERE (`+countryString(country)+`)  AND (`+propertyString(property)+`)  AND (`+yearString(year)+`) RETURN n, p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``
     return cypher;
 }
 

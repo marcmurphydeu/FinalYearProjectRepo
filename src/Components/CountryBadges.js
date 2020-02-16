@@ -10,7 +10,7 @@ const findDuplicates = (arr) => {
     // original array won't be modified)
     let results = [];
     for (let i = 0; i < sorted_arr.length - 1; i++) {
-      if (sorted_arr[i + 1] == sorted_arr[i]) {
+      if (sorted_arr[i + 1] === sorted_arr[i]) {
         results.push(sorted_arr[i]);
       }
     }
@@ -33,11 +33,10 @@ export default function Badges (props) {
         alert("Enter a country you haven't entered before")
         deleteCountry(props.setSelectedCountries, duplicates[0], props.countries)
     }
-    // console.log(props.countries)
     return (
-        <div>
+        <div className="badges">
             {props.countries.map(
-                (country) => <Chip key = {country} label={country} size = "small" onDelete={() => deleteCountry(props.setSelectedCountries, country, props.countries)} color="primary" />
+                (country) => <Chip id = "badge" key = {country} label={country} size = "small" onDelete={() => deleteCountry(props.setSelectedCountries, country, props.countries)} color="primary" />
             )}
             
         </div>

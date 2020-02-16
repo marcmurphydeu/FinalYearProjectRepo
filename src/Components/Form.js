@@ -1,15 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import '../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Form, Col} from 'react-bootstrap';
+import {Form} from 'react-bootstrap';
 import draw from './Visualization';
 import CountriesDropDown from './CountriesDropDown';
 import YearsDropDownMenu from './YearsDropDown';
-import Badges from './Badges';
-import styled from 'styled-components';
+import Badges from './CountryBadges';
 import OrderByFilter from './OrderBy';
 import PropertiesDropDown from './PropertiesDropDown';
 import PropertiesBadges from './PropertyBadges';
+import LimitDropDownMenu from './LimitDropDown';
+import YearBadges from './YearBadges';
+import TimeSeriesSlider from './TimeSeriesSlider';
+import Slider from './Slider';
+import Grid from '@material-ui/core/Grid';
+
+
 
 export function UserForm(props){
     const [property, setProperty] = useState('Population')
@@ -19,58 +25,51 @@ export function UserForm(props){
     const [filter , setFilter] = useState('asc') 
     const [selectedCountries, setSelectedCountries] = useState([country])
     const [selectedProperties, setSelectedProperties] = useState([property])
+    const [selectedYears, setSelectedYears] = useState([year])
  
     useEffect(()=>{
-        draw(selectedCountries, property, year, limit, filter)
+        draw(selectedCountries, selectedProperties, selectedYears, limit, filter)
     });
 
 
     return (
-    <div>
-        <Form>
-            <Form.Row id = "FormRow"> 
-               <div>
-                    <Form.Group controlId="formCountry">
-                    <Form.Label>Country</Form.Label>
-                    <CountriesDropDown setCountry = {setCountry} country = {country} countries = {selectedCountries} setSelectedCountries = {setSelectedCountries}/>
-                    </Form.Group>
+        <Grid item xs={6} id = "Form"> 
+
+            <Grid container id = "row1">
+                <Grid id = "countryForm" item xs={5} >
+                    <Form.Label id = "label">Country</Form.Label>
+                    <CountriesDropDown className = "dropdown" setCountry = {setCountry} country = {country} countries = {selectedCountries} setSelectedCountries = {setSelectedCountries}/>
                     <Badges countries = {selectedCountries} setSelectedCountries = {setSelectedCountries}/>
-                </div>            
+                </Grid>            
 
-                <div>
-                    <Form.Group controlId="formProperty">
-                    <Form.Label>Property</Form.Label>
-                    <PropertiesDropDown setProperty = {setProperty} property = {property} properties = {selectedProperties} setSelectedProperties = {setSelectedProperties}/>
+                <Grid id ="propertyForm" item xs={5}>
+                    <Form.Label id = "label">Property</Form.Label>
+                    <PropertiesDropDown  className = "dropdown" setProperty = {setProperty} property = {property} properties = {selectedProperties} setSelectedProperties = {setSelectedProperties}/>
                     <PropertiesBadges properties = {selectedProperties} setSelectedProperties = {setSelectedProperties}/>
-                    </Form.Group>
-                </div>
-                
-                <div>
-                    <Form.Group controlId="formYear">
-                    <Form.Label>Year</Form.Label>
-                    <YearsDropDownMenu setYear ={setYear} year = {year}/>
-                    </Form.Group>
-                </div>
-                
-                <div>
-                    <Form.Group controlId="formLimit">
-                    <Form.Label>Limit</Form.Label>
-                    <Form.Control onChange={e => setLimit(e.target.value)} type="number" placeholder={limit} />
-                    </Form.Group>
-                </div>
+                </Grid>
+            </Grid> 
 
-                <div>
-                    <Form.Group controlId="forOrder">
-                    <Form.Label>Order By</Form.Label>
-                    <OrderByFilter setFilter ={setFilter} filter = {filter}/>
-                    </Form.Group>
-                </div>
-                
-            </Form.Row>
-        
-        </Form>
-        <div id = "viz"></div>
-    </div>
+            <Grid container id= "row2">
+                <Grid id ="yearForm" item xs={11}>
+                    <Form.Label id = "label">Year</Form.Label>
+                    <YearsDropDownMenu className = "dropdown" setYear ={setYear} year = {year}  selectedYears = {selectedYears} setSelectedYears = {setSelectedYears}/>
+                    <YearBadges years = {selectedYears} setSelectedYears = {setSelectedYears} />
+                    <Slider id = "yearSlider" setSelectedYears = {setSelectedYears}/>
+                    <TimeSeriesSlider setSelectedYears = {setSelectedYears}/>
+                </Grid>
+            </Grid>
+
+            <Grid container>
+                <Grid id ="limitForm" item xs={6}>
+                    <Form.Label id = "label">Limit</Form.Label>
+                    <LimitDropDownMenu className = "dropdown" setLimit ={setLimit} limit = {limit}/>
+                </Grid>
+                <Grid id ="orderByForm" item xs={6}>
+                    <Form.Label id = "label">Order By</Form.Label>
+                    <OrderByFilter className = "dropdown" setFilter ={setFilter} filter = {filter}/>
+                </Grid>
+            </Grid>
+        </Grid>
     )
 }
 

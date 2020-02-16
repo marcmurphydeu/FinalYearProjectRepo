@@ -10,7 +10,10 @@ export default function YearsDropDownMenu (props) {
     }
 
     const years = years_list.map(
-        (year) => <Dropdown.Item onSelect={() => props.setYear(year)} key={year}>{year}</Dropdown.Item>
+        (year) => <Dropdown.Item onSelect={() => {
+            props.setYear(year);
+            props.setSelectedYears(props.selectedYears.concat([year]))
+        }} key={year}>{year}</Dropdown.Item>
     ) 
     
     return (
