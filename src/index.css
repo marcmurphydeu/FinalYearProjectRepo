@@ -13,6 +13,27 @@ code {
     monospace;
 }
 
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+  -webkit-border-radius: 10px;
+  background: white;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: #173B65; 
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+
 #theaLogo {
   height: 40px;
 }
@@ -26,6 +47,11 @@ Label{
   background-color: #0077AB;
   border-color:#0077AB;
 }
+
+/* .dropdown-toggle btn btn-success{
+  background-color: white;
+  border-color: white;
+} */
 
 #badge {
   color: #fff;
@@ -128,7 +154,28 @@ Label{
   align-items: center;
   flex-direction: column;
   background-color: #EB3F38;
+  /* overflow: hidden; */
 }
+
+
+.dropdown-menu {
+  max-width:400px;
+  max-height:200px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+
+.dropdown-item {
+  overflow: hidden;
+  padding-inline-start: 0px;
+}
+
+ul{
+  padding-inline-start: 30px;
+}
+
+
 
 #labelAndDropdown{
   display: flex;

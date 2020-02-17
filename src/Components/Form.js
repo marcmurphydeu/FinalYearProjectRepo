@@ -17,7 +17,7 @@ import Grid from '@material-ui/core/Grid';
 
 
 
-export function UserForm(props){
+export function UserForm(){
     const [property, setProperty] = useState('Population')
     const [country, setCountry] = useState('Spain')
     const [year, setYear] = useState(2018)
@@ -54,7 +54,7 @@ export function UserForm(props){
 
             <Grid container id= "row2-box">
                 <Grid id ="yearForm" item xs={11}>
-                    <Grid container xs={11} id="row2row1">
+                    <Grid item xs={11} id="row2row1">
                         <Grid item xs ={9} id = "labelAndDropdown">
                             <Form.Label id = "label">Year</Form.Label>
                             <YearsDropDownMenu setYear ={setYear} year = {year}  selectedYears = {selectedYears} setSelectedYears = {setSelectedYears}/>
