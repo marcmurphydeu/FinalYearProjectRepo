@@ -3,13 +3,9 @@ import '../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Form} from 'react-bootstrap';
 import draw from './Visualization';
-import CountriesDropDown from './CountriesDropDown';
-import YearsDropDownMenu from './YearsDropDown';
 import Badges from './CountryBadges';
-import OrderByFilter from './OrderBy';
-import PropertiesDropDown from './PropertiesDropDown';
+import DropDownMenu from './DropDownMenu';
 import PropertiesBadges from './PropertyBadges';
-import LimitDropDownMenu from './LimitDropDown';
 import YearBadges from './YearBadges';
 import TimeSeriesSlider from './TimeSeriesSlider';
 import Slider from './Slider';
@@ -18,14 +14,11 @@ import Grid from '@material-ui/core/Grid';
 
 
 export function UserForm(){
-    const [property, setProperty] = useState('Population')
-    const [country, setCountry] = useState('Spain')
-    const [year, setYear] = useState(2018)
-    const [limit , setLimit] = useState(50)
+    const [limit , setLimit] = useState()
     const [filter , setFilter] = useState('asc') 
-    const [selectedCountries, setSelectedCountries] = useState([country])
-    const [selectedProperties, setSelectedProperties] = useState([property])
-    const [selectedYears, setSelectedYears] = useState([year])
+    const [selectedCountries, setSelectedCountries] = useState([])
+    const [selectedProperties, setSelectedProperties] = useState([])
+    const [selectedYears, setSelectedYears] = useState([])
  
     useEffect(()=>{
         draw(selectedCountries, selectedProperties, selectedYears, limit, filter)
@@ -38,7 +31,7 @@ export function UserForm(){
                 <Grid id = "countryForm" item xs={5} >
                     <Grid item id = "labelAndDropdown">
                         <Form.Label id = "label">Country</Form.Label>
-                        <CountriesDropDown setCountry = {setCountry} country = {country} countries = {selectedCountries} setSelectedCountries = {setSelectedCountries}/>
+                        <DropDownMenu type={"countries"}  values = {selectedCountries} setSelectedValues = {setSelectedCountries}/>
                     </Grid>
                     <Badges countries = {selectedCountries} setSelectedCountries = {setSelectedCountries}/>
                 </Grid>            
@@ -46,7 +39,7 @@ export function UserForm(){
                 <Grid id ="propertyForm" item xs={5}>
                     <Grid item id = "labelAndDropdown">
                         <Form.Label id = "label">Property</Form.Label>
-                        <PropertiesDropDown setProperty = {setProperty} property = {property} properties = {selectedProperties} setSelectedProperties = {setSelectedProperties}/>
+                        <DropDownMenu  type = {"properties"} values = {selectedProperties} setSelectedValues = {setSelectedProperties}/>
                     </Grid>
                     <PropertiesBadges properties = {selectedProperties} setSelectedProperties = {setSelectedProperties}/>
                 </Grid>
@@ -57,7 +50,7 @@ export function UserForm(){
                     <Grid item xs={11} id="row2row1">
                         <Grid item xs ={9} id = "labelAndDropdown">
                             <Form.Label id = "label">Year</Form.Label>
-                            <YearsDropDownMenu setYear ={setYear} year = {year}  selectedYears = {selectedYears} setSelectedYears = {setSelectedYears}/>
+                            <DropDownMenu type={"years"} values ={selectedYears} setSelectedValues = {setSelectedYears}/>
                         </Grid>
                         <Grid item xs={3}>
                             <Slider id = "yearSlider" setSelectedYears = {setSelectedYears}/>
@@ -76,11 +69,11 @@ export function UserForm(){
                 <Grid item id = "filterForm" xs={11}>
                     <Grid id ="labelAndDropdown" item xs={5}>
                             <Form.Label id = "label">Limit</Form.Label>
-                            <LimitDropDownMenu setLimit ={setLimit} limit = {limit}/>
+                            <DropDownMenu type = {"limit"} values ={[limit]} setSelectedValues = {setLimit}/>
                     </Grid>
                     <Grid id ="labelAndDropdown" item xs={5}>
                         <Form.Label id = "label">Order By</Form.Label>
-                        <OrderByFilter setFilter ={setFilter} filter = {filter}/>
+                        <DropDownMenu type = {"orderBy"} setSelectedValues ={setFilter} values = {[filter]}/>
                     </Grid>
                 </Grid>
                     
