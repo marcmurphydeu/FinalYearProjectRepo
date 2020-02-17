@@ -1,3 +1,5 @@
+import {getPageRank} from '../Models/DatabaseModel'
+
 
 function countryString(countries){
     let string = ``
@@ -38,13 +40,24 @@ function yearString(years){
     return string
 }
 
-function computeCypher(country, property, year, limit, filter){
-    let cypher = `MATCH (n:Country)-[r:had]->(p1)-[i:in]->(y1:Year) WHERE (`+countryString(country)+`)  AND (`+propertyString(property)+`)  AND (`+yearString(year)+`) RETURN n, p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``
+export function computeCypher(country, property, year, limit, filter, pageRank = false){
+    let cypher = `MATCH (n:Country)-[r:had]->(p1)-[i:in]->(y1:Year) WHERE (`+countryString(country)+`)  AND (`+propertyString(property)+`)  AND (`+yearString(year)+`) `
+    if (pageRank){
+        let initialString = "CALL algo.pageRank.stream('MATCH (p)  RETURN id(p) as id', '"
+        cypher = initialString + cypher
+        cypher += `RETURN id(p1) as source, id(y1) as target', {graph:'cypher'})
+                   YIELD nodeId,score with algo.asNode(nodeId) as node, score order by score desc LIMIT 20
+                   RETURN node {.value, .country_name, .year}, score `
+    }
+    else{
+        cypher += `RETURN n, p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``
+    }
     return cypher;
 }
 
 export default function draw(country, property, year, limit, filter){
     var viz;
+    console.log(getPageRank(computeCypher(country,property,year,limit,filter,true)).then(res => console.log(res)))
     var config = {
         container_id: "viz",
         server_url:"bolt://localhost:7687",
@@ -56,10 +69,8 @@ export default function draw(country, property, year, limit, filter){
                     "size": 3.0,
                     "community": "country_name"
                 },
-                "Property": {
-                    "caption": "no clue",
-                    "size": 2.0,
-                    "community": "value"
+                [property[0]]:{
+                    "caption" : "a", "size": 10.0, "community":"value",  
                 },
                 "Year":{
                     "caption": "year",
@@ -80,7 +91,6 @@ export default function draw(country, property, year, limit, filter){
             }
         
             },
-
         initial_cypher: computeCypher(country,property,year,limit, filter),
         arrows: true
     };
@@ -89,13 +99,3 @@ export default function draw(country, property, year, limit, filter){
     viz.render();
 
 }
-// export default function Visualization (props) {
-//     var visualizationType = '2D'
-    
-//     return (
-//         <div>
-            
-//             </div>
-//         </div>
-//     )
-// }

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import '../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Form} from 'react-bootstrap';
-import draw from './Visualization';
+import draw from '../Controllers/2DVisualization';
 import Badges from './CountryBadges';
 import DropDownMenu from './DropDownMenu';
 import PropertiesBadges from './PropertyBadges';
@@ -14,14 +14,18 @@ import Grid from '@material-ui/core/Grid';
 
 
 export function UserForm(){
-    const [limit , setLimit] = useState()
+    const [limit , setLimit] = useState('5')
     const [filter , setFilter] = useState('asc') 
     const [selectedCountries, setSelectedCountries] = useState([])
     const [selectedProperties, setSelectedProperties] = useState([])
     const [selectedYears, setSelectedYears] = useState([])
  
     useEffect(()=>{
-        draw(selectedCountries, selectedProperties, selectedYears, limit, filter)
+        if (selectedCountries.length !== 0
+            && selectedProperties.length !==0 
+            && selectedYears.length !==0){
+            draw(selectedCountries, selectedProperties, selectedYears, limit, filter)
+        }
     });
 
 
