@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 import '../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Navbar, Nav, NavDropdown, Form, FormControl, Button} from 'react-bootstrap';
-import theaLogo from '../theaLogo.jpg'
+import theaLogo from '../theaLogoFinal.png'
 
 export class NavBar extends Component {
     render() {
         return (
             <Navbar bg="light" expand="lg">
-                <Navbar.Brand href="#home"><img src={theaLogo} alt = "Logo" id="theaLogo"/></Navbar.Brand>
+                <Navbar.Brand href="#home"><img src={theaLogo} alt = "Logo" id="theaLogo" /></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                   <Nav className="mr-auto">

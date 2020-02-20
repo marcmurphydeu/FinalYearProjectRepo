@@ -83,6 +83,7 @@ export function computeCypher(country, property, year, limit, filter, pageRank =
 
 export function computeQueryFor3D(country, property, year, limit, filter, pageRank = false){
     let query = `MATCH (n:Country)-[r:had]->(p1)-[:in]->(y1:Year) WHERE (`+countryString(country)+`)  AND (`+propertyString(property)+` or (`+propertyString(property)+`) )  AND (`+yearString(year)+`)
-                RETURN [id(n), id(p1)] as source, [id(p1), id(y1)] as target`
+                RETURN {id: [id(n), id(p1)], label: [labels(n), labels(p1)], caption: [n.country_name, p1.value] } as source, 
+                {id: [id(p1), id(y1)], label:[labels(p1), labels(y1)], caption:[p1.value, y1.year] } as target`
     return query;
 }
