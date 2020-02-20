@@ -10,21 +10,32 @@ import YearBadges from './YearBadges';
 import TimeSeriesSlider from './TimeSeriesSlider';
 import Slider from './Slider';
 import Grid from '@material-ui/core/Grid';
-
+import draw3D from '../Controllers/3DVisualization';
 
 
 export function UserForm(){
-    const [limit , setLimit] = useState('5')
+    const [limit , setLimit] = useState('100')
     const [filter , setFilter] = useState('asc') 
     const [selectedCountries, setSelectedCountries] = useState([])
     const [selectedProperties, setSelectedProperties] = useState([])
     const [selectedYears, setSelectedYears] = useState([])
+    const [visualization, setVisualization] = useState(['2D'])
  
     useEffect(()=>{
         if (selectedCountries.length !== 0
             && selectedProperties.length !==0 
             && selectedYears.length !==0){
-            draw(selectedCountries, selectedProperties, selectedYears, limit, filter)
+            switch (visualization){
+                case "2D":
+                    draw(selectedCountries, selectedProperties, selectedYears, limit, filter);
+                    break;
+                case "3D":
+                    draw3D(selectedCountries, selectedProperties, selectedYears, limit, filter);
+                    break;
+                default:
+                    break;
+                }
+            
         }
     });
 
@@ -78,6 +89,16 @@ export function UserForm(){
                     <Grid id ="labelAndDropdown" item xs={5}>
                         <Form.Label id = "label">Order By</Form.Label>
                         <DropDownMenu type = {"orderBy"} setSelectedValues ={setFilter} values = {[filter]}/>
+                    </Grid>
+                </Grid>
+                    
+            </Grid>
+
+            <Grid container id="row3">
+                <Grid item id = "filterForm" xs={11}>
+                        <Form.Label id = "label">Visualization</Form.Label>
+                    <Grid id ="labelAndDropdown" item xs={5}>
+                        <DropDownMenu type = {"visualization"} setSelectedValues ={setVisualization} values = {[visualization]}/>
                     </Grid>
                 </Grid>
                     

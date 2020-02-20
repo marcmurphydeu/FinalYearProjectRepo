@@ -50,6 +50,10 @@ export default function DropDownMenu (props) {
                 let filters = ['ASC', 'DESC'];
                 setValues(filters)
                 break;
+            case "visualization":
+                let types = ['2D', '3D', 'heatMap']
+                setValues(types);
+                break;
             default:
               alert('Invalid props type')
           }
@@ -67,7 +71,7 @@ export default function DropDownMenu (props) {
             {/* This adds the selected country to the dropdown title
                 and adds the selected country to the list of country chips  */}
             {values.map((v) => <Dropdown.Item onSelect={()=>{
-                    if (props.type === "limit" || props.type === "orderBy"){
+                    if (props.type === "limit" || props.type === "orderBy"|| props.type === "visualization" ){
                         props.setSelectedValues(v);
                     }else{
                         props.setSelectedValues(props.values.concat([v]));
