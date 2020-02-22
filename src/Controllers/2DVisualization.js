@@ -1,5 +1,5 @@
 import {getPageRank, setPageRankOfQuery} from '../Models/DatabaseModel'
-import {computeCypher} from './queryConstructors';
+import {computeCypher} from '../Models/QueryConstructors';
 
 
 export default function draw(country, property, year, limit, filter){

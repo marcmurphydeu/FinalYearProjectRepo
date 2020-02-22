@@ -1,6 +1,7 @@
 import ForceGraph3D from '3d-force-graph';
 import neo4j from 'neo4j-driver';
-import {computeQueryFor3D} from './queryConstructors';
+import {computeQueryFor3D, computeCypher} from '../Models/QueryConstructors';
+import {getPageRank, setPageRankOfQuery} from '../Models/DatabaseModel'
 //PUT SESSION STUFF TO MODEL
 
 
@@ -11,35 +12,31 @@ export default function draw3D (country, property, year, limit, filter){
         );       
         const session = driver.session();
         const elem = document.getElementById('viz');
-        const start = new Date()
+        setPageRankOfQuery(computeCypher(country,property,year,limit,filter,true))
     session
         .run(computeQueryFor3D(country, property, year, limit, filter))
         .then(function (result) {
-            // console.log(result)
             const links = []
             const nodes = {}
-            console.log(result)
             result.records.forEach(r => { 
+                console.log(r)
                 for (let i = 0; i<r._fields.length; i++){
-                    console.log(r)
                     
-                    nodes[r._fields[0].id[i].toNumber()] = {id: r._fields[0].id[i].toNumber(), caption: r._fields[0].caption[i], label: r._fields[0].label[i]}
-                    nodes[r._fields[1].id[i].toNumber()] = {id: r._fields[1].id[i].toNumber(), caption: r._fields[1].caption[i], label: r._fields[1].label[i]}
-                    // return {source:r.get('source').toNumber(), target:r.get('target').toNumber()}
+                    nodes[r._fields[0].id[i].toNumber()] = {id: r._fields[0].id[i].toNumber(), caption: r._fields[0].caption[i], label: r._fields[0].label[i], size: r._fields[0].size[i]*10}
+                    nodes[r._fields[1].id[i].toNumber()] = {id: r._fields[1].id[i].toNumber(), caption: r._fields[1].caption[i], label: r._fields[1].label[i], size: r._fields[1].size[i]*10}
                     links.push({source:r._fields[0].id[i].toNumber(), target:r._fields[1].id[i].toNumber()})
                 }
             });
-            console.log("nodes", nodes)
-            console.log(links)        
             session.close();
-            console.log(links.length+" links loaded in "+(new Date()-start)+" ms.")
             const ids = new Set()
             links.forEach(l => {ids.add(l.source);ids.add(l.target);});
             const gData = { nodes: Object.values(nodes), links: links}
-            console.log("GDATA IS ", gData)
             ForceGraph3D()(elem)
                             .graphData(gData)
                             .nodeAutoColorBy('label')
+                            .linkDirectionalArrowLength(3)
+                            .linkOpacity(0.6)
+                            .nodeVal('size')
                             .nodeLabel(node=> `${node.label}:${node.caption}`)
                             .onNodeHover(node=>elem.style.cursor = node ? 'pointer':null);
           })

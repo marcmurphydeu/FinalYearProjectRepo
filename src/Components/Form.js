@@ -19,7 +19,7 @@ export function UserForm(){
     const [selectedCountries, setSelectedCountries] = useState([])
     const [selectedProperties, setSelectedProperties] = useState([])
     const [selectedYears, setSelectedYears] = useState([])
-    const [visualization, setVisualization] = useState(['2D'])
+    const [visualization, setVisualization] = useState('2D')
  
     useEffect(()=>{
         if (selectedCountries.length !== 0

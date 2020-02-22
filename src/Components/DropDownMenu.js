@@ -2,9 +2,7 @@ import React, {useState, useEffect} from 'react';
 import '../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Dropdown} from 'react-bootstrap';
-import {getProperties} from '../Models/DatabaseModel';
-import {getCountries} from '../Models/DatabaseModel';
-
+import {getDropDownData} from '../Controllers/DropdownData';
 
 
 
@@ -17,7 +15,7 @@ export default function DropDownMenu (props) {
     useEffect(()=>{
         switch(props.type) {
             case "properties":
-                getProperties().then((result)=>{
+                getDropDownData('properties').then((result)=>{
                     let values = result.map(function(key){
                         return key[0];
                     });
@@ -25,7 +23,7 @@ export default function DropDownMenu (props) {
                 })
                 break;
             case "countries":
-                getCountries().then((result)=>{
+                getDropDownData('countries').then((result)=>{
                     let values = result.map(function(key){
                         return key[0];
                     });
