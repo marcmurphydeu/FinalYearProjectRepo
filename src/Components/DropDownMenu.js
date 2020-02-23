@@ -49,7 +49,7 @@ export default function DropDownMenu (props) {
                 setValues(filters)
                 break;
             case "visualization":
-                let types = ['2D', '3D', 'heatMap']
+                let types = ['2D', '3D', 'HeatMap']
                 setValues(types);
                 break;
             default:

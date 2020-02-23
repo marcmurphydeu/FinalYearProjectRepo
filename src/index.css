@@ -68,6 +68,7 @@ Label{
   justify-content: flex-start;
   align-items: flex-start; 
   align-content: center;
+  flex-wrap: wrap;
 }
 
 #viz {
@@ -76,6 +77,12 @@ Label{
   font: 22pt arial;
   background-color: white;
   flex-shrink: 0;
+}
+
+
+.leaflet-container {
+  width: 100%;
+  height: 100vh;
 }
 
 /* Doesn't actually do anything */
