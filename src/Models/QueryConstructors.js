@@ -18,19 +18,21 @@ function computeString(values, type, variable_name=null){
     values.forEach((v) => {
         if (v === values[values.length-1]){
             if(variable_name){
+                string += variable_name + `` + attribute 
                 if (type === 'years'){
-                    string += variable_name + `` + attribute + ` = `+v+``
+                    string += ` = `+v+``
                 }else{
-                    string += variable_name + `` + attribute + ` = "`+v+`"`
+                    string += ` = "`+v+`"`
                 }
             }
         }
         else {
             if(variable_name){
+                string += variable_name + `` + attribute
                 if(type === 'years'){
-                    string += variable_name + `` + attribute + ` = `+v+` or `
+                    string += ` = `+v+` or `
                 }else{
-                    string += variable_name + `` + attribute + ` = "`+v+`" or `
+                    string += ` = "`+v+`" or `
                 }
             }
         }

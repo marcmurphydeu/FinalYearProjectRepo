@@ -11,6 +11,7 @@ import TimeSeriesSlider from './TimeSeriesSlider';
 import Slider from './Slider';
 import Grid from '@material-ui/core/Grid';
 import draw3D from '../Controllers/3DVisualization';
+import SelectAllButton from './SelectAllButton';
 
 
 export function UserForm(){
@@ -34,8 +35,7 @@ export function UserForm(){
                     break;
                 default:
                     break;
-                }
-            
+                }    
         }
     });
 
@@ -48,6 +48,7 @@ export function UserForm(){
                         <Form.Label id = "label">Country</Form.Label>
                         <DropDownMenu type={"countries"}  values = {selectedCountries} setSelectedValues = {setSelectedCountries}/>
                     </Grid>
+                    <SelectAllButton type={"countries"} setSelectedValues = {setSelectedCountries}/>
                     <Badges countries = {selectedCountries} setSelectedCountries = {setSelectedCountries}/>
                 </Grid>            
 
@@ -56,6 +57,7 @@ export function UserForm(){
                         <Form.Label id = "label">Property</Form.Label>
                         <DropDownMenu  type = {"properties"} values = {selectedProperties} setSelectedValues = {setSelectedProperties}/>
                     </Grid>
+                    <SelectAllButton type = {"properties"}  setSelectedValues = {setSelectedProperties}/>
                     <PropertiesBadges properties = {selectedProperties} setSelectedProperties = {setSelectedProperties}/>
                 </Grid>
             </Grid> 
@@ -73,7 +75,8 @@ export function UserForm(){
                         <Grid item xs={3}>
                             <TimeSeriesSlider setSelectedYears = {setSelectedYears}/>
                         </Grid>
-                    </Grid>    
+                    </Grid>
+                    <SelectAllButton type={"years"} setSelectedValues = {setSelectedYears}/>    
                     <Grid item xs = {11}>
                         <YearBadges years = {selectedYears} setSelectedYears = {setSelectedYears} />
                     </Grid>
