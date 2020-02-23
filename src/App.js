@@ -14,6 +14,7 @@ function App() {
             <Grid container id = "MainPageContent">
                 <UserForm/>
                 <Grid xs={6} item id = "viz"></Grid>
+                <Grid xs = {12} item id="map"/>
             </Grid>
             
         </React.Fragment>

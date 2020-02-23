@@ -23,9 +23,9 @@ export function UserForm(){
     const [visualization, setVisualization] = useState('2D')
  
     useEffect(()=>{
-        // if (selectedCountries.length !== 0
-        //     && selectedProperties.length !==0 
-        //     && selectedYears.length !==0){
+        if (selectedCountries.length !== 0
+            && selectedProperties.length !==0 
+            && selectedYears.length !==0){
             switch (visualization){
                 case "2D":
                     draw(selectedCountries, selectedProperties, selectedYears, limit, filter);
@@ -34,13 +34,13 @@ export function UserForm(){
                     draw3D(selectedCountries, selectedProperties, selectedYears, limit, filter);
                     break;
                 case "HeatMap":
-                    HeatMap();
+                    HeatMap(selectedCountries, selectedProperties, selectedYears, limit, filter);
                     break;
                 default:
                     break;
                 }    
         }
-    );
+    });
 
 
     return (
