@@ -29,13 +29,12 @@ export default function HeatMap (selectedCountries, selectedProperties, selected
             response.forEach(country=>{
                 if (country[1] && country[2] && country[0] in list){
                     let marker = L.circleMarker([country[2], country[1]],{
-                        color: "red",
-                        fillColor: "#f03",
+                        color: list[country[0]].colour,
+                        fillColor: list[country[0]].colour,
                         fillOpacity: 0.6,
                         radius: list[country[0]].diameter
                     }).addTo(map)
                     marker.on('mouseover', function(e) {
-                        //open popup;
                         var popup = L.popup()
                          .setLatLng([country[2], country[1]]) 
                          .setContent(''+list[country[0]].value)
@@ -44,29 +43,48 @@ export default function HeatMap (selectedCountries, selectedProperties, selected
                 }
             })
         })
-    }     
-    )  
+    }).then(e=>{
+        const mapElement = document.getElementById('map')
+        window.scrollTo(0, mapElement.offsetTop)
+        mapElement.style.paddingTop = "10px";
+        mapElement.style.boxShadow = "0px 0px 23px 4px rgba(0,0,0,0.57)"
+        mapElement.style.borderRadius = "15px 15px 15px 15px;"
+        mapElement.style.marginTop = "30px"
+        })
 }
 
 function normalizeNumbers(list){
     let  maxDiameter = 30.0
-    var max = list[0]
-    list.forEach(tuple=>{
-        if (tuple[1] >= max[1]){
-            max = tuple
-        }
-    })
+
+    list.sort(function(a, b){return b[1]-a[1]});
+
+    let colorsList = []
+    
+    console.log(colorsList)
 
     var newList = {}
-    list.forEach(tuple=>{
-        if (tuple === max){
-            newList[tuple[0]] = {diameter:maxDiameter, value: tuple[1]}
+    list.forEach((tuple,i)=>{
+        
+        if (i === 0){
+            newList[tuple[0]] = {diameter:maxDiameter, value: tuple[1], colour: "#FF0000" }
         }
         else{
-            let p = (tuple[1]*100)/max[1]
+            // For the diameter
+            let p = (tuple[1]*100)/list[0][1]
             let d = (p/100)*maxDiameter
-            newList[tuple[0]] = {diameter:d, value: tuple[1]}
+
+            let red = 255
+            let calculateGreen = (p/100) * red 
+            let green = 255 - calculateGreen
+            console.log(tuple[0])
+            console.log("red, green, blue ", red, green, 0)
+            console.log("----------------")
+
+            newList[tuple[0]] = {diameter:d, value: tuple[1], colour: rgbToHex(Math.round(red), Math.round(green), 0)}
         }
     })
     return newList
 }
+
+const rgbToHex = (r, g, b) => '#' + [r, g, b]
+  .map(x => x.toString(16).padStart(2, '0')).join('')

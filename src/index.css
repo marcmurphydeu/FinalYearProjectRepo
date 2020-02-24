@@ -15,7 +15,7 @@ code {
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 8px;
 }
 
 /* Track */
@@ -30,7 +30,7 @@ code {
 ::-webkit-scrollbar-thumb {
   -webkit-border-radius: 10px;
   border-radius: 10px;
-  background: #173B65; 
+  background: #0077AB; 
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 }
 
@@ -65,7 +65,7 @@ Label{
 #MainPageContent{
   background-color: #173B65; 
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: flex-start; 
   align-content: center;
   flex-wrap: wrap;
@@ -79,6 +79,11 @@ Label{
   flex-shrink: 0;
 }
 
+#divider {
+  padding-top: 30px;
+  flex-grow: 1;
+  border-bottom: 3px solid #F3AF0F;
+}
 
 .leaflet-container {
   width: 100%;
@@ -146,8 +151,13 @@ Label{
   display: flex;
   flex-wrap:wrap;
   justify-content: flex-start;
+  align-items: flex-start;
   padding-top: 10px;
   padding-bottom: 10px;
+  max-height: 200px;
+  max-width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #countryForm{
@@ -159,15 +169,16 @@ Label{
   align-items: center;
   flex-direction: column;
   background-color: #EB3F38;
-  /* overflow: hidden; */
+
 }
 
 
 .dropdown-menu {
   max-width:400px;
   max-height:200px;
-  overflow: scroll;
+  /* overflow: scroll; */
   overflow-x: hidden;
+  
 }
 
 
