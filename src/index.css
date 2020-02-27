@@ -213,6 +213,25 @@ ul{
   background-color: #EB3F38;
 }
 
+#timeSeriesSlider{
+  display: flex;
+  flex-grow: 0;
+  box-shadow: 0px 0px 23px 4px rgba(0,0,0,0.57);
+  border-radius: 15px 15px 15px 15px;
+  justify-content: space-around; 
+  background-color: #EB3F38;
+  /* align-items: center; */
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  
+}
+
+#mapContainer{
+  display: flex;
+  justify-content: center;
+}
+
 #yearForm{
   display: flex;
   /* flex-grow: 1; */

@@ -13,9 +13,10 @@ import Grid from '@material-ui/core/Grid';
 import draw3D from '../Controllers/3DVisualization';
 import SelectAllButton from './SelectAllButton';
 import HeatMap from '../Controllers/HeatMap';
+import ReactDOM from 'react-dom'
 
 export function UserForm(){
-    const [limit , setLimit] = useState('100')
+    const [limit , setLimit] = useState('250')
     const [filter , setFilter] = useState('asc') 
     const [selectedCountries, setSelectedCountries] = useState([])
     const [selectedProperties, setSelectedProperties] = useState([])
@@ -34,14 +35,14 @@ export function UserForm(){
                     draw3D(selectedCountries, selectedProperties, selectedYears, limit, filter);
                     break;
                 case "HeatMap":
-                    HeatMap(selectedCountries, selectedProperties, selectedYears, limit, filter);
+                    HeatMap(selectedCountries, selectedProperties, selectedYears, limit, filter, setSelectedYears);
+                    ReactDOM.render(<TimeSeriesSlider setSelectedYears={setSelectedYears}/>, document.getElementById('timeSeriesSlider'));
                     break;
                 default:
                     break;
                 }    
         }
     });
-
 
     return (
         <Grid item xs={6} id = "Form"> 
@@ -68,7 +69,7 @@ export function UserForm(){
             <Grid container id= "row2-box">
                 <Grid id ="yearForm" item xs={11}>
                     <Grid item xs={11} id="row2row1">
-                        <Grid item xs ={9} id = "labelAndDropdown">
+                        <Grid item xs ={3} id = "labelAndDropdown">
                             <Form.Label id = "label">Year</Form.Label>
                             <DropDownMenu type={"years"} values ={selectedYears} setSelectedValues = {setSelectedYears}/>
                         </Grid>
@@ -76,10 +77,13 @@ export function UserForm(){
                             <Slider id = "yearSlider" setSelectedYears = {setSelectedYears}/>
                         </Grid>
                         <Grid item xs={3}>
-                            <TimeSeriesSlider setSelectedYears = {setSelectedYears}/>
+                            <TimeSeriesSlider id = "timeSeriesSlider" setSelectedYears = {setSelectedYears}/>
                         </Grid>
+                        <Grid item xs={3}>
+                            <SelectAllButton type={"years"} setSelectedValues = {setSelectedYears}/>    
+                        </Grid>
+                        
                     </Grid>
-                    <SelectAllButton type={"years"} setSelectedValues = {setSelectedYears}/>    
                     <Grid item xs = {11}>
                         <YearBadges years = {selectedYears} setSelectedYears = {setSelectedYears} />
                     </Grid>

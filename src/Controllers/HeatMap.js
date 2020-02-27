@@ -3,7 +3,9 @@ import {getCountriesPositions} from '../Models/DatabaseModel';
 import {computeCypher} from '../Models/QueryConstructors';
 import {getDataFromQuery} from '../Models/DatabaseModel';
 
-export default function HeatMap (selectedCountries, selectedProperties, selectedYears, limit, filter){
+
+
+export default function HeatMap (selectedCountries, selectedProperties, selectedYears, limit, filter, setSelectedYears){
     var container = L.DomUtil.get('map'); if(container != null){ container._leaflet_id = null; }
     var map = L.map('map').setView([0, 0], 2);
     map.setMaxZoom(5);
@@ -24,7 +26,6 @@ export default function HeatMap (selectedCountries, selectedProperties, selected
     })
     queryCountriesSize.then(l => normalizeNumbers(l))
     .then(list=>{
-        console.log(list)
         getCountriesPositions().then(response=>{
             response.forEach(country=>{
                 if (country[1] && country[2] && country[0] in list){
@@ -44,7 +45,7 @@ export default function HeatMap (selectedCountries, selectedProperties, selected
             })
         })
     }).then(e=>{
-        const mapElement = document.getElementById('map')
+        const mapElement = document.getElementById('timeSeriesSlider')
         window.scrollTo(0, mapElement.offsetTop)
         mapElement.style.paddingTop = "10px";
         mapElement.style.boxShadow = "0px 0px 23px 4px rgba(0,0,0,0.57)"
@@ -57,11 +58,7 @@ function normalizeNumbers(list){
     let  maxDiameter = 30.0
 
     list.sort(function(a, b){return b[1]-a[1]});
-
-    let colorsList = []
     
-    console.log(colorsList)
-
     var newList = {}
     list.forEach((tuple,i)=>{
         
@@ -76,9 +73,6 @@ function normalizeNumbers(list){
             let red = 255
             let calculateGreen = (p/100) * red 
             let green = 255 - calculateGreen
-            console.log(tuple[0])
-            console.log("red, green, blue ", red, green, 0)
-            console.log("----------------")
 
             newList[tuple[0]] = {diameter:d, value: tuple[1], colour: rgbToHex(Math.round(red), Math.round(green), 0)}
         }

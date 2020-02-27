@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import 'antd/dist/antd.css';
 import { Slider, Switch } from 'antd';
-
 export default function TimeSeriesSlider (props)  {
 
     const marks = {
@@ -27,6 +26,7 @@ export default function TimeSeriesSlider (props)  {
         </div>
       );
 }
+
 
 
           

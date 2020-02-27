@@ -15,7 +15,10 @@ function App() {
                 <UserForm/>
                 <Grid xs={6} item id = "viz"></Grid>
                 <Grid xs={11} item id="divider"></Grid>
-                <Grid xs = {10} item id="map"/>
+                <Grid container id = "mapContainer">
+                    <Grid item xs = {10} id = "timeSeriesSlider"/>
+                    <Grid xs = {10} item id="map"/>
+                </Grid>
             </Grid>
             
         </React.Fragment>
