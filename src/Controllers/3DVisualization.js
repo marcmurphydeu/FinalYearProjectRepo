@@ -12,7 +12,7 @@ export default function draw3D (country, property, year, limit, filter){
         );       
         const session = driver.session();
         const elem = document.getElementById('viz');
-        setPageRankOfQuery(computeCypher(country,property,year,limit,filter,true))
+        // setPageRankOfQuery(computeCypher(country,property,year,limit,filter,true))
     session
         .run(computeQueryFor3D(country, property, year, limit, filter))
         .then(function (result) {
@@ -36,7 +36,7 @@ export default function draw3D (country, property, year, limit, filter){
                             .nodeAutoColorBy('label')
                             .linkDirectionalArrowLength(3)
                             .linkOpacity(0.6)
-                            .nodeVal('size')
+                            // .nodeVal('size')
                             .nodeLabel(node=> `${node.label}:${node.caption}`)
                             .onNodeHover(node=>elem.style.cursor = node ? 'pointer':null);
           })

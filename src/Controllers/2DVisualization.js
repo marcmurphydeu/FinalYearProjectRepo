@@ -1,12 +1,12 @@
-import {getPageRank, setPageRankOfQuery} from '../Models/DatabaseModel'
-import {computeCypher} from '../Models/QueryConstructors';
+import {computeCypher, maxValueQuery} from '../Models/QueryConstructors';
+import {getDataFromQuery,} from '../Models/DatabaseModel';
 
-
-export default function draw(country, property, year, limit, filter){
+export default async function draw(country, property, year, limit, filter){
     var viz;
-    // console.log(computeCypher(country, property, year, limit, filter,true))
-    // getPageRank(computeCypher(country,property,year,limit,filter,true)).then(res => console.log(res))
-    // console.log(setPageRankOfQuery(computeCypher(country,property,year,limit,filter,true)))
+    var query;
+    var maxVal = await getDataFromQuery(maxValueQuery(country,property,year,limit,filter))
+    query = computeCypher(country,property,year,limit, filter, maxVal);
+
     var config = {
         container_id: "viz",
         server_url:"bolt://localhost:7687",
@@ -37,14 +37,30 @@ export default function draw(country, property, year, limit, filter){
             }
         
             },
-        initial_cypher: computeCypher(country,property,year,limit, filter),
+        initial_cypher: query,
         arrows: true
     };
 
+
+    console.log(query)
+
+    
+
+    // var propertyAndValues = {}
+    // getDataFromQuery(query).then(res=> {
+        // console.log(res)
+        // res.forEach(row=> {
+            
+            // let property = row[1].properties.property
+            // let value = row[1].properties.value
+            // console.log(property, value)
+
+        // })
+    // })
     property.forEach(p=>{
         config.labels[p] =  {
             "caption": "property",
-            "size":"pageRank",
+            "size":"scaledValue",
             "community":"property"
             }
     })
