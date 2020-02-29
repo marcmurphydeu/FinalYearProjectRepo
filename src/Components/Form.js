@@ -11,6 +11,9 @@ import Grid from '@material-ui/core/Grid';
 import SelectAllButton from './SelectAllButton';
 import displayVisualization from '../Controllers/VisualController';
 import TimeSeriesSlider from './TimeSeriesSlider';
+import ReactDOM from 'react-dom';
+import ToggleButtonGroupControlled from './ControlledButton';
+
 
 export function UserForm(){
     const [limit , setLimit] = useState('250')
@@ -18,10 +21,27 @@ export function UserForm(){
     const [selectedCountries, setSelectedCountries] = useState([])
     const [selectedProperties, setSelectedProperties] = useState([])
     const [selectedYears, setSelectedYears] = useState([])
-    const [visualization, setVisualization] = useState('2D')
+    
+    const [selectedOtherCountries, setOtherCountries] = useState([])
  
     useEffect(()=>{
-        displayVisualization(visualization, selectedCountries, selectedProperties,selectedYears,limit,filter,setSelectedYears)
+        // displayVisualization(visualization, 
+        //                     selectedCountries, 
+        //                     selectedProperties,
+        //                     selectedYears,
+        //                     limit,
+        //                     filter,
+        //                     setSelectedYears)
+        // DO WE NEED SELECTED OTHER COUNTRIES TOO?
+        ReactDOM.render(<ToggleButtonGroupControlled 
+                        setSelectedYears={setSelectedYears}
+                        selectedYears = {selectedYears}
+                        limit = {limit}
+                        filter = {filter}
+                        selectedCountries = {selectedCountries}
+                        selectedProperties = {selectedProperties}
+                        />, document.getElementById('controlledButton'));
+
     });
 
     return (
@@ -33,13 +53,15 @@ export function UserForm(){
                     <Grid item id = "labelAndDropdown">
                         <Form.Label id = "label">Country</Form.Label>
                         <DropDownMenu type={"countries"}  values = {selectedCountries} setSelectedValues = {setSelectedCountries}/>
+                        
                     </Grid>
                     <Grid item id = "labelAndDropdown">
                         <Form.Label id = "label">Others</Form.Label>
-                        <DropDownMenu type={"otherCountries"}  values = {selectedCountries} setSelectedValues = {setSelectedCountries}/>
+                        <DropDownMenu type={"otherCountries"}  values = {selectedOtherCountries} setSelectedValues = {setOtherCountries}/>
                     </Grid>
                     <SelectAllButton type={"countries"} setSelectedValues = {setSelectedCountries}/>
                     <Badges countries = {selectedCountries} setSelectedCountries = {setSelectedCountries}/>
+                    <Badges countries = {selectedOtherCountries} setSelectedCountries = {setOtherCountries}/>
                 </Grid> 
             </Grid>      
 
@@ -94,7 +116,7 @@ export function UserForm(){
             </Grid>
 
             {/* Visualization */}
-            <Grid container id="row">
+            {/* <Grid container id="row">
                 <Grid item id = "formItem" xs={11}>
                         <Form.Label id = "label">Visualization</Form.Label>
                     <Grid id ="labelAndDropdown" item xs={5}>
@@ -102,7 +124,7 @@ export function UserForm(){
                     </Grid>
                 </Grid>
                     
-            </Grid>
+            </Grid> */}
         </Grid>
     )
 }

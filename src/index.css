@@ -198,16 +198,15 @@ ul{
 
 #timeSeriesSlider{
   display: flex;
-  flex-grow: 0;
+  /* flex-grow: 0; */
   box-shadow: 0px 0px 23px 4px rgba(0,0,0,0.57);
   border-radius: 15px 15px 15px 15px;
-  justify-content: space-around; 
+  justify-content: center; 
   background-color: #EB3F38;
-  /* align-items: center; */
+  align-items: stretch;
   flex-direction: row;
   flex-wrap: wrap;
   margin-bottom: 20px;
-  
 }
 
 #mapContainer{
@@ -237,7 +236,6 @@ ul{
 
 #formItem{
   display: flex;
-  /* flex-grow: 1; */
   padding-top: 10px;
   padding-bottom: 15px;
   box-shadow: 0px 0px 23px 4px rgba(0,0,0,0.57);

@@ -24,18 +24,18 @@ export default function DropDownMenu (props) {
                 break;
             case "countries":
                 getDropDownData('countries').then((result)=>{
-                    let values = result.map(function(key){
+                    let newValues = result.map(function(key){
                         return key[0];
                     });
-                    setValues(values)
+                    setValues(values.concat(newValues))
                 })
                 break;
             case "otherCountries":
                 getDropDownData('otherCountries').then((result)=>{
-                    let values = result.map(function(key){
+                    let newValues = result.map(function(key){
                         return key[0];
                     });
-                    setValues(values)
+                    setValues(values.concat(newValues))
                 })
                 break;
             case "years":
@@ -56,10 +56,10 @@ export default function DropDownMenu (props) {
                 let filters = ['ASC', 'DESC'];
                 setValues(filters)
                 break;
-            case "visualization":
-                let types = ['2D', '3D', 'HeatMap']
-                setValues(types);
-                break;
+            // case "visualization":
+            //     let types = ['2D', '3D', 'HeatMap']
+            //     setValues(types);
+            //     break;
             default:
               alert('Invalid props type')
           }
@@ -77,7 +77,7 @@ export default function DropDownMenu (props) {
             {/* This adds the selected country to the dropdown title
                 and adds the selected country to the list of country chips  */}
             {values.map((v) => <Dropdown.Item onSelect={()=>{
-                    if (props.type === "limit" || props.type === "orderBy"|| props.type === "visualization" ){
+                    if (props.type === "limit" || props.type === "orderBy"){
                         props.setSelectedValues(v);
                     }else{
                         props.setSelectedValues(props.values.concat([v]));

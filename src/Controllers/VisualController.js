@@ -18,7 +18,7 @@ export default function displayVisualization(visualization, selectedCountries, s
             case "3D":
                 draw3D(selectedCountries, selectedProperties, selectedYears, limit, filter);
                 break;
-            case "HeatMap":
+            case "Map":
                 HeatMap(selectedCountries, selectedProperties, selectedYears, limit, filter, setSelectedYears);
                 ReactDOM.render(<TimeSeriesSlider setSelectedYears={setSelectedYears}/>, document.getElementById('timeSeriesSlider'));
                 break;
