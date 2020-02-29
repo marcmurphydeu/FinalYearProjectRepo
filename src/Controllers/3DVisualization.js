@@ -1,11 +1,11 @@
 import ForceGraph3D from '3d-force-graph';
 import neo4j from 'neo4j-driver';
-import {computeQueryFor3D, computeCypher} from '../Models/QueryConstructors';
-import {getPageRank, setPageRankOfQuery} from '../Models/DatabaseModel'
+import {computeQueryFor3D, computeCypher, maxValueQuery} from '../Models/QueryConstructors';
+import {getPageRank, setPageRankOfQuery, getDataFromQuery} from '../Models/DatabaseModel'
 //PUT SESSION STUFF TO MODEL
 
 
-export default function draw3D (country, property, year, limit, filter){
+export default async function draw3D (country, property, year, limit, filter){
     var driver = neo4j.driver(
         'bolt://localhost:7687',
         neo4j.auth.basic('neo4j', 'fender14'),
@@ -13,17 +13,18 @@ export default function draw3D (country, property, year, limit, filter){
         const session = driver.session();
         const elem = document.getElementById('viz');
         // setPageRankOfQuery(computeCypher(country,property,year,limit,filter,true))
+        var maxVal = await getDataFromQuery(maxValueQuery(country,property,year,limit,filter))
+
     session
-        .run(computeQueryFor3D(country, property, year, limit, filter))
+        .run(computeQueryFor3D(country, property, year, limit, filter, maxVal[0]))
         .then(function (result) {
             const links = []
             const nodes = {}
             result.records.forEach(r => { 
-                console.log(r)
                 for (let i = 0; i<r._fields.length; i++){
                     
-                    nodes[r._fields[0].id[i].toNumber()] = {id: r._fields[0].id[i].toNumber(), caption: r._fields[0].caption[i], label: r._fields[0].label[i], size: r._fields[0].size[i]*10}
-                    nodes[r._fields[1].id[i].toNumber()] = {id: r._fields[1].id[i].toNumber(), caption: r._fields[1].caption[i], label: r._fields[1].label[i], size: r._fields[1].size[i]*10}
+                    nodes[r._fields[0].id[i].toNumber()] = {id: r._fields[0].id[i].toNumber(), caption: r._fields[0].caption[i], label: r._fields[0].label[i], size: r._fields[0].size[i]}
+                    nodes[r._fields[1].id[i].toNumber()] = {id: r._fields[1].id[i].toNumber(), caption: r._fields[1].caption[i], label: r._fields[1].label[i], size: r._fields[1].size[i]}
                     links.push({source:r._fields[0].id[i].toNumber(), target:r._fields[1].id[i].toNumber()})
                 }
             });
@@ -36,7 +37,7 @@ export default function draw3D (country, property, year, limit, filter){
                             .nodeAutoColorBy('label')
                             .linkDirectionalArrowLength(3)
                             .linkOpacity(0.6)
-                            // .nodeVal('size')
+                            .nodeVal('size')
                             .nodeLabel(node=> `${node.label}:${node.caption}`)
                             .onNodeHover(node=>elem.style.cursor = node ? 'pointer':null);
           })

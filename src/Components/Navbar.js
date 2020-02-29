@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import '../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Navbar, Nav, NavDropdown, Form, FormControl, Button} from 'react-bootstrap';
+import {Navbar, Nav, NavDropdown} from 'react-bootstrap';
 import theaLogo from '../theaLogoFinal.png'
+import ToggleButtonGroupControlled from './ControlledButton';
 
 export class NavBar extends Component {
     render() {
@@ -21,11 +22,8 @@ export class NavBar extends Component {
                       <NavDropdown.Divider />
                       <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                     </NavDropdown>
-                  </Nav>
-                  <Form inline>
-                    <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                    <Button variant="outline-success">Search</Button>
-                  </Form>
+                    <ToggleButtonGroupControlled/>
+                  </Nav>  
                 </Navbar.Collapse>
             </Navbar>
         )

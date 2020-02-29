@@ -28,7 +28,6 @@ export async function setPageRankOfQuery(query){
 
     var session = driver.session()
     var pageRank = await getPageRank(query)
-    console.log(pageRank)
     var setQueries = []
     pageRank.forEach(node => {
         if (node[0].country_name !== null){
@@ -41,7 +40,6 @@ export async function setPageRankOfQuery(query){
                 value = 0
             }
             let q = "MATCH (p:"+node[0].property+"{value:"+value+"}) SET p.pageRank = " + node[1]*10
-            console.log(q)
             setQueries.push(q)
         }
         else if (node[0].year !== null){

@@ -5,7 +5,7 @@ export default async function draw(country, property, year, limit, filter){
     var viz;
     var query;
     var maxVal = await getDataFromQuery(maxValueQuery(country,property,year,limit,filter))
-    query = computeCypher(country,property,year,limit, filter, maxVal);
+    query = computeCypher(country,property,year,limit, filter, maxVal[0]);
 
     var config = {
         container_id: "viz",
@@ -15,8 +15,8 @@ export default async function draw(country, property, year, limit, filter){
         labels: {
                 "Country" : {
                     "caption": "country_name",
-                    "size": "pageRank",
-                    "community": "country_name",
+                    "size": 5.0,
+                    "community": "country_name"
                 },
                 "Year":{
                     "caption": "year",
@@ -43,20 +43,6 @@ export default async function draw(country, property, year, limit, filter){
 
 
     console.log(query)
-
-    
-
-    // var propertyAndValues = {}
-    // getDataFromQuery(query).then(res=> {
-        // console.log(res)
-        // res.forEach(row=> {
-            
-            // let property = row[1].properties.property
-            // let value = row[1].properties.value
-            // console.log(property, value)
-
-        // })
-    // })
     property.forEach(p=>{
         config.labels[p] =  {
             "caption": "property",
@@ -64,9 +50,7 @@ export default async function draw(country, property, year, limit, filter){
             "community":"property"
             }
     })
-
     
-    // console.log(config)
 
     var neo = require('neovis.js')
     viz = new neo.default(config);

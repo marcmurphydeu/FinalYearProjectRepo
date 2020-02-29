@@ -30,6 +30,14 @@ export default function DropDownMenu (props) {
                     setValues(values)
                 })
                 break;
+            case "otherCountries":
+                getDropDownData('otherCountries').then((result)=>{
+                    let values = result.map(function(key){
+                        return key[0];
+                    });
+                    setValues(values)
+                })
+                break;
             case "years":
                 let years_list = [];
                 for (var i = 1960; i <= 2018; i++) {
