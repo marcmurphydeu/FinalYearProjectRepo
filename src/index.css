@@ -35,8 +35,7 @@ code {
 }
 
 #theaLogo {
-  /* height: 40px; */
-  width: 80px;
+  width: 50px;
 }
 
 Label{
@@ -47,12 +46,9 @@ Label{
   color: #fff;
   background-color: #0077AB;
   border-color:#0077AB;
-}
+  box-shadow: none !important;
 
-/* .dropdown-toggle btn btn-success{
-  background-color: white;
-  border-color: white;
-} */
+}
 
 #badge {
   color: #fff;
@@ -174,7 +170,21 @@ ul{
   padding-inline-start: 30px;
 }
 
+.controllerButton{
+  background-color: #EB3F38 !important;
+  border-color: #EB3F38 !important;
+  box-shadow: none !important;
+}
 
+.controllerButton.active{
+  background-color: #F3AF0F !important;
+  border-color: #F3AF0F !important;
+  box-shadow: none !important;
+}
+
+.form-control{
+  box-shadow: none !important;
+}
 
 #labelAndDropdown{
   display: flex;
@@ -185,16 +195,6 @@ ul{
 }
 
 
-#propertyForm{
-  display: flex;
-  flex-grow: 0;
-  box-shadow: 0px 0px 23px 4px rgba(0,0,0,0.57);
-  border-radius: 15px 15px 15px 15px;
-  justify-content: space-evenly;
-  align-items: baseline;
-  flex-direction: row;
-  background-color: #EB3F38;
-}
 
 #timeSeriesSlider{
   display: flex;
@@ -212,18 +212,6 @@ ul{
 #mapContainer{
   display: flex;
   justify-content: center;
-}
-
-#yearForm{
-  display: flex;
-  /* flex-grow: 1; */
-  box-shadow: 0px 0px 23px 4px rgba(0,0,0,0.57);
-  border-radius: 15px 15px 15px 15px;
-  justify-content: center; 
-  background-color: #EB3F38;
-  align-items: center;
-  flex-direction: row;
-  flex-wrap: wrap;
 }
 
 #row2row1{
@@ -245,4 +233,38 @@ ul{
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
+}
+
+
+#submitButton{
+  background-color: #0077ab;
+  margin-top: 10px;
+  border-color:#0077AB;
+  box-shadow: none !important;
+}
+
+
+#customQueryItem{
+  display: flex;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  box-shadow: 0px 0px 23px 4px rgba(0,0,0,0.57);
+  border-radius: 15px 15px 15px 15px;
+  justify-content: space-evenly;
+  background-color: #F3AF0F;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+
+
+
+#loader{
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 50%;
+  height: 50%;
+  z-index: 1000;
 }

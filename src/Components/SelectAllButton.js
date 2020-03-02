@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import 'antd/dist/antd.css';
 import { Switch } from 'antd';
-import {getDropDownData} from '../Controllers/DropdownData';
+import {getData} from '../Controllers/DataController';
 
 export default function SelectAllButton (props)  {
     const [enabled, setEnabled] = useState(false)
@@ -10,7 +10,7 @@ export default function SelectAllButton (props)  {
       if (enabled===false){
         switch(props.type) {
             case "properties":
-                getDropDownData('properties').then((result)=>{
+                getData('properties').then((result)=>{
                     let values = result.map(function(key){
                         return key[0];
                     });
@@ -18,7 +18,7 @@ export default function SelectAllButton (props)  {
                 })
                 break;
             case "countries":
-                getDropDownData('countries').then((result)=>{
+                getData('countries').then((result)=>{
                     let values = result.map(function(key){
                         return key[0];
                     });

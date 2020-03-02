@@ -1,12 +1,11 @@
 import {computeCypher, maxValueQuery} from '../Models/QueryConstructors';
-import {getDataFromQuery,} from '../Models/DatabaseModel';
+import {getDataFromQuery} from '../Models/DatabaseModel';
+import {getData} from './DataController';
 
-export default async function draw(country, property, year, limit, filter){
-    var viz;
-    var query;
-    var maxVal = await getDataFromQuery(maxValueQuery(country,property,year,limit,filter))
-    query = computeCypher(country,property,year,limit, filter, maxVal[0]);
+var viz;
+var neo = require('neovis.js');
 
+function getConfig(query = null){
     var config = {
         container_id: "viz",
         server_url:"bolt://localhost:7687",
@@ -16,44 +15,65 @@ export default async function draw(country, property, year, limit, filter){
                 "Country" : {
                     "caption": "country_name",
                     "size": 5.0,
-                    "community": "country_name"
+                    "community": "community"
                 },
                 "Year":{
                     "caption": "year",
                     "size": "pageRank",
-                    "community": "year",
+                    "community": "community",
                 }
             },
         relationships: {
             "had": {
-            "thickness": "no clue",
+            "thickness": "weight",
             "caption": true,
             "community": "value"
             },
             "in":{
-            "thickness": "no clue",
+            "thickness": "0.1",
             "caption": true,
             "community": 'value'
             }
         
             },
-        initial_cypher: query,
         arrows: true
     };
 
+    if(query){
+        config.initial_cypher = query
+    }
 
-    console.log(query)
-    property.forEach(p=>{
-        config.labels[p] =  {
+    getData('properties').then(e=> {
+        e.forEach(p=>{
+        config.labels[p[0]] =  {
             "caption": "property",
             "size":"scaledValue",
-            "community":"property"
+            "community":"community"
             }
+        })
     })
-    
 
-    var neo = require('neovis.js')
+    return config;
+}
+
+export default async function draw(country, property, year, limit, filter){
+    var query;
+    var maxVal = await getDataFromQuery(maxValueQuery(country,property,year,limit,filter))
+    if (maxVal[0][0] === 0){maxVal = [1]}
+    query = computeCypher(country,property,year,limit, filter, maxVal[0]);
+
+    let config = getConfig(query)
     viz = new neo.default(config);
     viz.render();
+}
 
+export async function drawFromCypher(textQuery){
+    try{
+        viz = new neo.default(getConfig(textQuery));
+        console.log(viz)
+        viz.renderWithCypher(textQuery);
+    }
+    catch(e){
+        alert("Query is incorrect", "Error : \n", e)
+    }
 }

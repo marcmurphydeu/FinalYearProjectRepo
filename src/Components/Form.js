@@ -9,40 +9,39 @@ import YearBadges from './YearBadges';
 import Slider from './Slider';
 import Grid from '@material-ui/core/Grid';
 import SelectAllButton from './SelectAllButton';
-import displayVisualization from '../Controllers/VisualController';
 import TimeSeriesSlider from './TimeSeriesSlider';
 import ReactDOM from 'react-dom';
 import ToggleButtonGroupControlled from './ControlledButton';
+import Button from 'react-bootstrap/Button'
 
+
+function toggle(customQuery){
+    ReactDOM.render(<ToggleButtonGroupControlled 
+        customQuery={customQuery}
+        />, document.getElementById('controlledButton'));   
+}
 
 export function UserForm(){
     const [limit , setLimit] = useState('250')
-    const [filter , setFilter] = useState('asc') 
+    const [filter , setFilter] = useState('DESC') 
     const [selectedCountries, setSelectedCountries] = useState([])
     const [selectedProperties, setSelectedProperties] = useState([])
     const [selectedYears, setSelectedYears] = useState([])
-    
     const [selectedOtherCountries, setOtherCountries] = useState([])
- 
-    useEffect(()=>{
-        // displayVisualization(visualization, 
-        //                     selectedCountries, 
-        //                     selectedProperties,
-        //                     selectedYears,
-        //                     limit,
-        //                     filter,
-        //                     setSelectedYears)
-        // DO WE NEED SELECTED OTHER COUNTRIES TOO?
-        ReactDOM.render(<ToggleButtonGroupControlled 
-                        setSelectedYears={setSelectedYears}
-                        selectedYears = {selectedYears}
-                        limit = {limit}
-                        filter = {filter}
-                        selectedCountries = {selectedCountries}
-                        selectedProperties = {selectedProperties}
-                        />, document.getElementById('controlledButton'));
+    const [customQuery, setCustomQuery] = useState(null)
 
-    });
+    useEffect(()=>{
+
+            // DO WE NEED SELECTED OTHER COUNTRIES TOO?
+            ReactDOM.render(<ToggleButtonGroupControlled 
+                setSelectedYears={setSelectedYears}
+                selectedYears = {selectedYears}
+                limit = {limit}
+                filter = {filter}
+                selectedCountries = {selectedCountries.concat(selectedOtherCountries)}
+                selectedProperties = {selectedProperties}
+                />, document.getElementById('controlledButton'));   
+    },[customQuery, filter, limit, selectedCountries, selectedOtherCountries, selectedProperties, selectedYears]);
 
     return (
         <Grid item xs={6} id = "Form"> 
@@ -62,6 +61,7 @@ export function UserForm(){
                     <SelectAllButton type={"countries"} setSelectedValues = {setSelectedCountries}/>
                     <Badges countries = {selectedCountries} setSelectedCountries = {setSelectedCountries}/>
                     <Badges countries = {selectedOtherCountries} setSelectedCountries = {setOtherCountries}/>
+                    
                 </Grid> 
             </Grid>      
 
@@ -115,16 +115,18 @@ export function UserForm(){
                     
             </Grid>
 
-            {/* Visualization */}
-            {/* <Grid container id="row">
-                <Grid item id = "formItem" xs={11}>
-                        <Form.Label id = "label">Visualization</Form.Label>
-                    <Grid id ="labelAndDropdown" item xs={5}>
-                        <DropDownMenu type = {"visualization"} setSelectedValues ={setVisualization} values = {[visualization]}/>
+
+            {/* Custom query filter */}
+            <Grid container id="row">
+                <Grid item id = "customQueryItem" xs={11}>
+                    <Form.Label id ="label">Custom query</Form.Label>
+                    <Grid item xs ={11}>
+                        <Form.Control onChange={e => setCustomQuery(e.target.value)} as = "textarea" type="text" placeholder="MATCH (n: Country) ..." />
                     </Grid>
-                </Grid>
-                    
-            </Grid> */}
+                    <Button onClick = {()=> toggle(customQuery)}  id = "submitButton">Submit</Button>
+                </Grid>        
+            </Grid>
+
         </Grid>
     )
 }

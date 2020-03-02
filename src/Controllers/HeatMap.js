@@ -5,7 +5,7 @@ import {getDataFromQuery} from '../Models/DatabaseModel';
 
 
 
-export default function HeatMap (selectedCountries, selectedProperties, selectedYears, limit, filter, setSelectedYears){
+export default function HeatMap (selectedCountries, selectedProperties, selectedYears, limit, filter){
     var container = L.DomUtil.get('map'); if(container != null){ container._leaflet_id = null; }
     var map = L.map('map').setView([0, 0], 2);
     map.setMaxZoom(5);
@@ -21,7 +21,8 @@ export default function HeatMap (selectedCountries, selectedProperties, selected
     var queryCountriesSize = getDataFromQuery(computeCypher(selectedCountries, selectedProperties, selectedYears, limit, filter))
     .then(query_res=>{
         return query_res.map(node_bundle=>{
-            return [node_bundle[0].properties.country_name, node_bundle[1].properties.value]
+            // In this case index 0 is the country node and index 2 is the property node
+            return [node_bundle[0].properties.country_name, node_bundle[2].properties.value]
         })
     })
     queryCountriesSize.then(l => normalizeNumbers(l))
@@ -36,9 +37,10 @@ export default function HeatMap (selectedCountries, selectedProperties, selected
                         radius: list[country[0]].diameter
                     }).addTo(map)
                     marker.on('mouseover', function(e) {
-                        var popup = L.popup()
+                        L.popup()
                          .setLatLng([country[2], country[1]]) 
-                         .setContent(''+list[country[0]].value)
+                         .setContent('Value is : '+list[country[0]].value +`\n ,`
+                                    + '\r Country is: ' + country[0])
                          .openOn(map);
                       });
                 }
@@ -68,7 +70,10 @@ function normalizeNumbers(list){
         else{
             // For the diameter
             let p = (tuple[1]*100)/list[0][1]
+            if (isNaN(p)){ p = 1}
             let d = (p/100)*maxDiameter
+
+            
 
             let red = 255
             let calculateGreen = (p/100) * red 

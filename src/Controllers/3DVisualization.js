@@ -1,9 +1,10 @@
 import ForceGraph3D from '3d-force-graph';
 import neo4j from 'neo4j-driver';
-import {computeQueryFor3D, computeCypher, maxValueQuery} from '../Models/QueryConstructors';
-import {getPageRank, setPageRankOfQuery, getDataFromQuery} from '../Models/DatabaseModel'
-//PUT SESSION STUFF TO MODEL
+import {computeQueryFor3D, maxValueQuery} from '../Models/QueryConstructors';
+import {getDataFromQuery} from '../Models/DatabaseModel'
 
+
+//PUT SESSION STUFF TO MODEL
 
 export default async function draw3D (country, property, year, limit, filter){
     var driver = neo4j.driver(
@@ -12,8 +13,8 @@ export default async function draw3D (country, property, year, limit, filter){
         );       
         const session = driver.session();
         const elem = document.getElementById('viz');
-        // setPageRankOfQuery(computeCypher(country,property,year,limit,filter,true))
         var maxVal = await getDataFromQuery(maxValueQuery(country,property,year,limit,filter))
+        if (maxVal[0][0] === 0){maxVal = [1]}
 
     session
         .run(computeQueryFor3D(country, property, year, limit, filter, maxVal[0]))
@@ -21,11 +22,21 @@ export default async function draw3D (country, property, year, limit, filter){
             const links = []
             const nodes = {}
             result.records.forEach(r => { 
-                for (let i = 0; i<r._fields.length; i++){
-                    
-                    nodes[r._fields[0].id[i].toNumber()] = {id: r._fields[0].id[i].toNumber(), caption: r._fields[0].caption[i], label: r._fields[0].label[i], size: r._fields[0].size[i]}
-                    nodes[r._fields[1].id[i].toNumber()] = {id: r._fields[1].id[i].toNumber(), caption: r._fields[1].caption[i], label: r._fields[1].label[i], size: r._fields[1].size[i]}
-                    links.push({source:r._fields[0].id[i].toNumber(), target:r._fields[1].id[i].toNumber()})
+                for (let i = 0; i<2; i++){
+                    // Source information
+                    nodes[r._fields[0].id[i].toNumber()] = {id: r._fields[0].id[i].toNumber(), 
+                                                            caption: r._fields[0].caption[i], 
+                                                            label: r._fields[0].label[i], 
+                                                            community: r._fields[0].community[i], 
+                                                            size: r._fields[0].size[i]}
+
+                    // Target information
+                    nodes[r._fields[1].id[i].toNumber()] = {id: r._fields[1].id[i].toNumber(), 
+                                                            caption: r._fields[1].caption[i], 
+                                                            label: r._fields[1].label[i], 
+                                                            community: r._fields[1].community[i], 
+                                                            size: r._fields[1].size[i]}
+                    links.push(Object.assign({source:r._fields[0].id[i].toNumber(), target:r._fields[1].id[i].toNumber()}, r._fields[2]))
                 }
             });
             session.close();
@@ -35,9 +46,13 @@ export default async function draw3D (country, property, year, limit, filter){
             ForceGraph3D()(elem)
                             .graphData(gData)
                             .nodeAutoColorBy('label')
-                            .linkDirectionalArrowLength(3)
+                            .linkDirectionalArrowLength(6)
                             .linkOpacity(0.6)
                             .nodeVal('size')
+                            .linkAutoColorBy('type')
+                            .linkWidth('weight')
+                            .nodeAutoColorBy('community')
+                            .width(window.innerWidth/2 -15)
                             .nodeLabel(node=> `${node.label}:${node.caption}`)
                             .onNodeHover(node=>elem.style.cursor = node ? 'pointer':null);
           })

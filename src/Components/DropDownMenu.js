@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import '../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Dropdown} from 'react-bootstrap';
-import {getDropDownData} from '../Controllers/DropdownData';
+import {getData} from '../Controllers/DataController';
 
 
 
@@ -15,7 +15,7 @@ export default function DropDownMenu (props) {
     useEffect(()=>{
         switch(props.type) {
             case "properties":
-                getDropDownData('properties').then((result)=>{
+                getData('properties').then((result)=>{
                     let values = result.map(function(key){
                         return key[0];
                     });
@@ -23,7 +23,7 @@ export default function DropDownMenu (props) {
                 })
                 break;
             case "countries":
-                getDropDownData('countries').then((result)=>{
+                getData('countries').then((result)=>{
                     let newValues = result.map(function(key){
                         return key[0];
                     });
@@ -31,7 +31,7 @@ export default function DropDownMenu (props) {
                 })
                 break;
             case "otherCountries":
-                getDropDownData('otherCountries').then((result)=>{
+                getData('otherCountries').then((result)=>{
                     let newValues = result.map(function(key){
                         return key[0];
                     });
@@ -56,10 +56,6 @@ export default function DropDownMenu (props) {
                 let filters = ['ASC', 'DESC'];
                 setValues(filters)
                 break;
-            // case "visualization":
-            //     let types = ['2D', '3D', 'HeatMap']
-            //     setValues(types);
-            //     break;
             default:
               alert('Invalid props type')
           }

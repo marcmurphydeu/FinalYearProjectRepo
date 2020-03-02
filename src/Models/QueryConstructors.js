@@ -38,21 +38,31 @@ function computeString(values, type, variable_name=null){
         }
     })
     return string;
-
 }
 
 export function computeCypher(country, property, year, limit, filter, maxValue = 1){
     let cypher = `MATCH (n:Country)-[r:had]->(p1)-[i:in]->(y1:Year) WHERE (`+computeString(country,'countries','n')+`)  AND (`+computeString(property, 'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)
-                  SET p1.scaledValue = (p1.value/`+maxValue+`)*50 `
-        cypher += `RETURN n, p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``
+                  SET p1.scaledValue = (p1.value/`+maxValue+`)*50, r.weight = p1.scaledValue/10 `
+        cypher += `RETURN n, id(n) as id,p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``
     return cypher;
 }
 
 export function computeQueryFor3D(country, property, year, limit, filter, maxValue = 1){
     let query = `MATCH (n:Country)-[r:had]->(p1)-[:in]->(y1:Year) WHERE (`+computeString(country, 'countries','n')+`)  AND (`+computeString(property,'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)
-                SET p1.scaledValue = (p1.value/`+maxValue+`)*50 
-                RETURN {id: [id(n), id(p1)], label: [labels(n), labels(p1)], caption: [n.country_name, p1.value], size:[3,p1.scaledValue] } as source, 
-                {id: [id(p1), id(y1)], label:[labels(p1), labels(y1)], caption:[p1.value, y1.year], size:[p1.scaledValue,3] } as target ORDER BY p1.value `+filter+` LIMIT `+limit+``
+                SET p1.scaledValue = (p1.value/`+maxValue+`)*50, r.weight=p1.scaledValue/10 
+                RETURN {id: [id(n), id(p1)], label: [labels(n), labels(p1)], 
+                        caption: [n.country_name, p1.value], 
+                        community:[n.community, labels(p1)], 
+                        size:[3,p1.scaledValue] } as source, 
+                        
+                        {id: [id(p1), id(y1)], label:[labels(p1), labels(y1)], 
+                        caption:[p1.value, y1.year], 
+                        community:[labels(p1), y1.community], 
+                        size:[p1.scaledValue,3] } as target, 
+                        
+                        {weight: r.weight, type:type(r)} as rel
+
+                        ORDER BY p1.value `+filter+` LIMIT `+limit+``
     return query;
 }
 
