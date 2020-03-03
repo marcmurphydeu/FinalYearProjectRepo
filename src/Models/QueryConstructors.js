@@ -43,7 +43,6 @@ function computeString(values, type, variable_name=null){
 // Very important method.
 export function computeCypher(country, property, year, limit, filter, maxValues = 1){
     // Must remove double quotes in the stringified version
-    console.log(JSON.stringify(maxValues))
     maxValues = JSON.stringify(maxValues)
     maxValues = maxValues.replace(/['"]+/g, '')
 
@@ -55,10 +54,13 @@ export function computeCypher(country, property, year, limit, filter, maxValues 
 }
 
 export function computeQueryFor3D(country, property, year, limit, filter, maxValues = 1){
-    let a = maxValues['Population']
-    console.log("P is ", a)
-    let query = `MATCH (n:Country)-[r:had]->(p1)-[:in]->(y1:Year) WHERE (`+computeString(country, 'countries','n')+`)  AND (`+computeString(property,'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)
-                SET p1.scaledValue = (p1.value/`+maxValues[`p1.property`]+`)*50, r.weight=p1.scaledValue/10 
+    
+    maxValues = JSON.stringify(maxValues)
+    maxValues = maxValues.replace(/['"]+/g, '')
+
+    let query = `UNWIND [`+maxValues+`] as mValues
+                MATCH (n:Country)-[r:had]->(p1)-[:in]->(y1:Year) WHERE (`+computeString(country, 'countries','n')+`)  AND (`+computeString(property,'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)
+                SET p1.scaledValue = ceil((p1.value/mValues[p1.property])*50), r.weight=p1.scaledValue/10 
                 RETURN {id: [id(n), id(p1)], label: [labels(n), labels(p1)], 
                         caption: [n.country_name, p1.value], 
                         community:[n.community, labels(p1)], 
@@ -74,16 +76,6 @@ export function computeQueryFor3D(country, property, year, limit, filter, maxVal
                         ORDER BY p1.value `+filter+` LIMIT `+limit+``
     return query;
 }
-
-
-// export function maxValueQuery(country, property, year){
-//     return `MATCH (n:Country)-[r:had]->(p1)-[i:in]->(y1:Year) 
-//             WHERE (`+computeString(country, 'countries','n')+`)  AND
-//                   (`+computeString(property, 'properties','p1')+`)  AND 
-//                   (`+computeString(year,'years','y1')+`) AND
-//                   TOSTRING(p1.value)<>'NaN' Return p1.value order by p1.value DESC LIMIT 1`
-// }
-
 
 export function maxValueQuery(country, property, year){
     return `MATCH (n:Country)-[r:had]->(p1)-[i:in]->(y1:Year) 

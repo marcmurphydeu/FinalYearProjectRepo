@@ -1,4 +1,6 @@
 import {getDataFromQuery} from '../Models/DatabaseModel';
+import {maxValueQuery} from '../Models/QueryConstructors';
+
 export async function getData(element){
     switch (element){
         case 'properties':
@@ -12,5 +14,23 @@ export async function getData(element){
         default:
             break;
     }
+}
+
+
+export function getMaxValues(properties, country, year, limit, filter, callback){
+    var maxVals = {}
+    var remaining = properties.length
+    properties.forEach(p =>{
+        getDataFromQuery(maxValueQuery(country, p, year, limit, filter)).then(result=>{
+            if (result.length !== 0){
+                maxVals[p] = result[0][0]
+                remaining -= 1
+                if (remaining === 0){
+                    callback(maxVals)
+                }
+            }   
+        })
+    })
+    return maxVals
 }
 

@@ -1,6 +1,7 @@
 import ForceGraph3D from '3d-force-graph';
 import neo4j from 'neo4j-driver';
 import {computeQueryFor3D, maxValueQuery} from '../Models/QueryConstructors';
+import {getMaxValues} from './DataController';
 import {getDataFromQuery} from '../Models/DatabaseModel'
 
 
@@ -13,11 +14,16 @@ export default async function draw3D (country, property, year, limit, filter){
         );       
         const session = driver.session();
         const elem = document.getElementById('viz');
-        var maxVal = await getDataFromQuery(maxValueQuery(country,property,year,limit,filter))
-        if (maxVal[0][0] === 0){maxVal = [1]}
 
-    session
-        .run(computeQueryFor3D(country, property, year, limit, filter, maxVal[0]))
+        getMaxValues(property, country,year,limit,filter, function(maxValues){
+            Object.keys(maxValues).forEach(function(key) {
+                if(maxValues[key] === 0){
+                    maxValues[key] = 1
+                }
+            });
+
+            session
+        .run(computeQueryFor3D(country, property, year, limit, filter, maxValues))
         .then(function (result) {
             const links = []
             const nodes = {}
@@ -59,4 +65,14 @@ export default async function draw3D (country, property, year, limit, filter){
           .catch(function (error) {
             console.log(error);
           });
+    
+        })
+
+        
+        // var maxVal = await getDataFromQuery(maxValueQuery(country,property,year,limit,filter))
+        // if (maxVal[0][0] === 0){maxVal = [1]}
+
+        // console.log(computeQueryFor3D(country, property, year, limit, filter, maxValues))
+
+    
 }

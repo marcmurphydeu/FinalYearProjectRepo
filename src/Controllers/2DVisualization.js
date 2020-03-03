@@ -1,5 +1,5 @@
-import {computeCypher, maxValueQuery} from '../Models/QueryConstructors';
-import {getDataFromQuery} from '../Models/DatabaseModel';
+import {computeCypher} from '../Models/QueryConstructors';
+import {getMaxValues} from './DataController';
 import {getData} from './DataController';
 
 var viz;
@@ -56,23 +56,7 @@ async function getConfig(query = null){
 }
 
 
-function getMaxValues(properties, country, year, limit, filter, callback){
-    var maxVals = {}
-    var remaining = properties.length
-    properties.forEach(p =>{
-        getDataFromQuery(maxValueQuery(country, p, year, limit, filter)).then(result=>{
-            if (result.length !== 0){
-                maxVals[p] = result[0][0]
-                remaining -= 1
-                if (remaining === 0){
-                    callback(maxVals)
-                }
-            }
-            
-        })
-    })
-    return maxVals
-}
+
 
 export default async function draw(country, property, year, limit, filter){
     var query;
@@ -88,7 +72,7 @@ export default async function draw(country, property, year, limit, filter){
     console.log(query)
     
 
-    let config = getConfig(query).then(c =>{
+    getConfig(query).then(c =>{
         console.log(c)
         viz = new neo.default(c);
         viz.render();
