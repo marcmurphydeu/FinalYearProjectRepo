@@ -40,16 +40,25 @@ function computeString(values, type, variable_name=null){
     return string;
 }
 
-export function computeCypher(country, property, year, limit, filter, maxValue = 1){
-    let cypher = `MATCH (n:Country)-[r:had]->(p1)-[i:in]->(y1:Year) WHERE (`+computeString(country,'countries','n')+`)  AND (`+computeString(property, 'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)
-                  SET p1.scaledValue = (p1.value/`+maxValue+`)*50, r.weight = p1.scaledValue/10 `
+// Very important method.
+export function computeCypher(country, property, year, limit, filter, maxValues = 1){
+    // Must remove double quotes in the stringified version
+    console.log(JSON.stringify(maxValues))
+    maxValues = JSON.stringify(maxValues)
+    maxValues = maxValues.replace(/['"]+/g, '')
+
+    let cypher = `UNWIND [`+maxValues+`] as mValues
+                  MATCH (n:Country)-[r:had]->(p1)-[i:in]->(y1:Year) WHERE (`+computeString(country,'countries','n')+`)  AND (`+computeString(property, 'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)
+                  SET p1.scaledValue = ceil((p1.value/mValues[p1.property]) * 50), r.weight = p1.scaledValue/10 `
         cypher += `RETURN n, id(n) as id,p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``
     return cypher;
 }
 
-export function computeQueryFor3D(country, property, year, limit, filter, maxValue = 1){
+export function computeQueryFor3D(country, property, year, limit, filter, maxValues = 1){
+    let a = maxValues['Population']
+    console.log("P is ", a)
     let query = `MATCH (n:Country)-[r:had]->(p1)-[:in]->(y1:Year) WHERE (`+computeString(country, 'countries','n')+`)  AND (`+computeString(property,'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)
-                SET p1.scaledValue = (p1.value/`+maxValue+`)*50, r.weight=p1.scaledValue/10 
+                SET p1.scaledValue = (p1.value/`+maxValues[`p1.property`]+`)*50, r.weight=p1.scaledValue/10 
                 RETURN {id: [id(n), id(p1)], label: [labels(n), labels(p1)], 
                         caption: [n.country_name, p1.value], 
                         community:[n.community, labels(p1)], 
@@ -67,10 +76,19 @@ export function computeQueryFor3D(country, property, year, limit, filter, maxVal
 }
 
 
+// export function maxValueQuery(country, property, year){
+//     return `MATCH (n:Country)-[r:had]->(p1)-[i:in]->(y1:Year) 
+//             WHERE (`+computeString(country, 'countries','n')+`)  AND
+//                   (`+computeString(property, 'properties','p1')+`)  AND 
+//                   (`+computeString(year,'years','y1')+`) AND
+//                   TOSTRING(p1.value)<>'NaN' Return p1.value order by p1.value DESC LIMIT 1`
+// }
+
+
 export function maxValueQuery(country, property, year){
     return `MATCH (n:Country)-[r:had]->(p1)-[i:in]->(y1:Year) 
-                WHERE (`+computeString(country, 'countries','n')+`)  AND
-                      (`+computeString(property, 'properties','p1')+`)  AND 
-                      (`+computeString(year,'years','y1')+`) AND
-                      TOSTRING(p1.value)<>'NaN' Return p1.value order by p1.value DESC LIMIT 1`
+            WHERE (`+computeString(country, 'countries','n')+`)  AND
+                  (p1: `+property+`)  AND 
+                  (`+computeString(year,'years','y1')+`) AND
+                  TOSTRING(p1.value)<>'NaN' Return p1.value order by p1.value DESC LIMIT 1`
 }

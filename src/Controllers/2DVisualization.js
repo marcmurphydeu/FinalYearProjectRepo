@@ -5,24 +5,13 @@ import {getData} from './DataController';
 var viz;
 var neo = require('neovis.js');
 
-function getConfig(query = null){
+async function getConfig(query = null){
     var config = {
         container_id: "viz",
         server_url:"bolt://localhost:7687",
         server_user:"neo4j",
         server_password: "fender14",
-        labels: {
-                "Country" : {
-                    "caption": "country_name",
-                    "size": 5.0,
-                    "community": "community"
-                },
-                "Year":{
-                    "caption": "year",
-                    "size": "pageRank",
-                    "community": "community",
-                }
-            },
+        labels: {},
         relationships: {
             "had": {
             "thickness": "weight",
@@ -36,35 +25,76 @@ function getConfig(query = null){
             }
         
             },
-        arrows: true
+        // arrows: true
     };
 
     if(query){
         config.initial_cypher = query
     }
 
-    getData('properties').then(e=> {
-        e.forEach(p=>{
-        config.labels[p[0]] =  {
-            "caption": "property",
-            "size":"scaledValue",
-            "community":"community"
-            }
-        })
+    let properties = await getData('properties')
+    properties.forEach(p=>{
+    config.labels[(p[0][0])] =  {
+        "caption": "property",
+        "size":"scaledValue",
+        "community":"community"
+        }
     })
+
+    config.labels["Country"] = {
+        "caption": "country_name",
+        "size": 5,
+        "community": "community"
+    }
+    config.labels["Year"] = {
+        "caption": "year",
+        "size": 5,
+        "community": "community"
+    }
 
     return config;
 }
 
+
+function getMaxValues(properties, country, year, limit, filter, callback){
+    var maxVals = {}
+    var remaining = properties.length
+    properties.forEach(p =>{
+        getDataFromQuery(maxValueQuery(country, p, year, limit, filter)).then(result=>{
+            if (result.length !== 0){
+                maxVals[p] = result[0][0]
+                remaining -= 1
+                if (remaining === 0){
+                    callback(maxVals)
+                }
+            }
+            
+        })
+    })
+    return maxVals
+}
+
 export default async function draw(country, property, year, limit, filter){
     var query;
-    var maxVal = await getDataFromQuery(maxValueQuery(country,property,year,limit,filter))
-    if (maxVal[0][0] === 0){maxVal = [1]}
-    query = computeCypher(country,property,year,limit, filter, maxVal[0]);
+    getMaxValues(property, country, year, limit, filter, function(maxValues){
 
-    let config = getConfig(query)
-    viz = new neo.default(config);
-    viz.render();
+    Object.keys(maxValues).forEach(function(key) {
+        if(maxValues[key] === 0){
+            maxValues[key] = 1
+        }
+    });
+    query = computeCypher(country,property,year,limit, filter, maxValues);
+
+    console.log(query)
+    
+
+    let config = getConfig(query).then(c =>{
+        console.log(c)
+        viz = new neo.default(c);
+        viz.render();
+    })
+
+    })
 }
 
 export async function drawFromCypher(textQuery){
