@@ -5,13 +5,8 @@ import TimeSeriesSlider from '../Components/TimeSeriesSlider';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-
-
-  
 export default function displayVisualization(visualization, selectedCountries, selectedProperties, selectedYears, limit, filter, setSelectedYears){
-    if (selectedCountries.length !== 0
-        && selectedProperties.length !==0 
-        && selectedYears.length !==0){
+    if (selectedCountries && selectedProperties && selectedYears.length){
         switch (visualization){
             case "2D":
                 draw(selectedCountries, selectedProperties, selectedYears, limit, filter);

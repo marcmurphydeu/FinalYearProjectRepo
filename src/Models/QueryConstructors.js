@@ -53,6 +53,15 @@ export function computeCypher(country, property, year, limit, filter, maxValues 
     return cypher;
 }
 
+export function computeCypherForMap(country, property, year, limit, filter){
+    // Must remove double quotes in the stringified version
+
+    let cypher = `MATCH (n:Country)-[r:had]->(p1)-[i:in]->(y1:Year) WHERE (`+computeString(country,'countries','n')+`)  AND 
+                    (`+computeString(property, 'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)`
+        cypher += `RETURN n, id(n) as id,p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``
+    return cypher;
+}
+
 export function computeQueryFor3D(country, property, year, limit, filter, maxValues = 1){
     
     maxValues = JSON.stringify(maxValues)
@@ -78,9 +87,50 @@ export function computeQueryFor3D(country, property, year, limit, filter, maxVal
 }
 
 export function maxValueQuery(country, property, year){
+    var countryString = ''
+    var propertyString = ''
+    var yearString = ''
+    if (country.length !== 0){
+        countryString = `(`+computeString(country, 'countries','n')+`)  AND`
+    }
+    if(property.length !==0){
+        propertyString = `(p1: `+property+`)  AND `
+    }
+    if(year.length !== 0){
+        yearString = `(`+computeString(year,'years','y1')+`) AND`
+    }
+    // if(is_pure_country){
+    //     propertyString += ` (p1.is_pure_country = true) AND `
+    // }
+
     return `MATCH (n:Country)-[r:had]->(p1)-[i:in]->(y1:Year) 
-            WHERE (`+computeString(country, 'countries','n')+`)  AND
-                  (p1: `+property+`)  AND 
-                  (`+computeString(year,'years','y1')+`) AND
-                  TOSTRING(p1.value)<>'NaN' Return p1.value order by p1.value DESC LIMIT 1`
+            WHERE `  + countryString + ` ` +propertyString+ ` `+yearString + `
+            TOSTRING(p1.value)<>'NaN' Return p1.value order by p1.value DESC LIMIT 1`          
+}
+
+export function computeCustomCypher2D(maxValues, country, property, year){
+    maxValues = JSON.stringify(maxValues)
+    maxValues = maxValues.replace(/['"]+/g, '')
+
+    var countryString = ''
+    var propertyString = ''
+    var yearString = ''
+    if (country.length !== 0){
+        countryString = `(`+computeString(country, 'countries','n')+`)`
+        if (year.length !== 0 || property.length !==0){
+            countryString += ` AND`
+        }
+    }
+    if(property.length !==0){
+        propertyString = `(`+computeString(property, 'properties','p1')+`)`
+        if(year.length !==0){
+            propertyString+= ` AND`
+        }
+    }
+    if(year.length !== 0){
+        yearString = `(`+computeString(year,'years','y1')+`) `
+    }
+    return `UNWIND [`+maxValues+`] as mValues MATCH (n:Country)-[r:had]->(p1)-[:in]->(y1:Year) 
+            WHERE `  + countryString + ` ` +propertyString+ ` `+yearString + `
+            SET p1.scaledValue = p1.value/mValues[p1.property]*50,  r.weight = p1.scaledValue/10`
 }

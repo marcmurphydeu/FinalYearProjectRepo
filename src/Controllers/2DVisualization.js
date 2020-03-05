@@ -1,6 +1,7 @@
-import {computeCypher} from '../Models/QueryConstructors';
+import {computeCypher, computeCustomCypher2D} from '../Models/QueryConstructors';
 import {getMaxValues} from './DataController';
 import {getData} from './DataController';
+import {setDataFromQuery} from '../Models/DatabaseModel';
 
 var viz;
 var neo = require('neovis.js');
@@ -32,7 +33,7 @@ async function getConfig(query = null){
         config.initial_cypher = query
     }
 
-    let properties = await getData('properties')
+    let properties = await getData('properties')  // This is being done below too!
     properties.forEach(p=>{
     config.labels[(p[0][0])] =  {
         "caption": "property",
@@ -58,36 +59,70 @@ async function getConfig(query = null){
 
 
 
-export default async function draw(country, property, year, limit, filter){
-    var query;
-    getMaxValues(property, country, year, limit, filter, function(maxValues){
+export default async function draw(country, property, year, limit, filter, isCustomQuery=false, customQueryString=null){
+    if(property.length !== 0){
+        getMaxValues(property, country, year,function(maxValues){
+            console.log("Max values", maxValues)
+            Object.keys(maxValues).forEach(function(key) {
+                if(maxValues[key] === 0){
+                    maxValues[key] = 1
+                }
+            });
+            if (!isCustomQuery){
+                let query = computeCypher(country,property,year,limit, filter, maxValues);   
+                renderVisualization(query)
+            }
+            else{
+                let setScaledValueString = computeCustomCypher2D(maxValues,country,property,year,customQueryString)
+                setDataFromQuery(setScaledValueString).then(()=> renderVisualization(customQueryString))
+            }
+        })
+    }
+    else if (customQueryString){ renderVisualization(customQueryString)  }
+}
 
-    Object.keys(maxValues).forEach(function(key) {
-        if(maxValues[key] === 0){
-            maxValues[key] = 1
-        }
-    });
-    query = computeCypher(country,property,year,limit, filter, maxValues);
-
-    console.log(query)
-    
-
-    getConfig(query).then(c =>{
-        console.log(c)
-        viz = new neo.default(c);
-        viz.render();
-    })
-
-    })
+async function renderVisualization(query){
+        getConfig(query).then(c =>{
+            viz = new neo.default(c);
+            console.log(viz)
+            try{
+                viz.render();
+            }
+            catch(error){
+                alert(error)
+            }
+        })
 }
 
 export async function drawFromCypher(textQuery){
-    try{
-        viz = new neo.default(getConfig(textQuery));
-        console.log(viz)
-        viz.renderWithCypher(textQuery);
-    }
-    catch(e){
-        alert("Query is incorrect", "Error : \n", e)
-    }
+
+        console.log(textQuery)
+        let countries = await getData('countries')
+        let properties = await getData('properties')
+        let otherCountries = await getData('otherCountries')
+        let years = []
+        for (let i = 1960; i< 2019; i++){
+            years.push(""+i)
+        }
+        let separatedQuery = textQuery.split(/[.\=,:}()'" {><*+-/_]/).map(item=> {return item.trim()})
+
+        let queryCountries = []
+        let queryProperties = []
+        let queryYears = []
+        separatedQuery.forEach(elem=>{
+            if (countries.flat().includes(elem) || otherCountries.flat().includes(elem)){
+                queryCountries.push(elem)
+            }
+            if(properties.flat().flat().includes(elem) && (elem!=="Country")){
+                queryProperties.push(elem)
+            }
+            if (years.includes(elem)){
+                queryYears.push(elem)
+            }
+        })
+              
+        console.log(separatedQuery)
+        console.log(queryCountries,queryProperties,queryYears)
+        draw(queryCountries,queryProperties,queryYears,null,null,true,textQuery)
+        // renderVisualization(textQuery)
 }

@@ -13,13 +13,16 @@ import TimeSeriesSlider from './TimeSeriesSlider';
 import ReactDOM from 'react-dom';
 import ToggleButtonGroupControlled from './ControlledButton';
 import Button from 'react-bootstrap/Button'
-
+import Popup from './Popup';
+import {getText} from '../Controllers/Information';
 
 function toggle(customQuery){
     ReactDOM.render(<ToggleButtonGroupControlled 
         customQuery={customQuery}
         />, document.getElementById('controlledButton'));   
 }
+
+
 
 export function UserForm(){
     const [limit , setLimit] = useState('250')
@@ -28,11 +31,9 @@ export function UserForm(){
     const [selectedProperties, setSelectedProperties] = useState([])
     const [selectedYears, setSelectedYears] = useState([])
     const [selectedOtherCountries, setOtherCountries] = useState([])
-    const [customQuery, setCustomQuery] = useState(null)
+    const [customQuery, setCustomQuery] = useState("")
 
     useEffect(()=>{
-
-            // DO WE NEED SELECTED OTHER COUNTRIES TOO?
             ReactDOM.render(<ToggleButtonGroupControlled 
                 setSelectedYears={setSelectedYears}
                 selectedYears = {selectedYears}
@@ -49,6 +50,9 @@ export function UserForm(){
             {/* Country Form Row */}
             <Grid container id = "row">
                 <Grid id = "formItem" item xs={11} >
+                    <Grid item id="iconRow" xs={12}>
+                        <Popup text={getText("Countries")}/>
+                    </Grid>
                     <Grid item id = "labelAndDropdown">
                         <Form.Label id = "label">Country</Form.Label>
                         <DropDownMenu type={"countries"}  values = {selectedCountries} setSelectedValues = {setSelectedCountries}/>
@@ -68,6 +72,9 @@ export function UserForm(){
             {/* Property Form Row */}
             <Grid container id = "row">
                 <Grid id ="formItem" item xs={11}>
+                    <Grid item id="iconRow" xs={12}>
+                        <Popup text={getText("Property")}/>
+                    </Grid>
                         <Grid item id = "labelAndDropdown">
                             <Form.Label id = "label">Property</Form.Label>
                             <DropDownMenu  type = {"properties"} values = {selectedProperties} setSelectedValues = {setSelectedProperties}/>
@@ -80,14 +87,17 @@ export function UserForm(){
             {/* Year Form Row */}
             <Grid container id= "row">
                 <Grid id ="formItem" item xs={11}>
-                        <Grid item  id = "labelAndDropdown">
+                        <Grid item id="iconRow" xs={12}>
+                            <Popup text={getText("Years")}/>
+                        </Grid>
+                        <Grid item id = "labelAndDropdown">
                             <Form.Label id = "label">Year</Form.Label>
                             <DropDownMenu type={"years"} values ={selectedYears} setSelectedValues = {setSelectedYears}/>
                         </Grid>
-                        <Grid item>
+                        <Grid xs={3} item>
                             <Slider id = "yearSlider" setSelectedYears = {setSelectedYears}/>
                         </Grid>
-                        <Grid item>
+                        <Grid xs={3} item>
                             <TimeSeriesSlider id = "timeSeriesSlider" setSelectedYears = {setSelectedYears}/>
                         </Grid>
                         <Grid item>
@@ -102,12 +112,16 @@ export function UserForm(){
 
             {/* Limit and Filter */}
             <Grid container id="row">
+                
                 <Grid item id = "formItem" xs={11}>
-                    <Grid id ="labelAndDropdown" item xs={5}>
+                    <Grid item id="iconRow" xs={12}>
+                        <Popup text={getText("Filters")}/>
+                    </Grid>
+                    <Grid id ="labelAndDropdown" item >
                             <Form.Label id = "label">Limit</Form.Label>
                             <DropDownMenu type = {"limit"} values ={[limit]} setSelectedValues = {setLimit}/>
                     </Grid>
-                    <Grid id ="labelAndDropdown" item xs={5}>
+                    <Grid id ="labelAndDropdown" item >
                         <Form.Label id = "label">Order By</Form.Label>
                         <DropDownMenu type = {"orderBy"} setSelectedValues ={setFilter} values = {[filter]}/>
                     </Grid>
@@ -119,9 +133,13 @@ export function UserForm(){
             {/* Custom query filter */}
             <Grid container id="row">
                 <Grid item id = "customQueryItem" xs={11}>
+                    <Grid item id="iconRow" xs={12}>
+                        <Popup text={getText("CustomQuery")}/>
+                    </Grid>
                     <Form.Label id ="label">Custom query</Form.Label>
-                    <Grid item xs ={11}>
-                        <Form.Control onChange={e => setCustomQuery(e.target.value)} as = "textarea" type="text" placeholder="MATCH (n: Country) ..." />
+                    <Grid item id="customQueryBox" xs ={12}>
+                        <Form.Control id={"customMenuForm"} value={customQuery} onChange={e => setCustomQuery(e.target.value)} as = "textarea" type="text" placeholder="MATCH (n: Country) ..." />
+                        <DropDownMenu type = {"customMenu"} setSelectedValues ={setCustomQuery} values = {['Examples']}/>
                     </Grid>
                     <Button onClick = {()=> toggle(customQuery)}  id = "submitButton">Submit</Button>
                 </Grid>        

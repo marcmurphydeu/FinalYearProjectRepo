@@ -7,13 +7,14 @@ import {getDataFromQuery} from '../Models/DatabaseModel'
 
 //PUT SESSION STUFF TO MODEL
 
-export default async function draw3D (country, property, year, limit, filter){
+export default async function draw3D (country, property, year, limit, filter, customQuery=null){
     var driver = neo4j.driver(
         'bolt://localhost:7687',
         neo4j.auth.basic('neo4j', 'fender14'),
         );       
         const session = driver.session();
         const elem = document.getElementById('viz');
+        
 
         getMaxValues(property, country,year,limit,filter, function(maxValues){
             Object.keys(maxValues).forEach(function(key) {
@@ -21,8 +22,9 @@ export default async function draw3D (country, property, year, limit, filter){
                     maxValues[key] = 1
                 }
             });
-
             session
+
+
         .run(computeQueryFor3D(country, property, year, limit, filter, maxValues))
         .then(function (result) {
             const links = []

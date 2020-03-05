@@ -86,7 +86,48 @@ Label{
   height: 100vh;
 }
 
-/* Doesn't actually do anything */
+
+#iconRow{
+  display:flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 5px;
+  padding-top: 1px;
+}
+
+/* Below is all the info popup style */
+#modal {
+  font-size: 24px;
+}
+#smallerSize{
+  font-size: 16px;
+}
+#note{
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.popup-content {
+  border-radius: 15px 15px 15px 15px;
+  overflow: scroll;
+  overflow-x: hidden;
+  max-height: 300px;
+  min-width: 560px;
+}
+
+#content{
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+hr {
+  width:100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+
 #Form{
   display: flex;
   align-items: flex-start; 
@@ -104,14 +145,6 @@ Label{
   flex-direction: row;
 }
 
-#row2-box{
-  padding-top: 20px;
-  display: flex;
-  align-items: flex-start; 
-  justify-content: space-around;
-  flex-wrap: nowrap;
-  flex-direction: row;
-}
 
 
 #sliderDiv{
@@ -153,16 +186,15 @@ Label{
 
 
 .dropdown-menu {
-  max-width:400px;
+  max-width:600px;
   max-height:200px;
   /* overflow: scroll; */
-  overflow-x: hidden;
+  overflow-x: auto;
   
 }
 
 
 .dropdown-item {
-  overflow: hidden;
   padding-inline-start: 0px;
 }
 
@@ -214,18 +246,10 @@ ul{
   justify-content: center;
 }
 
-#row2row1{
-  display: flex;
-  justify-content: space-around;
-  align-items: baseline;
-  flex-direction: row;
-  flex-wrap: nowrap;
-}
-
 #formItem{
   display: flex;
-  padding-top: 10px;
-  padding-bottom: 15px;
+  padding-top: 0px;
+  padding-bottom: 30px;
   box-shadow: 0px 0px 23px 4px rgba(0,0,0,0.57);
   border-radius: 15px 15px 15px 15px;
   justify-content: space-evenly;
@@ -246,7 +270,6 @@ ul{
 
 #customQueryItem{
   display: flex;
-  padding-top: 10px;
   padding-bottom: 15px;
   box-shadow: 0px 0px 23px 4px rgba(0,0,0,0.57);
   border-radius: 15px 15px 15px 15px;
@@ -256,9 +279,17 @@ ul{
   flex-direction: row;
   flex-wrap: wrap;
 }
-
-
-
+#customQueryBox{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap:nowrap;
+}
+#customMenuForm{
+  max-height: 600px;
+  max-width: 400px;
+}
 
 #loader{
   position: fixed;

@@ -19,6 +19,26 @@ export async function getDataFromQuery(query){
     return records
 }
 
+export async function setDataFromQuery(query){
+    console.log("Write query ",query)
+    var driver = neo4j.driver(
+        'bolt://localhost:7687',
+        neo4j.auth.basic('neo4j', 'fender14'),
+        );
+    var session = driver.session()
+    try {
+    await session.writeTransaction(tx =>
+        tx.run(query)
+    )
+    // var records = result.records.map(record => record._fields)
+    } finally {
+    await session.close()
+    }
+    // on application exit:
+    await driver.close()
+    // return records
+}
+
 
 export async function setPageRankOfQuery(query){
     var driver = neo4j.driver(

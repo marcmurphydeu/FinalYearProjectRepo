@@ -1,6 +1,6 @@
 import L from 'leaflet';
 import {getCountriesPositions} from '../Models/DatabaseModel'; 
-import {computeCypher} from '../Models/QueryConstructors';
+import {computeCypherForMap} from '../Models/QueryConstructors';
 import {getDataFromQuery} from '../Models/DatabaseModel';
 
 
@@ -18,7 +18,7 @@ export default function HeatMap (selectedCountries, selectedProperties, selected
     accessToken: 'pk.eyJ1IjoibWFyY211cnBoeWRldSIsImEiOiJjazZ5d21jOHMwNjV2M2x1ZmJsNmFtcXMzIn0.aAIV1cnVp14mkZ7BIoJfcQ'
     }).addTo(map);
 
-    var queryCountriesSize = getDataFromQuery(computeCypher(selectedCountries, selectedProperties, selectedYears, limit, filter))
+    var queryCountriesSize = getDataFromQuery(computeCypherForMap(selectedCountries, selectedProperties, selectedYears, limit, filter))
     .then(query_res=>{
         return query_res.map(node_bundle=>{
             // In this case index 0 is the country node and index 2 is the property node
