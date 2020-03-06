@@ -59,7 +59,6 @@ export async function drawFromCypher(textQuery, visualization){
         }
     })
           
-    console.log(separatedQuery)
     console.log(queryCountries,queryProperties,queryYears)
     switch (visualization){
         case '2D':

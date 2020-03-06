@@ -26,7 +26,6 @@ export function getMaxValues(properties, country, year, callback){
     var maxVals = {}
     var remaining = properties.length
     properties.forEach(p =>{
-        console.log("MAX VALUE QUERY", maxValueQuery(country, p, year))
         getDataFromQuery(maxValueQuery(country, p, year)).then(result=>{
             if (result.length !== 0){
                 maxVals[p] = result[0][0]
@@ -34,7 +33,7 @@ export function getMaxValues(properties, country, year, callback){
                 if (remaining === 0){
                     callback(maxVals)
                 }
-            }    
+            }
         })
     })
     return maxVals
