@@ -33,8 +33,6 @@ export default function displayVisualization(visualization, selectedCountries, s
 
 
 export async function drawFromCypher(textQuery, visualization){
-
-    console.log(textQuery)
     let countries = await getData('countries')
     let properties = await getData('properties')
     let otherCountries = await getData('otherCountries')
@@ -59,13 +57,15 @@ export async function drawFromCypher(textQuery, visualization){
         }
     })
           
-    console.log(queryCountries,queryProperties,queryYears)
     switch (visualization){
         case '2D':
             draw(queryCountries,queryProperties,queryYears,null,null,true,textQuery)
             break;
         case '3D':
             draw3D(queryCountries, queryProperties, queryYears, null,null, textQuery)
+            break;
+        case 'Map':
+            HeatMap(queryCountries, queryProperties, queryYears, null, null, textQuery)
             break;
         default:
             break;
