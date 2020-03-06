@@ -1,9 +1,11 @@
 import HeatMap from './HeatMap';
 import draw3D from './3DVisualization';
-import draw,{drawFromCypher} from './2DVisualization';
+import draw from './2DVisualization';
 import TimeSeriesSlider from '../Components/TimeSeriesSlider';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {getData} from './DataController';
+
 
 export default function displayVisualization(visualization, selectedCountries, selectedProperties, selectedYears, limit, filter, setSelectedYears){
     if (selectedCountries && selectedProperties && selectedYears.length){
@@ -27,14 +29,50 @@ export default function displayVisualization(visualization, selectedCountries, s
                 break;
             }    
     }
+}   
+
+
+export async function drawFromCypher(textQuery, visualization){
+
+    console.log(textQuery)
+    let countries = await getData('countries')
+    let properties = await getData('properties')
+    let otherCountries = await getData('otherCountries')
+    let years = []
+    for (let i = 1960; i< 2019; i++){
+        years.push(""+i)
+    }
+    let separatedQuery = textQuery.split(/[.\=,:}()'" {><*+-/_]/).map(item=> {return item.trim()})
+
+    let queryCountries = []
+    let queryProperties = []
+    let queryYears = []
+    separatedQuery.forEach(elem=>{
+        if (countries.flat().includes(elem) || otherCountries.flat().includes(elem)){
+            queryCountries.push(elem)
+        }
+        if(properties.flat().flat().includes(elem) && (elem!=="Country")){
+            queryProperties.push(elem)
+        }
+        if (years.includes(elem)){
+            queryYears.push(elem)
+        }
+    })
+          
+    console.log(separatedQuery)
+    console.log(queryCountries,queryProperties,queryYears)
+    switch (visualization){
+        case '2D':
+            draw(queryCountries,queryProperties,queryYears,null,null,true,textQuery)
+            break;
+        case '3D':
+            draw3D(queryCountries, queryProperties, queryYears, null,null, textQuery)
+            break;
+        default:
+            break;
+    }
+    // renderVisualization(textQuery)
 }
 
-export function displayFromQuery(query){
-    try{
-        drawFromCypher(query)
-    }
-    catch(error){
-        alert("Cypher query is incorrect")
-    }
-}
+
 

@@ -94,35 +94,3 @@ async function renderVisualization(query){
         })
 }
 
-export async function drawFromCypher(textQuery){
-
-        console.log(textQuery)
-        let countries = await getData('countries')
-        let properties = await getData('properties')
-        let otherCountries = await getData('otherCountries')
-        let years = []
-        for (let i = 1960; i< 2019; i++){
-            years.push(""+i)
-        }
-        let separatedQuery = textQuery.split(/[.\=,:}()'" {><*+-/_]/).map(item=> {return item.trim()})
-
-        let queryCountries = []
-        let queryProperties = []
-        let queryYears = []
-        separatedQuery.forEach(elem=>{
-            if (countries.flat().includes(elem) || otherCountries.flat().includes(elem)){
-                queryCountries.push(elem)
-            }
-            if(properties.flat().flat().includes(elem) && (elem!=="Country")){
-                queryProperties.push(elem)
-            }
-            if (years.includes(elem)){
-                queryYears.push(elem)
-            }
-        })
-              
-        console.log(separatedQuery)
-        console.log(queryCountries,queryProperties,queryYears)
-        draw(queryCountries,queryProperties,queryYears,null,null,true,textQuery)
-        // renderVisualization(textQuery)
-}

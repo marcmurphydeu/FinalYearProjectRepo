@@ -54,8 +54,6 @@ export function computeCypher(country, property, year, limit, filter, maxValues 
 }
 
 export function computeCypherForMap(country, property, year, limit, filter){
-    // Must remove double quotes in the stringified version
-
     let cypher = `MATCH (n:Country)-[r:had]->(p1)-[i:in]->(y1:Year) WHERE (`+computeString(country,'countries','n')+`)  AND 
                     (`+computeString(property, 'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)`
         cypher += `RETURN n, id(n) as id,p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``
@@ -99,9 +97,6 @@ export function maxValueQuery(country, property, year){
     if(year.length !== 0){
         yearString = `(`+computeString(year,'years','y1')+`) AND`
     }
-    // if(is_pure_country){
-    //     propertyString += ` (p1.is_pure_country = true) AND `
-    // }
 
     return `MATCH (n:Country)-[r:had]->(p1)-[i:in]->(y1:Year) 
             WHERE `  + countryString + ` ` +propertyString+ ` `+yearString + `

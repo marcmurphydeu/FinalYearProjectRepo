@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup'
 import ToggleButton from 'react-bootstrap/ToggleButton'
-import displayVisualization,{displayFromQuery} from '../Controllers/VisualController';
+import displayVisualization,{drawFromCypher} from '../Controllers/VisualController';
 
 
 export default function ToggleButtonGroupControlled(props) {
@@ -17,7 +17,7 @@ export default function ToggleButtonGroupControlled(props) {
                 props.filter,
                 props.setSelectedYears)
         }else{
-            displayFromQuery(props.customQuery)
+          drawFromCypher(props.customQuery, visualization)
         }
         
     });  
