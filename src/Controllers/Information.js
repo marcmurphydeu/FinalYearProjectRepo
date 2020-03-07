@@ -65,7 +65,9 @@ export function getText(type){
             )
         case "CustomQuery":
             let examplesList = ["Simple query which returns a single node. In this case, the country Spain",
-                                "Returns the CO2 values form all countries in the year 2013"]
+                                "Returns the CO2 values form all countries in the year 2013",
+                                "Shows which countries will be affected most if sea levels rise 5 meters. "+
+                                "The labels display the population that wil be affected."]
             return (
                 <div>
                     Here you can create your own query. The structure of the database is:

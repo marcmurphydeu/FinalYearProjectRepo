@@ -11,8 +11,12 @@ export async function getDataFromQuery(query){
         tx.run(query)
     )
     var records = result.records.map(record => record._fields)
-    } finally {
-    await session.close()
+    } 
+    catch (e){
+        alert(e)
+    }
+    finally {
+        await session.close()
     }
     // on application exit:
     await driver.close()

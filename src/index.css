@@ -299,3 +299,12 @@ ul{
   height: 50%;
   z-index: 1000;
 }
+
+#expand{
+  width: 30px;
+  /* margin-top: 10px; */
+  margin-right: 15px;
+  position: absolute;
+  right: 0px;
+  height: 30px;
+}

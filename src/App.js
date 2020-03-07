@@ -5,7 +5,6 @@ import NavBar from './Components/Navbar';
 import UserForm from './Components/Form';
 import Grid from '@material-ui/core/Grid';
 
-
 function App() {
     return (
         <React.Fragment>
@@ -14,7 +13,7 @@ function App() {
             
             <Grid container id = "MainPageContent">
                 <UserForm/>
-                <Grid xs={6} item id = "viz">
+                <Grid xs={6} item id = "viz">        
                 </Grid>
                 <Grid xs={11} item id="divider"></Grid>
                 <Grid container id = "mapContainer">
@@ -22,8 +21,7 @@ function App() {
                     <Grid item xs = {10} id = "timeLapse"/>
                     <Grid xs = {10} item id="map"/>
                 </Grid>
-            </Grid>
-            
+            </Grid>  
         </React.Fragment>
       
     );
