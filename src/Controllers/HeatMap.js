@@ -19,12 +19,24 @@ export default function HeatMap (selectedCountries, selectedProperties, selected
     }).addTo(map);
 
     var queryCountriesSize;
+    var labels ={};
     if(!customQuery){
         queryCountriesSize = getDataFromQuery(computeCypherForMap(selectedCountries, selectedProperties, selectedYears, limit, filter))
                             .then(query_res=>{
                                 return query_res.map(node_bundle=>{
-                                    // In this case index 0 is the country node and index 2 is the property node
-                                    return [node_bundle[0].properties.country_name, node_bundle[2].properties.value]
+                                    let property;
+                                    let country;
+                                    node_bundle.forEach(elem =>{
+                                        if (elem.properties.country_name){
+                                            country = elem
+                                        }
+                                        if (elem.properties.property){
+                                            property = elem
+                                        }
+                                    })
+                                    // Labels are not always the same 
+                                    labels[country.properties.country_name] = property.properties.value
+                                    return [country.properties.country_name, property.properties.value ]
                                 })
                             })
     }
@@ -32,16 +44,31 @@ export default function HeatMap (selectedCountries, selectedProperties, selected
         queryCountriesSize = getDataFromQuery(customQuery)
                             .then(query_res=>{
                                 return query_res.map(node_bundle=>{
-                                    // In this case index 0 is the country node and index 2 is the property node
-                                    return [node_bundle[0].properties.country_name, node_bundle[2].properties.value]
+                                    let property;
+                                    let country;
+                                    setLabels(node_bundle,labels)
+                                    node_bundle.forEach(elem =>{
+                                        if (elem.properties.country_name){
+                                            country = elem
+                                            
+                                        }
+                                        if (elem.properties.property){
+                                            property = elem
+                                        }
+                                    })
+                                    return [country.properties.country_name, property.properties.value ]
                                 })
                             })
     }
-    
+    // console.log(queryCountriesSize)
+    // Gets a list of the countries with their size, value and color
+    // then it gets the countries positions (async) and set's a marker
+    // for each of the countries with the information from the list
     queryCountriesSize.then(l => normalizeNumbers(l))
     .then(list=>{
         getCountriesPositions().then(response=>{
             response.forEach(country=>{
+                // console.log("List is", list)
                 if (country[1] && country[2] && country[0] in list){
                     let marker = L.circleMarker([country[2], country[1]],{
                         color: list[country[0]].colour,
@@ -52,7 +79,7 @@ export default function HeatMap (selectedCountries, selectedProperties, selected
                     marker.on('mouseover', function(e) {
                         L.popup()
                          .setLatLng([country[2], country[1]]) 
-                         .setContent('Value is : '+list[country[0]].value +`\n ,`
+                         .setContent('Value is : '+labels[country[0]] +`\n ,`
                                     + '\r Country is: ' + country[0])
                          .openOn(map);
                       });
@@ -69,9 +96,32 @@ export default function HeatMap (selectedCountries, selectedProperties, selected
         })
 }
 
-function normalizeNumbers(list){
-    let  maxDiameter = 30.0
+function setLabels(nodes,labels){
+    console.log(nodes)
+    switch(nodes.length){
+        case 2:
+            labels[nodes[0].properties.country_name] = nodes[1].properties.value //Where the first is the country and second is the value
+            break;
+        case 3: //For analysis
+            nodes.forEach(node=>{
+                if (node.properties.property === "Population"){
+                    labels[nodes[0].properties.country_name] = node.properties.value
+                }
+            })
+            break;
+        default:
+            break;
+    }
+    console.log(labels)
+}
 
+function normalizeNumbers(list){
+    // let setScaledValueString = computeCustomCypher2D(maxValues,country,property,year,customQueryString)
+    // setDataFromQuery(setScaledValueString).then(()=> renderVisualization(customQueryString))
+    // computeCypherForMap
+
+    let  maxDiameter = 30.0
+    console.log("List is ", list)
     list.sort(function(a, b){return b[1]-a[1]});
     
     var newList = {}
@@ -93,6 +143,7 @@ function normalizeNumbers(list){
             newList[tuple[0]] = {diameter:d, value: tuple[1], colour: rgbToHex(Math.round(red), Math.round(green), 0)}
         }
     })
+    console.log(newList)
     return newList
 }
 

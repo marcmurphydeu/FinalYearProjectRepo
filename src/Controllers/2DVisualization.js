@@ -82,11 +82,11 @@ export default async function draw(country, property, year, limit, filter, isCus
 }
 
 async function renderVisualization(query){
-        getConfig(query).then(c =>{
+        getConfig(query).then(async c =>{
             viz = new neo.default(c);
             console.log(viz)
             try{
-                viz.render();
+                await viz.render();
             }
             catch(error){
                 alert(error)

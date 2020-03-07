@@ -64,12 +64,21 @@ export function getText(type){
                 </div>
             )
         case "CustomQuery":
+            let examplesList = ["Simple query which returns a single node. In this case, the country Spain",
+                                "Returns the CO2 values form all countries in the year 2013"]
             return (
                 <div>
                     Here you can create your own query. The structure of the database is:
                     <br/> 
                     <strong>(:Country)-[:had]->(:Property)-[:in]->(:Year)</strong>
                     <br/>
+                    <hr/>
+                    <strong>The examples are :</strong>
+                    <ol>
+                        {examplesList.map(elem=>{
+                            return (<li key={elem} id="smallerSize">{elem}</li>)
+                        })}
+                    </ol>
                     <div id ="note">
                         Note: The property has to be a value such as the ones available 
                         in the properties dropdown.

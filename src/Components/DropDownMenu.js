@@ -73,8 +73,7 @@ export default function DropDownMenu (props) {
 
             <Dropdown.Menu>
             <ul>
-            {/* This adds the selected country to the dropdown title
-                and adds the selected country to the list of country chips  */}
+
             {values.map((v) => <Dropdown.Item onSelect={()=>{
                     if (props.type === "limit" || props.type === "orderBy" || props.type === "customMenu" ){
                         props.setSelectedValues(v);

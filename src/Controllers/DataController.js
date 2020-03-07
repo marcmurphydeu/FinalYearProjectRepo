@@ -18,8 +18,8 @@ export async function getData(element){
 
 export function getQueryExamples(){
     return ["MATCH(c:Country{country_name:'Spain'}) return c",
-            "MATCH (c:Country)-[h:had]->(p:CO2Emissions)-[i:in]->(y:Year{year: 2013}) WHERE c.is_pure_country = true return c,h,p,y,i ORDER BY p.value DESC LIMIT 100"];
-    
+            "MATCH (c:Country)-[h:had]->(p:CO2Emissions)-[i:in]->(y:Year{year: 2013}) WHERE c.is_pure_country = true return c,h,p,y,i ORDER BY p.value DESC LIMIT 100",
+            "MATCH (c:Country)-[h1:had]-> (area:LandAreaWhereElevationIsBelow5Meters) WITH ID(c) as countryID,area,h1  MATCH(c: Country)-[h:had]->(population:Population)-[i:in]->(y:Year) WHERE ID(c) = countryID  AND c.is_pure_country = true AND y.year = 2018 RETURN c,i,h,h1,population,area order by area.value desc limit 100"];
 }
 
 export function getMaxValues(properties, country, year, callback){
