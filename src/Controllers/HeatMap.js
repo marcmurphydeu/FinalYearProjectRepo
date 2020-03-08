@@ -5,9 +5,11 @@ import {getDataFromQuery} from '../Models/DatabaseModel';
 
 
 
-export default function HeatMap (selectedCountries, selectedProperties, selectedYears, limit, filter, customQuery = null){
-    var container = L.DomUtil.get('map'); if(container != null){ container._leaflet_id = null; }
-    var map = L.map('map').setView([0, 0], 2);
+export default function HeatMap (selectedCountries, selectedProperties, selectedYears, limit, filter, customQuery = null, analysis_container=null){
+    var placement = analysis_container ? analysis_container : 'map'
+
+    var container = L.DomUtil.get(placement); if(container != null){ container._leaflet_id = null; }
+    var map = L.map(placement).setView([0, 0], 2);
     map.setMaxZoom(5);
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -97,7 +99,6 @@ export default function HeatMap (selectedCountries, selectedProperties, selected
 }
 
 function setLabels(nodes,labels){
-    console.log(nodes)
     switch(nodes.length){
         case 2:
             labels[nodes[0].properties.country_name] = nodes[1].properties.value //Where the first is the country and second is the value
@@ -112,7 +113,6 @@ function setLabels(nodes,labels){
         default:
             break;
     }
-    console.log(labels)
 }
 
 function normalizeNumbers(list){
@@ -121,7 +121,6 @@ function normalizeNumbers(list){
     // computeCypherForMap
 
     let  maxDiameter = 30.0
-    console.log("List is ", list)
     list.sort(function(a, b){return b[1]-a[1]});
     
     var newList = {}
@@ -143,7 +142,6 @@ function normalizeNumbers(list){
             newList[tuple[0]] = {diameter:d, value: tuple[1], colour: rgbToHex(Math.round(red), Math.round(green), 0)}
         }
     })
-    console.log(newList)
     return newList
 }
 

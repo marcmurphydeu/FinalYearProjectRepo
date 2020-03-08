@@ -85,6 +85,8 @@ export function computeQueryFor3D(country, property, year, limit, filter, maxVal
 }
 
 export function maxValueQuery(country, property, year){
+    year = Array.from(new Set(year))
+    console.log("Year is ", year)
     var countryString = ''
     var propertyString = ''
     var yearString = ''
@@ -95,15 +97,19 @@ export function maxValueQuery(country, property, year){
         propertyString = `(p1: `+property+`)  AND `
     }
     if(year.length !== 0){
-        yearString = `(`+computeString(year,'years','y1')+`) AND`
+        yearString = `(`+computeString(year,'years','y1')+`) AND `
     }
-
+    
+    console.log("Property",propertyString)
+    console.log("Country", countryString)
+    console.log("Yeah", yearString)
     return `MATCH (n:Country)-[r:had]->(p1)-[i:in]->(y1:Year) 
             WHERE `  + countryString + ` ` +propertyString+ ` `+yearString + `
             TOSTRING(p1.value)<>'NaN' Return p1.value order by p1.value DESC LIMIT 1`          
 }
 
 export function computeCustomCypher2D(maxValues, country, property, year){
+    year = Array.from(new Set(year))
     maxValues = JSON.stringify(maxValues)
     maxValues = maxValues.replace(/['"]+/g, '')
 
@@ -125,6 +131,7 @@ export function computeCustomCypher2D(maxValues, country, property, year){
     if(year.length !== 0){
         yearString = `(`+computeString(year,'years','y1')+`) `
     }
+
     return `UNWIND [`+maxValues+`] as mValues MATCH (n:Country)-[r:had]->(p1)-[:in]->(y1:Year) 
             WHERE `  + countryString + ` ` +propertyString+ ` `+yearString + `
             SET p1.scaledValue = p1.value/mValues[p1.property]*50,  r.weight = p1.scaledValue/10`

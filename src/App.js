@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './Components/Navbar';
 import UserForm from './Components/Form';
 import Grid from '@material-ui/core/Grid';
+import Analysis from './Components/Analysis';
 
 function App() {
     return (
@@ -21,6 +22,9 @@ function App() {
                     <Grid item xs = {10} id = "timeLapse"/>
                     <Grid xs = {10} item id="map"/>
                 </Grid>
+                
+                <Analysis/>
+                
             </Grid>  
         </React.Fragment>
       

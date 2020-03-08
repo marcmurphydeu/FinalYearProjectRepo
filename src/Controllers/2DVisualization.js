@@ -6,9 +6,10 @@ import {setDataFromQuery} from '../Models/DatabaseModel';
 var viz;
 var neo = require('neovis.js');
 
-async function getConfig(query = null){
+async function getConfig(query = null, container=null){
+    let placement = container ? container : 'viz'
     var config = {
-        container_id: "viz",
+        container_id: placement,
         server_url:"bolt://localhost:7687",
         server_user:"neo4j",
         server_password: "fender14",
@@ -26,7 +27,7 @@ async function getConfig(query = null){
             }
         
             },
-        // arrows: true
+        arrows: true
     };
 
     if(query){
@@ -59,10 +60,9 @@ async function getConfig(query = null){
 
 
 
-export default async function draw(country, property, year, limit, filter, isCustomQuery=false, customQueryString=null){
+export default async function draw(country, property, year, limit, filter, isCustomQuery=false, customQueryString=null, container = null){
     if(property.length !== 0){
         getMaxValues(property, country, year,function(maxValues){
-            console.log("Max values", maxValues)
             Object.keys(maxValues).forEach(function(key) {
                 if(maxValues[key] === 0){
                     maxValues[key] = 1
@@ -74,17 +74,16 @@ export default async function draw(country, property, year, limit, filter, isCus
             }
             else{
                 let setScaledValueString = computeCustomCypher2D(maxValues,country,property,year,customQueryString)
-                setDataFromQuery(setScaledValueString).then(()=> renderVisualization(customQueryString))
+                setDataFromQuery(setScaledValueString).then(()=> renderVisualization(customQueryString, container))
             }
         })
     }
-    else if (customQueryString){ renderVisualization(customQueryString)  }
+    else if (customQueryString){ renderVisualization(customQueryString, container)  }
 }
 
-async function renderVisualization(query){
-        getConfig(query).then(async c =>{
+async function renderVisualization(query,container = null){
+        getConfig(query, container).then(async c =>{
             viz = new neo.default(c);
-            console.log(viz)
             try{
                 await viz.render();
             }
