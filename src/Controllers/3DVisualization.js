@@ -10,7 +10,7 @@ import {setDataFromQuery} from '../Models/DatabaseModel';
 
 //PUT SESSION STUFF TO MODEL
 
-export default async function draw3D (country, property, year, limit, filter, customQuery=null){
+export default async function draw3D (country, property, year, limit, filter, customQuery=null,container = null){
     var driver = neo4j.driver(
         'bolt://localhost:7687',
         neo4j.auth.basic('neo4j', 'fender14'),
@@ -25,7 +25,7 @@ export default async function draw3D (country, property, year, limit, filter, cu
                 if(customQuery){
                     let setScaledValueString = computeCustomCypher2D(maxValues,country,property,year,customQuery)
                     await setDataFromQuery(setScaledValueString)
-                    runCustomQuerySession(driver,customQuery) 
+                    runCustomQuerySession(driver,customQuery,container) 
                 }
                 else{
                     runQuerySession(maxValues,driver,country,property,year,limit,filter)
@@ -33,11 +33,11 @@ export default async function draw3D (country, property, year, limit, filter, cu
             })
         }
         else if (customQuery){
-            runCustomQuerySession(driver,customQuery) 
+            runCustomQuerySession(driver,customQuery,container) 
         }
     }
         
-    function runCustomQuerySession(driver,customQuery){
+    function runCustomQuerySession(driver,customQuery,container){
         const links = []
         const nodes = {}
         const session = driver.session();
@@ -71,7 +71,7 @@ export default async function draw3D (country, property, year, limit, filter, cu
                 })
             });
             session.close();
-            renderGraph(links,nodes)
+            renderGraph(links,nodes,container)
         })
         .catch(function (error) {
             alert(error);
@@ -111,8 +111,12 @@ export default async function draw3D (country, property, year, limit, filter, cu
                 });
     }
 
-    function renderGraph(links, nodes){
-        const elem = document.getElementById('viz');
+    function renderGraph(links, nodes,container=null){
+        const placement = container ? container : 'viz'
+        console.log("WIDTH", document.getElementById('analysis').offsetWidth)
+        const width = container ? document.getElementById('analysis8').offsetWidth-10 : window.innerWidth/2 -10
+        const height = container ? document.getElementById('analysis8').offsetHeight-10 : 700-10
+        const elem = document.getElementById(placement);
         const ids = new Set()
         links.forEach(l => {ids.add(l.source);ids.add(l.target);});
         const gData = { nodes: Object.values(nodes), links: links}
@@ -122,10 +126,10 @@ export default async function draw3D (country, property, year, limit, filter, cu
                         .linkDirectionalArrowLength(6)
                         .linkOpacity(0.6)
                         .nodeVal('size')
-                        // .linkAutoColorBy('type')
                         .linkWidth('weight')
                         .nodeAutoColorBy('community')
-                        .width(window.innerWidth/2 -15)
+                        .width(width)
+                        .height(height)
                         .nodeLabel(node=> `${node.label}:${node.caption}`)
                         .onNodeHover(node=>elem.style.cursor = node ? 'pointer':null);
     }

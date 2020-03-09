@@ -49,7 +49,7 @@ export async function drawFromCypher(textQuery, visualization, container = null)
         if (countries.flat().includes(elem) || otherCountries.flat().includes(elem)){
             queryCountries.push(elem)
         }
-        if(properties.flat().flat().includes(elem) && (elem!=="Country")){
+        if(properties.flat().flat().includes(elem)){
             queryProperties.push(elem)
         }
         if (years.includes(elem)){
@@ -62,7 +62,7 @@ export async function drawFromCypher(textQuery, visualization, container = null)
             draw(queryCountries,queryProperties,queryYears,null,null,true,textQuery, container)
             break;
         case '3D':
-            draw3D(queryCountries, queryProperties, queryYears, null,null, textQuery)
+            draw3D(queryCountries, queryProperties, queryYears, null,null, textQuery, container)
             break;
         case 'Map':
             HeatMap(queryCountries, queryProperties, queryYears, null, null, textQuery, container)

@@ -23,7 +23,8 @@ function App() {
                     <Grid xs = {10} item id="map"/>
                 </Grid>
                 
-                <Analysis/>
+                {/* <Analysis/> */}
+                <div id = "analysis"/> 
                 
             </Grid>  
         </React.Fragment>

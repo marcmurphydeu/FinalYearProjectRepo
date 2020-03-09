@@ -45,26 +45,26 @@ export default function Analysis(){
                             arable land. However, countries such as the United Kingdom have both of these properties with high values.
                     </span>
             </Grid> 
-            <Grid item xs = {11} id = "protectedAreas">
+            <Grid item xs = {12} id = "protectedAreas">
                 <Grid item xs = {12}>
                     <h2 className="analysisTitleText">Comparing protected areas in 2016 </h2>
                 </Grid>
                 
-                <Grid item xs = {4}>
+                <Grid item xs = {3}>
                     <div className="analysis" id="analysis5">{AnalysisController('analysis5')}</div>
                     <span className="analysisDescription">This visualization displays the highest values in Forest Area compared to the same country 
                             having Terrestrial protected area (% of total land area). This illustrates that the countries with highest forest area don't necessarily have
                             high terrestrial protected areas (although for Bhutan and Brunei this is the case).
                     </span>
                 </Grid>
-                <Grid item xs = {4}>
+                <Grid item xs = {3}>
                     <div className="analysis" id="analysis6">{AnalysisController('analysis6')}</div>
                     <span className="analysisDescription">Similarly to the example on the left, this returns the countries with highest Terrestrial protected areas in comparison
                             to their Forest Area. This is the exact opposite as the counterpart on the left. However, there seems to be a correlation in high Terrestrial protected areas 
                             having high forest area (although Greenland obviously doesn't have much Forest area).
                     </span>
                 </Grid>   
-                <Grid item xs = {4}>
+                <Grid item xs = {3}>
                     <div className="analysis" id="analysis7">{AnalysisController('analysis7')}</div>
                     <span className="analysisDescription">This shows the results from the 10 highest Terrestrial Protected Areas and, independently, the 10 highest
                             Marine Protected Areas. The intersection of these two queries shows how Slovenia is in the highest values for both properties and so is New Caledonia.
@@ -72,6 +72,35 @@ export default function Analysis(){
                     </span>
                 </Grid>         
             </Grid> 
+        
+            <Grid item xs = {12} id = "protectedAreas">
+                <Grid item xs = {12}>
+                    <h2 className="analysisTitleText">Comparing percentage of energy production types used in Low, Middle and High income countries in 1978 and 2015</h2>
+                </Grid>
+                
+                <Grid item xs = {3}>
+                    <div className="analysis" id="analysis8">{AnalysisController('analysis8')}</div>
+                    <span className="analysisDescription"><strong>Low Income: </strong> In both years, these countries produced Hydroelectric energy as their most abundant source.
+                            As one might expect, coal energy was higher in 1978 with 15% compared to a 2% in 2015. Another visible aspect is that back then, energy from natural and renewable
+                            sources was not even close to adding up to 0.5% of the total energy production. Whereas for natural sources, in 2015 the value is of 13%. A big difference is that there are no
+                            values for Nuclear Energy, probably meaning that the values are so low they are not considered.
+                    </span>
+                </Grid>
+                <Grid item xs = {3}>
+                    <div className="analysis" id="analysis9">{AnalysisController('analysis9')}</div>
+                    <span className="analysisDescription"><strong>Middle income: </strong> In contrast to Low income, the highest value in 1978 is Hydroelectric but with Coal energy closely next, being the highest value in 2015.
+                            Interestingly, Nuclear energy was higher in the past than recently for Middle Income countries. 
+                    </span>
+                </Grid>   
+                <Grid item xs = {3}>
+                    <div className="analysis" id="analysis10">{AnalysisController('analysis10')}</div>
+                    <span className="analysisDescription"><strong>High income: </strong> There's a visible increase in the thickness in the relationships from Low to Middle income indicating a higher use of energy. However, this increase is 
+                            is more evident in Higher Income countries. There's a notable decrease in the use of oil energy from 1978 to 2015 with a difference of 22% compared to 3%. In this case, coal production was already dominant in the past 
+                            compared to Low and Middle income countries. However the distribution in use of energy is more even in 2015 where in Low and Middle income especially Hydroelectric production amounts to almost half the of total percentage.
+                            Moreover, the growth in production of renewable energy is twice as much as it's growth in Low and Middle income countries.
+                    </span>
+                </Grid>         
+            </Grid>
         </Grid>
     )
 }
