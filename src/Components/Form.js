@@ -2,19 +2,17 @@ import React, {useState, useEffect} from 'react';
 import '../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Form} from 'react-bootstrap';
-import Badges from './CountryBadges';
+import Button from 'react-bootstrap/Button'
 import DropDownMenu from './DropDownMenu';
-import PropertiesBadges from './PropertyBadges';
-import YearBadges from './YearBadges';
+import Badges from './Badges';
 import Slider from './Slider';
 import Grid from '@material-ui/core/Grid';
 import SelectAllButton from './SelectAllButton';
 import TimeSeriesSlider from './TimeSeriesSlider';
 import ReactDOM from 'react-dom';
 import ToggleButtonGroupControlled from './ControlledButton';
-import Button from 'react-bootstrap/Button'
 import Popup from './Popup';
-import {getText} from '../Controllers/Information';
+import {getText} from '../Controllers/InformationController';
 
 function toggle(customQuery){
     ReactDOM.render(<ToggleButtonGroupControlled 
@@ -63,8 +61,8 @@ export function UserForm(){
                         <DropDownMenu type={"otherCountries"}  values = {selectedOtherCountries} setSelectedValues = {setOtherCountries}/>
                     </Grid>
                     <SelectAllButton type={"countries"} setSelectedValues = {setSelectedCountries}/>
-                    <Badges countries = {selectedCountries} setSelectedCountries = {setSelectedCountries}/>
-                    <Badges countries = {selectedOtherCountries} setSelectedCountries = {setOtherCountries}/>
+                    <Badges values = {selectedCountries} setSelectedValues = {setSelectedCountries}/>
+                    <Badges values = {selectedOtherCountries} setSelectedValues = {setOtherCountries}/>
                     
                 </Grid> 
             </Grid>      
@@ -80,7 +78,7 @@ export function UserForm(){
                             <DropDownMenu  type = {"properties"} values = {selectedProperties} setSelectedValues = {setSelectedProperties}/>
                         </Grid>
                         <SelectAllButton type = {"properties"}  setSelectedValues = {setSelectedProperties}/>
-                        <PropertiesBadges properties = {selectedProperties} setSelectedProperties = {setSelectedProperties}/>
+                        <Badges values = {selectedProperties} setSelectedValues = {setSelectedProperties}/>
                     </Grid>
             </Grid>
             
@@ -105,7 +103,7 @@ export function UserForm(){
                         </Grid>
                         
                     <Grid item>
-                        <YearBadges years = {selectedYears} setSelectedYears = {setSelectedYears} />
+                        <Badges values = {selectedYears} setSelectedValues = {setSelectedYears} />
                     </Grid>
                 </Grid>
             </Grid>

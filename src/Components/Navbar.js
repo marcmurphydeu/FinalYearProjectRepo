@@ -42,7 +42,9 @@ function scrollHome(){
 }
 
 function scrollAnalysis(){
-  ReactDOM.render(<Analysis/>, document.getElementById('analysis'));   
+  const analysis = document.getElementById('analysis')
+  ReactDOM.render(<Analysis/>, analysis);   
+  window.scrollTo(0, analysis.offsetTop)
 }
 
 export default NavBar;

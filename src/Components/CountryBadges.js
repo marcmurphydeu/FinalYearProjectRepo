@@ -19,11 +19,8 @@ const findDuplicates = (arr) => {
 
 function deleteCountry(setSelectedCountries, country, countries){
     let value = country
-
     let arr = countries
-
     arr = arr.filter(item => item !== value)
-
     setSelectedCountries(arr)
 }
 

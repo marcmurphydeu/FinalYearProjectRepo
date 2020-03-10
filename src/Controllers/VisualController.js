@@ -1,6 +1,6 @@
-import HeatMap from './HeatMap';
-import draw3D from './3DVisualization';
-import draw from './2DVisualization';
+import HeatMap from './MapController';
+import draw3D from './3DController';
+import draw from './2DVisualizationController';
 import TimeSeriesSlider from '../Components/TimeSeriesSlider';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -17,12 +17,9 @@ export default function displayVisualization(visualization, selectedCountries, s
                 draw3D(selectedCountries, selectedProperties, selectedYears, limit, filter);
                 break;
             case "Map":
+                HeatMap(selectedCountries, selectedProperties, selectedYears, limit, filter);
                 if (selectedProperties.length > 1){
-                    alert("You can only visualize one property in the map")
-                }
-                else{
-                    HeatMap(selectedCountries, selectedProperties, selectedYears, limit, filter);
-                    ReactDOM.render(<TimeSeriesSlider setSelectedYears={setSelectedYears}/>, document.getElementById('timeSeriesSlider'));
+                    displayMapWithSlider(setSelectedYears)
                 }
                 break;
             default:
@@ -31,6 +28,16 @@ export default function displayVisualization(visualization, selectedCountries, s
     }
 }   
 
+function displayMapWithSlider(setSelectedYears){
+    ReactDOM.unmountComponentAtNode(document.getElementById('analysis'))
+    ReactDOM.render(<TimeSeriesSlider setSelectedYears={setSelectedYears}/>, document.getElementById('timeSeriesSlider'))
+    const mapElement = document.getElementById('timeSeriesSlider')
+    window.scrollTo(0, mapElement.offsetTop)
+    mapElement.style.paddingTop = "10px";
+    mapElement.style.boxShadow = "0px 0px 23px 4px rgba(0,0,0,0.57)"
+    mapElement.style.borderRadius = "15px 15px 15px 15px;"
+    mapElement.style.marginTop = "30px"
+}
 
 export async function drawFromCypher(textQuery, visualization, container = null){
     let countries = await getData('countries')
@@ -56,7 +63,6 @@ export async function drawFromCypher(textQuery, visualization, container = null)
             queryYears.push(elem)
         }
     })
-    
     switch (visualization){
         case '2D':
             draw(queryCountries,queryProperties,queryYears,null,null,true,textQuery, container)
@@ -70,8 +76,5 @@ export async function drawFromCypher(textQuery, visualization, container = null)
         default:
             break;
     }
-    // renderVisualization(textQuery)
 }
-
-
 

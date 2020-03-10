@@ -24,7 +24,6 @@ export async function getDataFromQuery(query){
 }
 
 export async function setDataFromQuery(query){
-    console.log("Write query ",query)
     var driver = neo4j.driver(
         'bolt://localhost:7687',
         neo4j.auth.basic('neo4j', 'fender14'),

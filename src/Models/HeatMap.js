@@ -1,25 +1,9 @@
-import L from 'leaflet';
-import {getCountriesPositions} from '../Models/DatabaseModel'; 
-import {computeCypherForMap} from '../Models/QueryConstructors';
-import {getDataFromQuery} from '../Models/DatabaseModel';
+import {computeCypherForMap} from './QueryConstructors';
+import {getDataFromQuery} from './DatabaseModel';
 
 
 
-export default function HeatMap (selectedCountries, selectedProperties, selectedYears, limit, filter, customQuery = null, analysis_container=null){
-    var placement = analysis_container ? analysis_container : 'map'
-
-    var container = L.DomUtil.get(placement); if(container != null){ container._leaflet_id = null; }
-    var map = L.map(placement).setView([0, 0], 2);
-    map.setMaxZoom(5);
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 18,
-    id: 'mapbox/streets-v11',
-    tileSize: 512,
-    zoomOffset: -1,
-    accessToken: 'pk.eyJ1IjoibWFyY211cnBoeWRldSIsImEiOiJjazZ5d21jOHMwNjV2M2x1ZmJsNmFtcXMzIn0.aAIV1cnVp14mkZ7BIoJfcQ'
-    }).addTo(map);
-
+export async function getCountriesData(selectedCountries, selectedProperties, selectedYears, limit, filter, customQuery = null){
     var queryCountriesSize;
     var labels ={};
     if(!customQuery){
@@ -62,40 +46,11 @@ export default function HeatMap (selectedCountries, selectedProperties, selected
                                 })
                             })
     }
-    // console.log(queryCountriesSize)
+
     // Gets a list of the countries with their size, value and color
     // then it gets the countries positions (async) and set's a marker
     // for each of the countries with the information from the list
-    queryCountriesSize.then(l => normalizeNumbers(l))
-    .then(list=>{
-        getCountriesPositions().then(response=>{
-            response.forEach(country=>{
-                // console.log("List is", list)
-                if (country[1] && country[2] && country[0] in list){
-                    let marker = L.circleMarker([country[2], country[1]],{
-                        color: list[country[0]].colour,
-                        fillColor: list[country[0]].colour,
-                        fillOpacity: 0.6,
-                        radius: list[country[0]].diameter
-                    }).addTo(map)
-                    marker.on('mouseover', function(e) {
-                        L.popup()
-                         .setLatLng([country[2], country[1]]) 
-                         .setContent('Value is : '+labels[country[0]] +`\n ,`
-                                    + '\r Country is: ' + country[0])
-                         .openOn(map);
-                      });
-                }
-            })
-        })
-    }).then(e=>{
-        const mapElement = document.getElementById('timeSeriesSlider')
-        window.scrollTo(0, mapElement.offsetTop)
-        mapElement.style.paddingTop = "10px";
-        mapElement.style.boxShadow = "0px 0px 23px 4px rgba(0,0,0,0.57)"
-        mapElement.style.borderRadius = "15px 15px 15px 15px;"
-        mapElement.style.marginTop = "30px"
-        })
+    return queryCountriesSize.then(l => normalizeNumbers(l, labels))
 }
 
 function setLabels(nodes,labels){
@@ -105,7 +60,7 @@ function setLabels(nodes,labels){
             break;
         case 3: //For analysis
             nodes.forEach(node=>{
-                if (node.properties.property === "Population"){
+                if (node.properties.property === ("Population"||"PopulationWhereElevationIsBelow5Meters")){
                     labels[nodes[0].properties.country_name] = node.properties.value
                 }
             })
@@ -115,19 +70,16 @@ function setLabels(nodes,labels){
     }
 }
 
-function normalizeNumbers(list){
-    // let setScaledValueString = computeCustomCypher2D(maxValues,country,property,year,customQueryString)
-    // setDataFromQuery(setScaledValueString).then(()=> renderVisualization(customQueryString))
-    // computeCypherForMap
-
+function normalizeNumbers(list, labels){
     let  maxDiameter = 30.0
     list.sort(function(a, b){return b[1]-a[1]});
-    
+    console.log(list)
+    if (list[0][1] === 0){alert('There is no data for this query')}
     var newList = {}
     list.forEach((tuple,i)=>{
         
         if (i === 0){
-            newList[tuple[0]] = {diameter:maxDiameter, value: tuple[1], colour: "#FF0000" }
+            newList[tuple[0]] = {diameter:maxDiameter, value: tuple[1], colour: "#FF0000" , label: labels[tuple[0]]}
         }
         else{
             // For the diameter
@@ -139,7 +91,7 @@ function normalizeNumbers(list){
             let calculateGreen = (p/100) * red 
             let green = 255 - calculateGreen
 
-            newList[tuple[0]] = {diameter:d, value: tuple[1], colour: rgbToHex(Math.round(red), Math.round(green), 0)}
+            newList[tuple[0]] = {diameter:d, value: tuple[1], colour: rgbToHex(Math.round(red), Math.round(green), 0), label: labels[tuple[0]]}
         }
     })
     return newList
