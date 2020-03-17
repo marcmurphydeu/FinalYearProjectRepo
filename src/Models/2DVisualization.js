@@ -30,7 +30,7 @@ export default async function getConfig(query = null, container=null){
         config.initial_cypher = query
     }
 
-    let properties = await getData('properties')  // This is being done below too!
+    let properties = await getData('properties')
     properties.forEach(p=>{
     config.labels[(p[0][0])] =  {
         "caption": "property",

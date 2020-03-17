@@ -47,7 +47,7 @@ export function computeCypher(country, property, year, limit, filter, maxValues 
     maxValues = maxValues.replace(/['"]+/g, '')
 
     let cypher = `UNWIND [`+maxValues+`] as mValues
-                  MATCH (n:Country)-[r:had]->(p1)-[i:in]->(y1:Year) WHERE (p1.value <> 0.0) AND (`+computeString(country,'countries','n')+`)  AND (`+computeString(property, 'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)
+                  MATCH (n:Country)-[r:had]->(p1)-[i:in{in_country:n.country_name}]->(y1:Year) WHERE (p1.value <> 0.0) AND (`+computeString(country,'countries','n')+`)  AND (`+computeString(property, 'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)
                   AND (p1.value <> 0.0)
                   SET p1.scaledValue = ceil((p1.value/mValues[p1.property]) * 50), r.weight = p1.scaledValue/10 `
         cypher += `RETURN distinct n, id(n) as id,p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``
@@ -55,7 +55,7 @@ export function computeCypher(country, property, year, limit, filter, maxValues 
 }
 
 export function computeCypherForMap(country, property, year, limit, filter){
-    let cypher = `MATCH (n:Country)-[r:had]->(p1)-[i:in]->(y1:Year) WHERE (`+computeString(country,'countries','n')+`)  AND 
+    let cypher = `MATCH (n:Country)-[r:had]->(p1)-[i:in {in_country:n.country_name}]->(y1:Year) WHERE (`+computeString(country,'countries','n')+`)  AND 
                     (`+computeString(property, 'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)`
         cypher += `RETURN n, p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``
     return cypher;
@@ -67,7 +67,7 @@ export function computeQueryFor3D(country, property, year, limit, filter, maxVal
     maxValues = maxValues.replace(/['"]+/g, '')
 
     let query = `UNWIND [`+maxValues+`] as mValues
-                MATCH (n:Country)-[r:had]->(p1)-[:in]->(y1:Year) WHERE (p1.value <> 0.0) AND (`+computeString(country, 'countries','n')+`)  AND (`+computeString(property,'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)
+                MATCH (n:Country)-[r:had]->(p1)-[:in{in_country:n.country_name}]->(y1:Year) WHERE (p1.value <> 0.0) AND (`+computeString(country, 'countries','n')+`)  AND (`+computeString(property,'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)
                 SET p1.scaledValue = ceil((p1.value/mValues[p1.property])*50), r.weight=p1.scaledValue/10 
                 RETURN {id: [id(n), id(p1)], label: [labels(n), labels(p1)], 
                         caption: [n.country_name, p1.value], 
@@ -100,7 +100,7 @@ export function maxValueQuery(country, property, year){
         yearString = `(`+computeString(year,'years','y1')+`) AND `
     }
 
-    return `MATCH (n:Country)-[r:had]->(p1)-[i:in]->(y1:Year) 
+    return `MATCH (n:Country)-[r:had]->(p1)-[i:in {in_country:n.country_name}]->(y1:Year) 
             WHERE `  + countryString + ` ` +propertyString+ ` `+yearString + `
             TOSTRING(p1.value)<>'NaN' Return p1.value order by p1.value DESC LIMIT 1`          
 }
@@ -129,7 +129,7 @@ export function computeCustomCypher2D(maxValues, country, property, year){
         yearString = `(`+computeString(year,'years','y1')+`) `
     }
 
-    return `UNWIND [`+maxValues+`] as mValues MATCH (n:Country)-[r:had]->(p1)-[:in]->(y1:Year) 
+    return `UNWIND [`+maxValues+`] as mValues MATCH (n:Country)-[r:had]->(p1)-[:in {in_country:n.country_name}]->(y1:Year) 
             WHERE `  + countryString + ` ` +propertyString+ ` `+yearString + `
             SET p1.scaledValue = p1.value/mValues[p1.property]*50,  r.weight = p1.scaledValue/10`
 }
