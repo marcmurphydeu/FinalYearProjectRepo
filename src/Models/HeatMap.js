@@ -58,12 +58,23 @@ function setLabels(nodes,labels){
         case 2:
             labels[nodes[0].properties.country_name] = nodes[1].properties.value //Where the first is the country and second is the value
             break;
-        case 3: //For analysis
-            nodes.forEach(node=>{
-                if (node.properties.property === ("Population"||"PopulationWhereElevationIsBelow5Meters")){
-                    labels[nodes[0].properties.country_name] = node.properties.value
+        case 4: //For map analysis (example of population affected)
+                let population; 
+                let populationPercentage;
+                let country_name;
+                nodes.forEach(node=>{
+                
+                if(node.labels[0] === "Country"){
+                    country_name = node.properties.country_name
+                }
+                if (node.properties.property === ("Population")){
+                    population = node.properties.value
+                }
+                else if (node.properties.property === ("PopulationWhereElevationIsBelow5Meters")){
+                    populationPercentage = node.properties.value
                 }
             })
+            labels[country_name] = Math.ceil(population*(populationPercentage/100))
             break;
         default:
             break;
@@ -73,7 +84,6 @@ function setLabels(nodes,labels){
 function normalizeNumbers(list, labels){
     let  maxDiameter = 30.0
     list.sort(function(a, b){return b[1]-a[1]});
-    console.log(list)
     if (list[0][1] === 0){alert('There is no data for this query')}
     var newList = {}
     list.forEach((tuple,i)=>{
@@ -99,3 +109,5 @@ function normalizeNumbers(list, labels){
 
 const rgbToHex = (r, g, b) => '#' + [r, g, b]
   .map(x => x.toString(16).padStart(2, '0')).join('')
+
+

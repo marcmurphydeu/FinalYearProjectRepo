@@ -11,7 +11,7 @@ export default function AnalysisController(analysis){
             drawFromCypher(examples[3], '2D', analysis)
             break;
         case 'analysis3':
-        drawFromCypher(examples[4], '2D', analysis)
+            drawFromCypher(examples[4], '2D', analysis)
             break;
         case 'analysis4':
             drawFromCypher(examples[5], '2D', analysis)
@@ -34,6 +34,7 @@ export default function AnalysisController(analysis){
         case 'analysis10':
             drawFromCypher(examples[11], '3D', analysis)
             break;
+        
         default:
             break;
     }

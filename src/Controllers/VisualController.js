@@ -47,7 +47,7 @@ export async function drawFromCypher(textQuery, visualization, container = null)
     for (let i = 1960; i< 2019; i++){
         years.push(""+i)
     }
-    let separatedQuery = textQuery.split(/[.\=,:}()'" {><*+-/_]/).map(item=> {return item.trim()})
+    let separatedQuery = textQuery.split(/[.\=,:}()'" {><*+-/_]/).map(item=> {return item.trim().toLowerCase()})
 
     let queryCountries = []
     let queryProperties = []
@@ -63,18 +63,25 @@ export async function drawFromCypher(textQuery, visualization, container = null)
             queryYears.push(elem)
         }
     })
-    switch (visualization){
-        case '2D':
-            draw(queryCountries,queryProperties,queryYears,null,null,true,textQuery, container)
-            break;
-        case '3D':
-            draw3D(queryCountries, queryProperties, queryYears, null,null, textQuery, container)
-            break;
-        case 'Map':
-            HeatMap(queryCountries, queryProperties, queryYears, null, null, textQuery, container)
-            break;
-        default:
-            break;
+
+    if(separatedQuery.includes("delete") || separatedQuery.includes("remove")){
+        alert("No remove or delete queries are permitted")
     }
+    else{
+        switch (visualization){
+            case '2D':
+                draw(queryCountries,queryProperties,queryYears,null,null,true,textQuery, container)
+                break;
+            case '3D':
+                draw3D(queryCountries, queryProperties, queryYears, null,null, textQuery, container)
+                break;
+            case 'Map':
+                HeatMap(queryCountries, queryProperties, queryYears, null, null, textQuery, container)
+                break;
+            default:
+                break;
+        }
+    }
+    
 }
 

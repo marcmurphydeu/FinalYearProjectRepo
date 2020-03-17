@@ -323,11 +323,14 @@ ul{
   display: flex;
   justify-content: center;
 }
-/* nalysisTitle{
+#elevationComparison{
   display: flex;
-  justify-content: center;
-  align-items: center;
-} */
+  justify-content: space-evenly;
+  align-items: flex-start;
+  flex-direction: row;
+  margin-top: 50px;
+  flex-wrap: wrap;
+}
 #energyComparison{
   display: flex;
   justify-content: space-evenly;

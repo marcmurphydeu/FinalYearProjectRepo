@@ -10,12 +10,12 @@ import Grid from '@material-ui/core/Grid';
 import SelectAllButton from './SelectAllButton';
 import TimeSeriesSlider from './TimeSeriesSlider';
 import ReactDOM from 'react-dom';
-import ToggleButtonGroupControlled from './ControlledButton';
+import VisualizationToggle from './ControlledButton';
 import Popup from './Popup';
 import {getText} from '../Controllers/InformationController';
 
 function toggle(customQuery){
-    ReactDOM.render(<ToggleButtonGroupControlled 
+    ReactDOM.render(<VisualizationToggle 
         customQuery={customQuery}
         />, document.getElementById('controlledButton'));   
 }
@@ -32,7 +32,7 @@ export function UserForm(){
     const [customQuery, setCustomQuery] = useState("")
 
     useEffect(()=>{
-            ReactDOM.render(<ToggleButtonGroupControlled 
+            ReactDOM.render(<VisualizationToggle 
                 setSelectedYears={setSelectedYears}
                 selectedYears = {selectedYears}
                 limit = {limit}

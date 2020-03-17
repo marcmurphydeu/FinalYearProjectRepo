@@ -4,7 +4,7 @@ import ToggleButton from 'react-bootstrap/ToggleButton'
 import displayVisualization,{drawFromCypher} from '../Controllers/VisualController';
 
 
-export default function ToggleButtonGroupControlled(props) {
+export default function VisualizationToggle(props) {
     // const [value, setValue] = useState(props.visualization);
     const [visualization, setVisualization] = useState('2D')
     useEffect(()=>{

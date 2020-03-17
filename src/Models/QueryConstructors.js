@@ -48,8 +48,9 @@ export function computeCypher(country, property, year, limit, filter, maxValues 
 
     let cypher = `UNWIND [`+maxValues+`] as mValues
                   MATCH (n:Country)-[r:had]->(p1)-[i:in]->(y1:Year) WHERE (p1.value <> 0.0) AND (`+computeString(country,'countries','n')+`)  AND (`+computeString(property, 'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)
+                  AND (p1.value <> 0.0)
                   SET p1.scaledValue = ceil((p1.value/mValues[p1.property]) * 50), r.weight = p1.scaledValue/10 `
-        cypher += `RETURN n, id(n) as id,p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``
+        cypher += `RETURN distinct n, id(n) as id,p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``
     return cypher;
 }
 

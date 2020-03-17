@@ -8,17 +8,22 @@ export default function Analysis(){
             <Grid xs={11} id ="AnalysisTitle">
                 <h1 className="analysisTitleText">Analysis</h1>
             </Grid>
-            <Grid item xs = {11}>
-                <h2 className="analysisTitleText">What are the countries most affected if sea levels rise 5 meters? (2018)</h2>
-                <div id="analysis1">{AnalysisController('analysis1')}</div>
-                <div className="analysisDescription">This map displays the countries with the highest area within 5 meters of sea level.
-                            With this data, if the sea does indeed rise to such extremes, the label of the markers displays the countries'
-                            population as a approximation of the population that could suffer from the consequences.
+            <Grid item xs = {11} id = "elevationComparison">
+                <h2 className="analysisTitleText">What are the countries that would have been most affected if sea levels rose 5 meters in 2010?</h2>
 
+                <Grid item xs = {11}>
+                    <div className="analysis" id="analysis1">{AnalysisController('analysis1')}</div>
+                    <div className="analysisDescription">This map displays the countries with the highest area within 5 meters of sea level.
+                            With this data, if the sea had indeed risen to such extremes, the label on the markers displays the population that would be affected.
+                            This data is computed by getting the countries with the maximum area within 5 meters, the population of these countries and
+                            the percentage of the population living within 5 meters of sea level. Population affected = total country population * (Percentage affected/100)
                     </div>
+                </Grid>            
             </Grid>
             <Grid item xs = {11} id = "energyComparison">
-                <h2 className="analysisTitleText">Comparing CO2 emissions with renewable energy consumption in 2014</h2>
+                <Grid item xs={11}>
+                    <h2 className="analysisTitleText">Comparing CO2 emissions with renewable energy consumption in 2014</h2>
+                </Grid>
                 
                 <Grid item xs = {5}>
                     <div className="analysis" id="analysis2">{AnalysisController('analysis2')}</div>
