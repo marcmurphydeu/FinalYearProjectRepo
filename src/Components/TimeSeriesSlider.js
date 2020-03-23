@@ -1,8 +1,12 @@
 import React, {useState} from 'react';
 import 'antd/dist/antd.css';
 import { Slider, Switch } from 'antd';
+
+// Slider used for time-series visualizations.
+// Uses the Ant design slider component.
 export default function TimeSeriesSlider (props)  {
 
+  // Represents the upper and lower bound of the slider
     const marks = {
         1960: {
           style: {

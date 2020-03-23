@@ -50,7 +50,6 @@ export function renderGraph(links, nodes,container=null){
     const gData = { nodes: Object.values(nodes), links: links}
     ForceGraph3D()(elem)
                     .graphData(gData)
-                    .nodeAutoColorBy('label')
                     .linkDirectionalArrowLength(6)
                     .linkOpacity(0.6)
                     .nodeVal('size')

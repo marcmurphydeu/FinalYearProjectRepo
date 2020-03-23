@@ -47,12 +47,17 @@ export async function drawFromCypher(textQuery, visualization, container = null)
     for (let i = 1960; i< 2019; i++){
         years.push(""+i)
     }
-    let separatedQuery = textQuery.split(/[.\=,:}()'" {><*+-/_]/).map(item=> {return item.trim().toLowerCase()})
+    let separatedQuery = textQuery.split(/[.\=,:}()'" {><*+-/_]/).map(item=> {return item.trim()})
 
     let queryCountries = []
     let queryProperties = []
     let queryYears = []
+    let valid = true //Check no deletion is attempted
     separatedQuery.forEach(elem=>{
+        if(elem.toLowerCase() === "delete"||elem.toLowerCase() === "remove"){
+            valid = false
+            alert("No remove or delete queries are permitted")
+        }
         if (countries.flat().includes(elem) || otherCountries.flat().includes(elem)){
             queryCountries.push(elem)
         }
@@ -64,10 +69,7 @@ export async function drawFromCypher(textQuery, visualization, container = null)
         }
     })
 
-    if(separatedQuery.includes("delete") || separatedQuery.includes("remove")){
-        alert("No remove or delete queries are permitted")
-    }
-    else{
+    if(valid){
         switch (visualization){
             case '2D':
                 draw(queryCountries,queryProperties,queryYears,null,null,true,textQuery, container)

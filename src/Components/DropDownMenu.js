@@ -9,9 +9,7 @@ import {getData, getQueryExamples} from '../Controllers/DataController';
 export default function DropDownMenu (props) {
     const [values, setValues] = useState(props.values)
 
-
-    // Gets the values from the database
-    // when needed
+    // Gets the corresponding values from the database
     useEffect(()=>{
         switch(props.type) {
             case "properties":
@@ -38,6 +36,8 @@ export default function DropDownMenu (props) {
                     setValues(values.concat(newValues))
                 })
                 break;
+
+            //The following cases don't necessarily need to call the database
             case "years":
                 let years_list = [];
                 for (var i = 1960; i <= 2018; i++) {
@@ -57,6 +57,7 @@ export default function DropDownMenu (props) {
                 setValues(filters)
                 break;
             case "customMenu":
+                //Get the examples used in the Analysis
                 setValues(getQueryExamples())
                 break;
             default:
@@ -68,16 +69,21 @@ export default function DropDownMenu (props) {
     return (
         <Dropdown  className = "formDropdown">
             <Dropdown.Toggle id="dropdown-basic">
+                {/* Display the last used value as the drop-down value */}
                 {props.values[props.values.length-1]}
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
+            {/* Creates an unordered list of all the values contained in the drop-down */}
             <ul>
-
             {values.map((v) => <Dropdown.Item onSelect={()=>{
+
+                    // Values that must be set individually
                     if (props.type === "limit" || props.type === "orderBy" || props.type === "customMenu" ){
                         props.setSelectedValues(v);
-                    }else{
+                    }
+                    //Updates the selected values by adding it to the current list (i.e. adding a Country to the current list)
+                    else{
                         props.setSelectedValues(props.values.concat([v]));
                     } 
                 }} key={v}>{v}</Dropdown.Item>)}

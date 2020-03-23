@@ -22,7 +22,8 @@ export default async function draw(country, property, year, limit, filter, isCus
                 alert("No data for this query")
             }else{
                 if (!isCustomQuery){
-                    let query = computeCypher(country,property,year,limit, filter, maxValues);   
+                    let query = computeCypher(country,property,year,limit, filter, maxValues); 
+                    console.log(query)  
                     renderVisualization(query)
                 }
                 else{

@@ -3,6 +3,7 @@ import '../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Chip from '@material-ui/core/Chip';
 
+//Check if the updated list contains any duplicates
 const findDuplicates = (arr) => {
     let sorted_arr = arr.slice().sort();
     let results = [];
@@ -14,20 +15,20 @@ const findDuplicates = (arr) => {
     return results;
   }
 
+// Remove the chosen badge and update the list accordingly  
 function deleteValue(setSelectedValues, value, values){
-    // let value = year
-    // let arr = years
     values = values.filter(item => item !== value)
     setSelectedValues(values)
 }
 
+// Badge list component which displays the selected values 
+// from the drop-down menu
 export default function Badges (props) {
     const duplicates = findDuplicates(props.values)
     if (duplicates.length !== 0){
         alert("Enter a value you haven't entered before")
         deleteValue(props.setSelectedValues, duplicates[0], props.values)
     }
-    // console.log(props.countries)
     return (
         <div className="badges">
             {props.values.map(

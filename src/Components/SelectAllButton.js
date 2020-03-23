@@ -5,6 +5,10 @@ import {getData} from '../Controllers/DataController';
 
 export default function SelectAllButton (props)  {
     const [enabled, setEnabled] = useState(false)
+
+    // When the switch is enabled, the appropriate 
+    // data is received from the controller and, with it,
+    // the list is updated to include all values. 
     const toggle = () => {
       setEnabled(!enabled);
       if (enabled===false){
@@ -25,6 +29,8 @@ export default function SelectAllButton (props)  {
                     props.setSelectedValues(values)
                 })
                 break;
+                
+            //The following cases don't necessarily need to call the database
             case "years":
                 let years_list = [];
                 for (var i = 1960; i <= 2018; i++) {

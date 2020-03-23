@@ -2,19 +2,20 @@ import React, {useState} from 'react';
 import 'antd/dist/antd.css';
 import { Slider, Switch } from 'antd';
 
+// Update the list of years with the range selected by the user
 function setYears (setSelectedYears, rangeOfYears){
     let years = []
-    console.log(rangeOfYears[0])
-    console.log(rangeOfYears[1])
     for (var i = rangeOfYears[0]; i <= rangeOfYears[1]; i++) {
         years.push(i);
     }
-    
     setSelectedYears(years)
 }
 
+// Slider from Ant design specifically for selecting a range of years
 export default function YearRangeSlider (props)  {
     const [enabled, setEnabled] = useState(false)
+    
+    // The lower and upper bound in the slider
     const marks = {
       1960: {
         style: {
@@ -29,6 +30,7 @@ export default function YearRangeSlider (props)  {
         label: 2018,
       },
     };
+    // Disabling the toggle empties the list of years
     const toggle = () => {
       setEnabled(!enabled);
       if (enabled===true){
