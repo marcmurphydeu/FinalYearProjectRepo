@@ -26,6 +26,10 @@ export default function HeatMap (selectedCountries, selectedProperties, selected
             getCountriesPositions().then(response=>{
                 response.forEach(country=>{
                     if (country[1] && country[2] && country[0] in list){
+                        // Country [0] = Country name
+                        // Country [1] = latitude
+                        // Country [2] = longitude
+                        // List = dictionary from the Model 
                         let marker = L.circleMarker([country[2], country[1]],{
                             color: list[country[0]].colour,
                             fillColor: list[country[0]].colour,

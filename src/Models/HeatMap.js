@@ -56,7 +56,7 @@ export async function getCountriesData(selectedCountries, selectedProperties, se
 function setLabels(nodes,labels){
     switch(nodes.length){
         case 2:
-            labels[nodes[0].properties.country_name] = nodes[1].properties.value //Where the first is the country and second is the value
+            labels[nodes[0].properties.country_name] = nodes[1].properties.value //Where the first is the country and second is the property
             break;
         case 4: //For map analysis (example of population affected)
                 let population; 
