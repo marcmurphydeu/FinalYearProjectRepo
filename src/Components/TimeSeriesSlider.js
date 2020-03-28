@@ -5,28 +5,32 @@ import { Slider, Switch } from 'antd';
 // Slider used for time-series visualizations.
 // Uses the Ant design slider component.
 export default function TimeSeriesSlider (props)  {
-
   // Represents the upper and lower bound of the slider
-    const marks = {
-        1960: {
-          style: {
-            color: 'white',
-          },
-          label: 1960,
-        },
-        2018: {
-          style: {
-            color: 'white',
-          },
-          label: 2018,
-        },
-      };
-
-    const [enabled, setEnabled] = useState(false)
+  var start = props.start
+  var end = props.end  
+  const marks = {}
+    marks[props.start] = {
+      style: {
+        color: 'white',
+      },
+      label: props.start,
+    }
+    marks[props.end] = {
+      style: {
+        color: 'white',
+      },
+      label: props.end,
+    }
+    
+    // Toggle for enabling or disabling slider
+    const [enabled, setEnabled] = useState(props.type?true:false)
+    const timeSeries = <div>Time series: <Switch size="small" checked={enabled} onChange={() => setEnabled(!enabled)} /></div>
+    const filter = <div><Switch size="small" checked={enabled} onChange={() => setEnabled(!enabled)} /></div>
     return (
-        <div id = "sliderDiv">
-          Time series: <Switch size="small" checked={enabled} onChange={() => setEnabled(!enabled)} />
-          {enabled ? <Slider defaultValue={2018} marks={marks} min = {1960} max = {2018} onChange = {(a)=> (props.setSelectedYears([a]))} disabled={!enabled} /> : ""}
+        <div id = {props.type ? "limitSlider":"sliderDiv"}>
+          {props.type ? filter : timeSeries}
+          
+          {enabled ? <Slider defaultValue={end/2} marks={marks} min = {start} max = {end} onChange = {(a)=> (props.setSelectedValues([a]))} disabled={!enabled} /> : ""}
         </div>
       );
 }

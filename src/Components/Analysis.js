@@ -2,6 +2,8 @@ import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import AnalysisController from '../Controllers/AnalysisController';
 
+
+// Analysis Component with examples demonstrating what is capable with the application
 export default function Analysis(){
     return (
         <Grid id="analysisComponent" item xs ={12}>

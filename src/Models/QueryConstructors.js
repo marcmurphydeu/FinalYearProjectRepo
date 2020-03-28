@@ -1,4 +1,5 @@
-// Usually p1 for property, n for country, y1 for year
+// Computes the string for countries, properties or years
+// For example: (p1.value = "1" or p1.value = 2 or ...)
 function computeString(values, type, variable_name=null){
     let string = ``;
     let attribute = "";
@@ -40,34 +41,47 @@ function computeString(values, type, variable_name=null){
     return string;
 }
 
-// Very important method.
+// Converts Form input into Cypher query for displaying 2D visualizations
 export function computeCypher(country, property, year, limit, filter, maxValues = 1){
+    // The WHERE clause filters all unnecessary nodes.
+    // Sets the scaled values in comparison to the respective property max value
+    // Sets the weight of the relationship
+    // Checks for null values
+
     // Must remove double quotes in the stringified version
     maxValues = JSON.stringify(maxValues)
     maxValues = maxValues.replace(/['"]+/g, '')
 
     let cypher = `UNWIND [`+maxValues+`] as mValues
-                  MATCH (n:Country)-[r:had]->(p1)-[i:in{in_country:n.country_name}]->(y1:Year) WHERE (p1.value <> 0.0) AND (`+computeString(country,'countries','n')+`)  AND (`+computeString(property, 'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)
+                  MATCH (n:Country)-[r:had {in_year:y1.year}]->(p1)-[i:in{in_country:n.country_name}]->(y1:Year) WHERE (p1.value <> 0.0) AND (`+computeString(country,'countries','n')+`)  AND (`+computeString(property, 'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)
                   AND (p1.value <> 0.0)
                   SET p1.scaledValue = ceil((p1.value/mValues[p1.property]) * 50), r.weight = p1.scaledValue/10 `
         cypher += `RETURN distinct n, id(n) as id,p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``
     return cypher;
 }
 
+// Converts Form input to Cypher query for Map visualizations
 export function computeCypherForMap(country, property, year, limit, filter){
-    let cypher = `MATCH (n:Country)-[r:had]->(p1)-[i:in {in_country:n.country_name}]->(y1:Year) WHERE (`+computeString(country,'countries','n')+`)  AND 
+    // Checks for null values
+    let cypher = `MATCH (n:Country)-[r:had {in_year:y1.year}]->(p1)-[i:in {in_country:n.country_name}]->(y1:Year) WHERE (`+computeString(country,'countries','n')+`)  AND 
                     (`+computeString(property, 'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)`
         cypher += `RETURN n, p1 as p, y1, r, i ORDER BY p.value ` +filter+ ` LIMIT `+limit+``
     return cypher;
 }
 
+// Converts Form input into a source/target format for 3D graphs.
+// Returns 3 dictionaries: source nodes, target nodes and relationships. Each with the 
+// necessary information
 export function computeQueryFor3D(country, property, year, limit, filter, maxValues = 1){
-    
+    // The WHERE clause filters all unnecessary nodes.
+    // Sets the scaled values in comparison to the respective property max value
+    // Sets the weight of the relationship
+    // Checks for null values
     maxValues = JSON.stringify(maxValues)
     maxValues = maxValues.replace(/['"]+/g, '')
 
     let query = `UNWIND [`+maxValues+`] as mValues
-                MATCH (n:Country)-[r:had]->(p1)-[:in{in_country:n.country_name}]->(y1:Year) WHERE (p1.value <> 0.0) AND (`+computeString(country, 'countries','n')+`)  AND (`+computeString(property,'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)
+                MATCH (n:Country)-[r:had {in_year:y1.year}]->(p1)-[:in{in_country:n.country_name}]->(y1:Year) WHERE (p1.value <> 0.0) AND (`+computeString(country, 'countries','n')+`)  AND (`+computeString(property,'properties','p1')+`)  AND (`+computeString(year,'years','y1')+`)
                 SET p1.scaledValue = ceil((p1.value/mValues[p1.property])*50), r.weight=p1.scaledValue/10 
                 RETURN {id: [id(n), id(p1)], label: [labels(n), labels(p1)], 
                         caption: [n.country_name, p1.value], 
@@ -85,6 +99,8 @@ export function computeQueryFor3D(country, property, year, limit, filter, maxVal
     return query;
 }
 
+// From a list of countries, years and a property value, it computes
+// the maximum value
 export function maxValueQuery(country, property, year){
     year = Array.from(new Set(year))
     var countryString = ''
@@ -99,13 +115,16 @@ export function maxValueQuery(country, property, year){
     if(year.length !== 0){
         yearString = `(`+computeString(year,'years','y1')+`) AND `
     }
-
-    return `MATCH (n:Country)-[r:had]->(p1)-[i:in {in_country:n.country_name}]->(y1:Year) 
+    // LIMIT 1 returns only one value - the highest
+    return `MATCH (n:Country)-[r:had {in_year:y1.year}]->(p1)-[i:in {in_country:n.country_name}]->(y1:Year) 
             WHERE `  + countryString + ` ` +propertyString+ ` `+yearString + `
             TOSTRING(p1.value)<>'NaN' Return p1.value order by p1.value DESC LIMIT 1`          
 }
 
-export function computeCustomCypher2D(maxValues, country, property, year){
+
+// Sets the scaled value for custom queries, prior to displaying them
+export function computeCustomCypher(maxValues, country, property, year){
+    // Remove duplicates
     year = Array.from(new Set(year))
     maxValues = JSON.stringify(maxValues)
     maxValues = maxValues.replace(/['"]+/g, '')
@@ -129,7 +148,7 @@ export function computeCustomCypher2D(maxValues, country, property, year){
         yearString = `(`+computeString(year,'years','y1')+`) `
     }
 
-    return `UNWIND [`+maxValues+`] as mValues MATCH (n:Country)-[r:had]->(p1)-[:in {in_country:n.country_name}]->(y1:Year) 
+    return `UNWIND [`+maxValues+`] as mValues MATCH (n:Country)-[r:had {in_year:y1.year}]->(p1)-[:in {in_country:n.country_name}]->(y1:Year) 
             WHERE `  + countryString + ` ` +propertyString+ ` `+yearString + `
             SET p1.scaledValue = p1.value/mValues[p1.property]*50,  r.weight = p1.scaledValue/10`
 }

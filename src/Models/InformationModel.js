@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Returns HTML element containing description for years component
 export function getYearsInformation(){
     return (
         <div>
@@ -10,6 +11,7 @@ export function getYearsInformation(){
     )
 }
 
+// Returns HTML element containing description for countries information
 export function getCountriesInformation(){
     return (
         <div>
@@ -25,7 +27,9 @@ export function getCountriesInformation(){
     )
 }
 
+// Returns a HTML element containing the property information
 export function getPropertyInformation(){
+    // List of all full properties (instead of the abbreviated values on the dropdown)
     let list = ["Population, total", 
             "Marine protected areas (% of territorial waters)",
             "Terrestrial protected areas (% of total land area)",
@@ -59,6 +63,7 @@ export function getPropertyInformation(){
             )
 }
 
+// Return HTML element containing the filter and order by component.
 export function getFilterInformation(){
     return (
         <div>
@@ -69,6 +74,8 @@ export function getFilterInformation(){
     )
 }
 
+// Returns HTML element containing the information needed for the custom query
+// including the database model. 
 export function getCustomQueryInformation(){
     return (
         <div>

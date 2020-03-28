@@ -6,8 +6,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {getData} from './DataController';
 
-
+// Display visualization from Form
 export default function displayVisualization(visualization, selectedCountries, selectedProperties, selectedYears, limit, filter, setSelectedYears){
+    // Check one of each is selected before triggering a visualization
     if (selectedCountries && selectedProperties && selectedYears.length){
         switch (visualization){
             case "2D":
@@ -18,6 +19,7 @@ export default function displayVisualization(visualization, selectedCountries, s
                 break;
             case "Map":
                 HeatMap(selectedCountries, selectedProperties, selectedYears, limit, filter);
+                // Display the time series slider for the Map
                 if (selectedProperties.length > 1){
                     displayMapWithSlider(setSelectedYears)
                 }
@@ -28,6 +30,8 @@ export default function displayVisualization(visualization, selectedCountries, s
     }
 }   
 
+// Obtains a slider component and adds it above the map.
+// Then, the window scrolls to the Map component
 function displayMapWithSlider(setSelectedYears){
     ReactDOM.unmountComponentAtNode(document.getElementById('analysis'))
     ReactDOM.render(<TimeSeriesSlider setSelectedYears={setSelectedYears}/>, document.getElementById('timeSeriesSlider'))
@@ -39,7 +43,12 @@ function displayMapWithSlider(setSelectedYears){
     mapElement.style.marginTop = "30px"
 }
 
+
+// First step of displaying custom query visualizations
+// The input is broken down into lists for each property, year and country
+// Then, the corresponding format is invoked with the customQuery = true as an additional parameter
 export async function drawFromCypher(textQuery, visualization, container = null){
+    // Get the valid data for comparing with input
     let countries = await getData('countries')
     let properties = await getData('properties')
     let otherCountries = await getData('otherCountries')
@@ -47,8 +56,10 @@ export async function drawFromCypher(textQuery, visualization, container = null)
     for (let i = 1960; i< 2019; i++){
         years.push(""+i)
     }
+    // Slit and trim query
     let separatedQuery = textQuery.split(/[.\=,:}()'" {><*+-/_]/).map(item=> {return item.trim()})
 
+    // Lists from input
     let queryCountries = []
     let queryProperties = []
     let queryYears = []
@@ -70,6 +81,7 @@ export async function drawFromCypher(textQuery, visualization, container = null)
     })
 
     if(valid){
+        // Same as displayVisualization() above
         switch (visualization){
             case '2D':
                 draw(queryCountries,queryProperties,queryYears,null,null,true,textQuery, container)

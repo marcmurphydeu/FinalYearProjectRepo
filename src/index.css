@@ -241,6 +241,12 @@ ul{
   margin-bottom: 20px;
 }
 
+/* #limitSlider{
+  display: flex;
+  flex-shrink: ;
+  flex-direction: column;
+} */
+
 #mapContainer{
   display: flex;
   justify-content: center;
@@ -254,7 +260,7 @@ ul{
   border-radius: 15px 15px 15px 15px;
   justify-content: space-evenly;
   background-color: #EB3F38;
-  align-items: center;
+  align-items: baseline;
   flex-direction: row;
   flex-wrap: wrap;
 }
@@ -385,3 +391,9 @@ ul{
   margin-top: 50px;
 }
 
+
+#correctImg{
+  width: 50px;
+  margin-top: 10px;
+  height: 50px;
+}

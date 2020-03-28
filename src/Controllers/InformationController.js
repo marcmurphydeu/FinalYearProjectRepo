@@ -1,5 +1,8 @@
 import {getYearsInformation, getCountriesInformation, getPropertyInformation, getFilterInformation, getCustomQueryInformation} from '../Models/InformationModel';
 
+
+// Gets the required information from the Information Model 
+// for displaying the Pop up box
 export function getText(type){
     switch (type){
         case "Years":

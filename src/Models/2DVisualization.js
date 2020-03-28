@@ -1,7 +1,9 @@
 import {getData} from '../Controllers/DataController';
 
 
-
+// Computes the configuration needed for Neovis to display a graph
+// It requires an object containing the database connection details,
+// the relationships and labels expected from the query. 
 export default async function getConfig(query = null, container=null){
     let placement = container ? container : 'viz'
     var config = {
@@ -10,6 +12,7 @@ export default async function getConfig(query = null, container=null){
         server_user:"neo4j",
         server_password: "fender14",
         labels: {},
+        // Define the relationships
         relationships: {
             "had": {
             "thickness": "weight",
@@ -26,24 +29,28 @@ export default async function getConfig(query = null, container=null){
         arrows: true
     };
 
+    // Define the query
     if(query){
         config.initial_cypher = query
     }
 
+    // Define the properties
     let properties = await getData('properties')
     properties.forEach(p=>{
     config.labels[(p[0][0])] =  {
         "caption": "property",
         "size":"scaledValue",
-        "community":"community"
+        "community":"property"
         }
     })
 
+    // Define the countries
     config.labels["Country"] = {
         "caption": "country_name",
         "size": 5,
         "community": "community"
     }
+    // Define the years
     config.labels["Year"] = {
         "caption": "year",
         "size": 5,

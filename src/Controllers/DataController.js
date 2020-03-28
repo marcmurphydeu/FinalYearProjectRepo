@@ -1,6 +1,7 @@
 import {getDataFromQuery} from '../Models/DatabaseModel';
 import {maxValueQuery} from '../Models/QueryConstructors';
 
+// Get data country, property or other country data from data base
 export async function getData(element){
     switch (element){
         case 'properties':
@@ -16,6 +17,7 @@ export async function getData(element){
     }
 }
 
+// Query examples used both as custom query examples and in analysis
 export function getQueryExamples(){
     return ["MATCH(c:Country{country_name:'Spain'}) return c",
             "MATCH (c:Country)-[h:had{in_year:y.year}]->(p:CO2Emissions)-[i:in{in_country:c.country_name}]->(y:Year{year: 2013}) WHERE c.is_pure_country = true return c,h,p,y,i ORDER BY p.value DESC LIMIT 100",
@@ -31,14 +33,16 @@ export function getQueryExamples(){
             "MATCH(c:Country)-[h1:had{in_year:y.year}]->(p)-[i1:in{in_country:c.country_name}]->(y:Year) WHERE (p.value <> 0.0) AND (c.country_name = 'High income') AND(y.year=2015 or y.year=1978) AND (p.property='ElectricityFromNaturalSources' or p.property='ElectricityFromNuclearSources' or p.property='ElectricityFromOilSources' or p.property='ElectricityFromHydroelectricSources' or p.property='ElectricityFromRenewableSources' or p.property='ElectricityFromCoalSources') return c,y,h1,p,i1 ORDER BY p.value desc limit 250"];
 }
 
+// Get maximum values for each property
+// Because of its asynchronous calls, it receives a callback 
+// The callback is executed once all the data is received
 export function getMaxValues(properties, country, year, callback){
     var maxVals = {}
     var remaining = properties.length
     properties.forEach(p =>{
         getDataFromQuery(maxValueQuery(country, p, year)).then(result=>{
-            
             if (result.length !== 0){
-                maxVals[p] = result[0][0]
+                maxVals[p] = result[0][0]  // Population: 2.000.000 for example
                 remaining -= 1
                 if (remaining === 0){
                     callback(maxVals)

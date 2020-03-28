@@ -7,6 +7,8 @@ import fullscreen from '../fullscreenColor.png';
 import Analysis from './Analysis';
 import ReactDOM from 'react-dom';
 
+
+// Navbar component displayed at the top of the application
 export class NavBar extends Component {
     render() {
         return (
@@ -26,6 +28,7 @@ export class NavBar extends Component {
     }
 }
 
+// Toggles full screen mode.
 function setSize(){
   let viz = document.getElementById('viz')
   console.log(viz.offsetHeight)
@@ -37,10 +40,12 @@ function setSize(){
   }
 }
 
+// Scroll to top of the application page
 function scrollHome(){
   window.scrollTo(0, 0)
 }
 
+//Scroll to the analysis section of the page
 function scrollAnalysis(){
   const analysis = document.getElementById('analysis')
   ReactDOM.render(<Analysis/>, analysis);   

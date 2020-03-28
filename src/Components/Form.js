@@ -96,7 +96,7 @@ export function UserForm(){
                             <Slider id = "yearSlider" setSelectedYears = {setSelectedYears}/>
                         </Grid>
                         <Grid xs={3} item>
-                            <TimeSeriesSlider id = "timeSeriesSlider" setSelectedYears = {setSelectedYears}/>
+                            <TimeSeriesSlider id = "timeSeriesSlider" start = {1960} end = {2018} setSelectedValues = {setSelectedYears}/>
                         </Grid>
                         <Grid item>
                             <SelectAllButton type={"years"} setSelectedValues = {setSelectedYears}/>    
@@ -115,11 +115,15 @@ export function UserForm(){
                     <Grid item id="iconRow" xs={12}>
                         <Popup text={getText("Filters")}/>
                     </Grid>
-                    <Grid id ="labelAndDropdown" item >
+                    <Grid id ="labelAndDropdown" item xs={11}>
+                        <Grid xs={3} item>
                             <Form.Label id = "label">Limit</Form.Label>
-                            <DropDownMenu type = {"limit"} values ={[limit]} setSelectedValues = {setLimit}/>
+                        </Grid>
+                        <Grid xs={8} item  >
+                            <TimeSeriesSlider id = "timeSeriesSlider" start = {0} type = {"filter"} end = {500} setSelectedValues = {setLimit}/>
+                        </Grid>
                     </Grid>
-                    <Grid id ="labelAndDropdown" item >
+                    <Grid id ="labelAndDropdown" item xs={12}>
                         <Form.Label id = "label">Order By</Form.Label>
                         <DropDownMenu type = {"orderBy"} setSelectedValues ={setFilter} values = {[filter]}/>
                     </Grid>
@@ -139,6 +143,7 @@ export function UserForm(){
                         <Form.Control id={"customMenuForm"} value={customQuery} onChange={e => setCustomQuery(e.target.value)} as = "textarea" type="text" placeholder="MATCH (n: Country) ..." />
                         <DropDownMenu type = {"customMenu"} setSelectedValues ={setCustomQuery} values = {['Examples']}/>
                     </Grid>
+                    <div id = "correctLabel"/>
                     <Button onClick = {()=> toggle(customQuery)}  id = "submitButton">Submit</Button>
                 </Grid>        
             </Grid>
