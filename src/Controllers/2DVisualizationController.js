@@ -46,18 +46,22 @@ export default async function draw(country, property, year, limit, filter, isCus
 
 
 // Function for rendering the query using Neovis.js
-function renderVisualization(query,container = null, customQuery = false){
-    var neo = require('neovis.js');
+// Neovis.js: https://github.com/neo4j-contrib/neovis.js/
+
+var neo = require('neovis.js');
+
+async function renderVisualization(query,container = null, customQuery = false){
+    var viz;
     var element = <img src={closeIcon} id="correctImg" alt = "Close" />;
     // Invoke the model to obtain the configuration
-    getConfig(query, container).then(c =>{
+    getConfig(query, container).then(async c =>{
             // The query is wrong until Neovis completes it
             if(customQuery){
                 ReactDOM.render(element, document.getElementById('correctLabel'));
             }
-            var viz = new neo.default(c);
+            viz = new neo.default(c);
             // Display the graph
-            viz.render()
+            await viz.render()
 
             // Listen to the completion event.
             // When the callback is executed, the icon is set to the 'tick'

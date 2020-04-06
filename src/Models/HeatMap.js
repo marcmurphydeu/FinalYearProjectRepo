@@ -138,6 +138,7 @@ function normalizeNumbers(list, labels){
 }
 
 // Function obtained from Stack overflow for converting rbg values to hexadecimal
+// https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
 const rgbToHex = (r, g, b) => '#' + [r, g, b]
   .map(x => x.toString(16).padStart(2, '0')).join('')
 

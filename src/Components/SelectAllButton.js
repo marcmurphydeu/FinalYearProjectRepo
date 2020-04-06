@@ -3,6 +3,9 @@ import 'antd/dist/antd.css';
 import { Switch } from 'antd';
 import {getData} from '../Controllers/DataController';
 
+// Uses the slider provided by https://ant.design/components/slider/
+
+
 export default function SelectAllButton (props)  {
     const [enabled, setEnabled] = useState(false)
 

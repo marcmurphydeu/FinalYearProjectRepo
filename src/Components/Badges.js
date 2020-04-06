@@ -4,8 +4,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Chip from '@material-ui/core/Chip';
 
 //Check if the updated list contains any duplicates
-const findDuplicates = (arr) => {
-    let sorted_arr = arr.slice().sort();
+// Inspiration taken from:
+//https://stackoverflow.com/questions/840781/get-all-non-unique-values-i-e-duplicate-more-than-one-occurrence-in-an-array
+const findDuplicates = (list) => {
+    let sorted_arr = list.slice().sort();
     let results = [];
     for (let i = 0; i < sorted_arr.length - 1; i++) {
       if (sorted_arr[i + 1] === sorted_arr[i]) {

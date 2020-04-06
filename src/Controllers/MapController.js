@@ -3,6 +3,11 @@ import {getCountriesPositions} from '../Models/DatabaseModel';
 import {getCountriesData} from '../Models/HeatMap';
 import {getData} from './DataController';
 
+
+// Inspiration from:
+// https://www.lyonwj.com/2017/11/28/geocoding-paradise-papers-neo4j-spatial-visualization/
+// and https://leafletjs.com/reference-1.6.0.html
+
 // Display a Map
 export default function HeatMap (selectedCountries, selectedProperties, selectedYears, limit, filter, customQuery = null, analysis_container=null){
     // Check if they are actual countries
@@ -17,6 +22,7 @@ export default function HeatMap (selectedCountries, selectedProperties, selected
         var map = L.map(placement).setView([0, 0], 2);
         map.setMaxZoom(5);
         // Create a tile layer and add it to map
+        // Need an api access token for accessing map box
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 18,

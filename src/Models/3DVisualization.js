@@ -6,6 +6,8 @@ import closeIcon from '../closeIcon.png';
 import correctIcon from '../correctIcon.png';
 import {getDataFromQuery} from './DatabaseModel';
 
+// Force 3D-graph: https://github.com/vasturiano/3d-force-graph
+// Github inspiration: https://medium.com/neo4j/visualizing-graphs-in-3d-with-webgl-9adaaff6fe43
 
 // Run the custom query string and convert the result to a source/node format
 // where the id, caption, label, community and size of each node is included.
@@ -25,7 +27,7 @@ export function runCustomQuerySession(customQuery,container){
                                                         size: 3}
                     }
                     if(elem.start){ //Relationship
-                        links.push(Object.assign({source:elem.start.toNumber(), target:elem.end.toNumber()}, {weight: elem.properties.weight*10}))
+                        links.push(Object.assign({source:elem.start.toNumber(), target:elem.end.toNumber()}, {weight: elem.properties.weight}))
                     }
                     if(elem.properties.property) {  // Property node
                         nodes[elem.identity.toNumber()] = {id: elem.identity.toNumber(), 
@@ -68,7 +70,6 @@ export function runQuerySession(maxValues,country,property,year,limit,filter){
         // const session = driver.session();
         getDataFromQuery(computeQueryFor3D(country, property, year, limit, filter, maxValues))
                 .then(function (result) {
-                    console.log(result)
                     result.forEach(r => { 
                         for (let i = 0; i<2; i++){
                             // Source information

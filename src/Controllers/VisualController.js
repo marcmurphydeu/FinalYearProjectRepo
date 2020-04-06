@@ -20,7 +20,7 @@ export default function displayVisualization(visualization, selectedCountries, s
             case "Map":
                 HeatMap(selectedCountries, selectedProperties, selectedYears, limit, filter);
                 // Display the time series slider for the Map
-                if (selectedProperties.length > 1){
+                if (selectedProperties.length >= 1){
                     displayMapWithSlider(setSelectedYears)
                 }
                 break;
@@ -65,7 +65,7 @@ export async function drawFromCypher(textQuery, visualization, container = null)
     let queryYears = []
     let valid = true //Check no deletion is attempted
     separatedQuery.forEach(elem=>{
-        if(elem.toLowerCase() === "delete"||elem.toLowerCase() === "remove"){
+        if(elem.toLowerCase() === "delete"||elem.toLowerCase() === "remove" || elem.toLowerCase() === "set"){
             valid = false
             alert("No remove or delete queries are permitted")
         }

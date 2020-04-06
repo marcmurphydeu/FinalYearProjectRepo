@@ -3,10 +3,12 @@ import '../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Navbar, Nav} from 'react-bootstrap';
 import theaLogo from '../theaLogoFinal.png';
-import fullscreen from '../fullscreenColor.png';
 import Analysis from './Analysis';
 import ReactDOM from 'react-dom';
 
+
+// Inspired by React's navbar examples:
+// https://react-bootstrap.github.io/components/navbar/
 
 // Navbar component displayed at the top of the application
 export class NavBar extends Component {
@@ -22,23 +24,13 @@ export class NavBar extends Component {
                     <div id = "controlledButton" />
                   </Nav>  
                 </Navbar.Collapse>
-                <img src={fullscreen} onClick={()=>setSize()} alt = "expand" id="expand" />     
+                
             </Navbar>
         )
     }
 }
 
-// Toggles full screen mode.
-function setSize(){
-  let viz = document.getElementById('viz')
-  console.log(viz.offsetHeight)
-  if (viz.offsetHeight === 700){
-      viz.webkitRequestFullscreen()
-  }
-  else{
-      viz.exitFullScreen()
-  }
-}
+
 
 // Scroll to top of the application page
 function scrollHome(){

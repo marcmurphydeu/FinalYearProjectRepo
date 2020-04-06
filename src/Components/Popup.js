@@ -2,6 +2,8 @@ import React from "react";
 import Popup from "reactjs-popup";
 import { Info } from 'react-bootstrap-icons';
 
+// Inspired by https://react-popup.elazizi.com/
+
 // Component used from react to display a popup
 // The props are HTML components containing text 
 export default function PopUp (props){

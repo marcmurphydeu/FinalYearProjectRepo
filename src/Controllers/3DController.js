@@ -11,6 +11,7 @@ export default async function draw3D (country, property, year, limit, filter, cu
     if(property.length !== 0){
             getMaxValues(property, country,year, async function(maxValues){
                 let zeroCount = 0
+                console.log(maxValues)
                 Object.keys(maxValues).forEach(function(key) {
                     // If no values are available,
                     // the max Value is set to 1
@@ -43,7 +44,11 @@ export default async function draw3D (country, property, year, limit, filter, cu
         }
     }
 
+
 // Function for displaying the graph using ForceGraph3D
+// Force 3D-graph: https://github.com/vasturiano/3d-force-graph
+// Github inspiration: https://medium.com/neo4j/visualizing-graphs-in-3d-with-webgl-9adaaff6fe43
+
 // Called from the Model
 // draw3D -> Model
 // Model -> renderGraph

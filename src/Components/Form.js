@@ -22,6 +22,12 @@ function toggle(customQuery){
 
 
 
+// Main Form in the application (in red). It presents drop-downs
+// for selecting Countries, Properties, Years and Filters. 
+// It also contains the custom query.
+// Inspiration for using forms:
+// https://medium.com/@everdimension/how-to-handle-forms-with-just-react-ac066c48bd4f
+
 export function UserForm(){
     const [limit , setLimit] = useState('250')
     const [filter , setFilter] = useState('DESC') 

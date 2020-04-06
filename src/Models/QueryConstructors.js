@@ -43,6 +43,7 @@ function computeString(values, type, variable_name=null){
 
 // Converts Form input into Cypher query for displaying 2D visualizations
 export function computeCypher(country, property, year, limit, filter, maxValues = 1){
+    console.log(maxValues)
     // The WHERE clause filters all unnecessary nodes.
     // Sets the scaled values in comparison to the respective property max value
     // Sets the weight of the relationship
@@ -69,9 +70,15 @@ export function computeCypherForMap(country, property, year, limit, filter){
     return cypher;
 }
 
+
+
 // Converts Form input into a source/target format for 3D graphs.
 // Returns 3 dictionaries: source nodes, target nodes and relationships. Each with the 
 // necessary information
+
+// Must be of the required form for 3D-force-graph:
+// https://medium.com/neo4j/visualizing-graphs-in-3d-with-webgl-9adaaff6fe43
+
 export function computeQueryFor3D(country, property, year, limit, filter, maxValues = 1){
     // The WHERE clause filters all unnecessary nodes.
     // Sets the scaled values in comparison to the respective property max value
@@ -118,7 +125,7 @@ export function maxValueQuery(country, property, year){
     // LIMIT 1 returns only one value - the highest
     return `MATCH (n:Country)-[r:had {in_year:y1.year}]->(p1)-[i:in {in_country:n.country_name}]->(y1:Year) 
             WHERE `  + countryString + ` ` +propertyString+ ` `+yearString + `
-            TOSTRING(p1.value)<>'NaN' Return p1.value order by p1.value DESC LIMIT 1`          
+            TOSTRING(p1.value)<>'NaN' Return distinct p1.value order by p1.value DESC LIMIT 1`          
 }
 
 

@@ -3,7 +3,7 @@ import 'antd/dist/antd.css';
 import { Slider, Switch } from 'antd';
 
 // Slider used for time-series visualizations.
-// Uses the Ant design slider component.
+// Uses the Ant design slider component. https://ant.design/components/slider/
 export default function TimeSeriesSlider (props)  {
   // Represents the upper and lower bound of the slider
   var start = props.start

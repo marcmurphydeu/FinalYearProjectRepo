@@ -90,7 +90,7 @@ export default function Analysis(){
                 
                 <Grid item xs = {3}>
                     <div className="analysis" id="analysis8">{AnalysisController('analysis8')}</div>
-                    <div className="analysisDescription"><strong>Low Income: </strong> In both years, these countries produced Hydroelectric energy as their most abundant source.
+                    <div className="analysisDescription"><strong>Low income: </strong> In both years, these countries produced Hydroelectric energy as their most abundant source.
                             As one might expect, coal energy was higher in 1978 with 15% compared to a 2% in 2015. Another visible aspect is that back then, energy from natural and renewable
                             sources was not even close to adding up to 0.5% of the total energy production. Whereas for natural sources, in 2015 the value is of 13%. A big difference is that there are no
                             values for Nuclear Energy, probably meaning that the values are so low they are not considered.

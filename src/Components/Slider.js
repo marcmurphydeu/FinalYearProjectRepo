@@ -2,6 +2,9 @@ import React, {useState} from 'react';
 import 'antd/dist/antd.css';
 import { Slider, Switch } from 'antd';
 
+// Uses Slider and Switch from https://ant.design/components/slider/
+
+
 // Update the list of years with the range selected by the user
 function setYears (setSelectedYears, rangeOfYears){
     let years = []

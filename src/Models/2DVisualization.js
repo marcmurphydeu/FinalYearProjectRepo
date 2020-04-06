@@ -1,6 +1,9 @@
 import {getData} from '../Controllers/DataController';
 
 
+// Neovis.js: 
+// https://github.com/neo4j-contrib/neovis.js/
+
 // Computes the configuration needed for Neovis to display a graph
 // It requires an object containing the database connection details,
 // the relationships and labels expected from the query. 
@@ -8,9 +11,9 @@ export default async function getConfig(query = null, container=null){
     let placement = container ? container : 'viz'
     var config = {
         container_id: placement,
-        server_url:"bolt://localhost:7687",
+        server_url:"bolt://localhost:7687", // Running locally
         server_user:"neo4j",
-        server_password: "fender14",
+        server_password: "Neo4jPassword",
         labels: {},
         // Define the relationships
         relationships: {
@@ -40,7 +43,7 @@ export default async function getConfig(query = null, container=null){
     config.labels[(p[0][0])] =  {
         "caption": "property",
         "size":"scaledValue",
-        "community":"property"
+        "community":"community"
         }
     })
 

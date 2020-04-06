@@ -1,11 +1,20 @@
 import neo4j from 'neo4j-driver';
 
+// Inspiration for setting up and closing drivers from:
+// https://adamcowley.co.uk/javascript/using-the-neo4j-driver-with-nodejs/
+
+
+const url = 'bolt://localhost:7687'
+const password = 'Neo4jPassword'
+// const url = 'bolt://3e5378d8.databases.neo4j.io'
+// const password = 'sDeAy2xzSR4afLgJ2eyUMJmy6_PsrM2sKOmikipLOKU'
 
 // Function for getting data from the database, returning the response.
 export async function getDataFromQuery(query){
     var driver = neo4j.driver(
-        'bolt://localhost:7687',
-        neo4j.auth.basic('neo4j', 'fender14'),
+        url,
+        neo4j.auth.basic('neo4j', password),
+        // { encrypted: true } 
         );
     var session = driver.session()
     try {
@@ -29,8 +38,9 @@ export async function getDataFromQuery(query){
 // Function for writing data to the database
 export async function setDataFromQuery(query){
     var driver = neo4j.driver(
-        'bolt://localhost:7687',
-        neo4j.auth.basic('neo4j', 'fender14'),
+        url,
+        neo4j.auth.basic('neo4j',password),
+        // { encrypted: true } 
         );
     var session = driver.session()
     try {
@@ -49,8 +59,9 @@ export async function setDataFromQuery(query){
 export async function getCountriesPositions(){
     var query = 'MATCH (n:Country) return n.country_name, n.longitude, n.latitude'
     var driver = neo4j.driver(
-        'bolt://localhost:7687',
-        neo4j.auth.basic('neo4j', 'fender14'),
+        url,
+        neo4j.auth.basic('neo4j', password),
+        // { encrypted: true } 
         );
     var session = driver.session()
     try {
