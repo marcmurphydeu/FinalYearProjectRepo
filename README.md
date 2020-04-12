@@ -1,5 +1,21 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Downloading the tools
+
+From https://neo4j.com/, download Neo4j. Keep the Desktop key for later.
+
+Open the app and create a local graph with default username: neo4j and password: Neo4jPassword
+Click on Activate to run the graph locally.
+
+Then, go to the "InsertData" src directory in of the application (Gaze) and run the python script: 
+python database_loader.py
+
+This will insert the data into the graph. Upon completion (inserting the data takes around 30 mins to 1 hour), 
+the application can be run.
+
+
+
+
 ## Available Scripts
 
 In the project directory, you can run:
