@@ -34,7 +34,7 @@ export default function displayVisualization(visualization, selectedCountries, s
 // Then, the window scrolls to the Map component
 function displayMapWithSlider(setSelectedYears){
     ReactDOM.unmountComponentAtNode(document.getElementById('analysis'))
-    ReactDOM.render(<TimeSeriesSlider setSelectedYears={setSelectedYears}/>, document.getElementById('timeSeriesSlider'))
+    ReactDOM.render(<TimeSeriesSlider id = "timeSeriesSlider" start = {1960} end = {2018} setSelectedValues={setSelectedYears}/>, document.getElementById('timeSeriesSlider'))
     const mapElement = document.getElementById('timeSeriesSlider')
     window.scrollTo(0, mapElement.offsetTop)
     mapElement.style.paddingTop = "10px";

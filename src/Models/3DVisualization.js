@@ -64,7 +64,7 @@ export function runCustomQuerySession(customQuery,container){
 
 // Equivalent function to the above but for the Form input. The query is obtained from
 // the query constructor. Then it is run and the response is converted to the source/target format
-export function runQuerySession(maxValues,country,property,year,limit,filter){
+export async function runQuerySession(maxValues,country,property,year,limit,filter){
         const links = []
         const nodes = {}
         // const session = driver.session();

@@ -31,7 +31,11 @@ export async function getCountriesData(selectedCountries, selectedProperties, se
                                     labels[country.properties.country_name] = property.properties.value
                                     return [country.properties.country_name, property.properties.value ]
                                 })
-                            })
+                            })// If error in query, display 'error' icon
+                            .catch(() => {
+                                // Null is returned to avoid redundant computation
+                                return null
+                            });  
     }
     else if (customQuery){
         // Like above, but the custom query is computed directly

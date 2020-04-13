@@ -1,5 +1,7 @@
 import {getData} from '../Controllers/DataController';
 
+// neo4j://3e5378d8.databases.neo4j.io
+// sDeAy2xzSR4afLgJ2eyUMJmy6_PsrM2sKOmikipLOKU
 
 // Neovis.js: 
 // https://github.com/neo4j-contrib/neovis.js/
@@ -14,6 +16,7 @@ export default async function getConfig(query = null, container=null){
         server_url:"bolt://localhost:7687", // Running locally
         server_user:"neo4j",
         server_password: "Neo4jPassword",
+        // encrypted:"ENCRYPTION_ON",
         labels: {},
         // Define the relationships
         relationships: {

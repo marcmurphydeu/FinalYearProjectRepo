@@ -11,7 +11,6 @@ export default async function draw3D (country, property, year, limit, filter, cu
     if(property.length !== 0){
             getMaxValues(property, country,year, async function(maxValues){
                 let zeroCount = 0
-                console.log(maxValues)
                 Object.keys(maxValues).forEach(function(key) {
                     // If no values are available,
                     // the max Value is set to 1
