@@ -44,7 +44,7 @@ export function getMaxValues(properties, country, year, callback){
     var remaining = properties.length
     properties.forEach(p =>{
         getDataFromQuery(maxValueQuery(country, p, year)).then(result=>{
-            if (result.length !== 0){
+            if (result && result.length !== 0){
                 maxVals[p] = result[0][0]  // Population: 2.000.000 for example
                 remaining -= 1
                 if (remaining === 0){
