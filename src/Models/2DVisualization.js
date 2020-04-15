@@ -13,10 +13,10 @@ export default async function getConfig(query = null, container=null){
     let placement = container ? container : 'viz'
     var config = {
         container_id: placement,
-        server_url:"bolt://localhost:7687", // Running locally
+        server_url:"neo4j://3e5378d8.databases.neo4j.io", // Running locally
         server_user:"neo4j",
-        server_password: "Neo4jPassword",
-        // encrypted:"ENCRYPTION_ON",
+        server_password: "sDeAy2xzSR4afLgJ2eyUMJmy6_PsrM2sKOmikipLOKU",
+        encrypted:"ENCRYPTION_ON",
         labels: {},
         // Define the relationships
         relationships: {

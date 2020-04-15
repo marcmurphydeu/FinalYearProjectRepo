@@ -47,20 +47,21 @@ export default async function draw3D (country, property, year, limit, filter, cu
 // Function for displaying the graph using ForceGraph3D
 // Force 3D-graph: https://github.com/vasturiano/3d-force-graph
 // Github inspiration: https://medium.com/neo4j/visualizing-graphs-in-3d-with-webgl-9adaaff6fe43
-
+var graph;
 // Called from the Model
 // draw3D -> Model
 // Model -> renderGraph
 export function renderGraph(links, nodes,container=null){  
     // Configure where and how to display it
     const placement = container ? container : 'viz'
-    const width = container ? document.getElementById('analysis8').offsetWidth-10 : window.innerWidth/2 -10
-    const height = container ? document.getElementById('analysis8').offsetHeight-10 : 700-10
     const elem = document.getElementById(placement);
+    const width = container ? document.getElementById('analysis8').offsetWidth-10 : elem.offsetWidth-10
+    const height = container ? document.getElementById('analysis8').offsetHeight-10 : elem.offsetHeight-10
+    
 
     // Transform the data to a format required by ForceGraph
     const gData = {nodes: Object.values(nodes), links: links}
-    ForceGraph3D()(elem)
+    graph = ForceGraph3D()(elem)
                     .graphData(gData) // The data
                     .linkDirectionalArrowLength(6) // Arrow size
                     .linkOpacity(0.6) 
@@ -72,4 +73,19 @@ export function renderGraph(links, nodes,container=null){
                     .nodeLabel(node=> `${node.label}:${node.caption}`)  // Labels of nodes
                     .onNodeHover(node=>elem.style.cursor = node ? 'pointer':null); // Show info on hover
     
+}
+
+export function refresh(zooming){
+    if (graph){
+        if(zooming){
+            graph.width(window.innerWidth-10)
+            graph.height(window.innerHeight-10)
+        }
+        if(!zooming){
+            const viz = document.getElementById('viz')
+            graph.width(viz.offsetWidth -10)
+            graph.height(viz.offsetHeight-10)
+        }
+
+    }
 }

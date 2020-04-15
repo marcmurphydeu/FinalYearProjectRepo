@@ -43,7 +43,6 @@ function computeString(values, type, variable_name=null){
 
 // Converts Form input into Cypher query for displaying 2D visualizations
 export function computeCypher(country, property, year, limit, filter, maxValues = 1){
-    console.log(maxValues)
     // The WHERE clause filters all unnecessary nodes.
     // Sets the scaled values in comparison to the respective property max value
     // Sets the weight of the relationship
