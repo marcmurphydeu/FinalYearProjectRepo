@@ -6,6 +6,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 The following describes how to setup the project to be run locally. 
 
+## Requirements:
+In order for the application to run, make sure you have Node.js installed.
+
 ### Note:
 Due to the complexity of getting a valid certificate working for https locally, the 2D visualization (which uses Neovis.js) does not work on a local server.
 In the case where observing the 2D functionality is needed, it is available on the published website: https://thea-bbf01.web.app/
