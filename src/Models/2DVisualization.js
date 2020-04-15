@@ -13,7 +13,7 @@ export default async function getConfig(query = null, container=null){
     let placement = container ? container : 'viz'
     var config = {
         container_id: placement,
-        server_url:"neo4j://3e5378d8.databases.neo4j.io", // Running locally
+        server_url:"neo4j://3e5378d8.databases.neo4j.io", // Running remotely
         server_user:"neo4j",
         server_password: "sDeAy2xzSR4afLgJ2eyUMJmy6_PsrM2sKOmikipLOKU",
         encrypted:"ENCRYPTION_ON",

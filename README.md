@@ -1,6 +1,25 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Note:
+# Thea Final Year Project Marc Murphy React App
 
-This is a React application using Neo4j as a database. There are no available scripts to run directly since there are many instructions and complications for running it locally. However, the link to the website is: https://thea-bbf01.web.app/
-The link contains the fully functional application using a remote Aura database and Firebase hosting.
+## Description
+
+The following describes how to setup the project to be run locally. 
+
+### Note:
+Due to the complexity of getting a valid certificate working for https locally, the 2D visualization (which uses Neovis.js) does not work on a local server.
+In the case where observing the 2D functionality is needed, it is available on the published website: https://thea-bbf01.web.app/
+
+## Installation
+- Clone the repo in your terminal by clicking the _green_ clone or download button at the top right and copyin the url
+- In your terminal, type ```git clone URL```
+  - replace URL with the url you copied
+  - hit enter
+- This will copy all the files from this repo down to your computer
+- In your terminal, cd into the directory you just created
+- Type ```npm install``` to install all dependencies
+- If there are vulnerabilities, running ```npm audit fix``` will fix this
+- Last, but not least, type ```npm start``` to run the app locally.
+- If there are any errors, running ```npm remove react-dev-utils && npm i react-dev-utils@10.0.0``` should fix the problem. Then run ```npm start``` again.
+
+- To look at the code, just open up the project in a code editor
