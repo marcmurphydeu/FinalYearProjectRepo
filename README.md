@@ -22,6 +22,7 @@ In the case where observing the 2D functionality is needed, it is available on t
 - In your terminal, cd into the directory you just created
 - Type ```npm install``` to install all dependencies
 - If there are vulnerabilities, running ```npm audit fix``` will fix this
+- Run the command ```npm remove react-dev-utils && npm i react-dev-utils@10.0.0```
 - Last, but not least, type ```npm start``` to run the app locally.
-- If there are any errors, running ```npm remove react-dev-utils && npm i react-dev-utils@10.0.0``` should fix the problem. Then execute Command+C on mac or Ctr+C on Windows to exit and  run ```npm start``` again.
 - To look at the code, just open up the project in a code editor
+- If an error was encounted, repeat the same steps but without running the command ```npm remove react-dev-utils && npm i react-dev-utils@10.0.0```
